@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Rozar & Arifa | Our Story</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@300;400;500;600&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<!-- ========================= -->
+<!-- BACKGROUND -->
+<!-- ========================= -->
+
+<div class="background">
+
+    <div class="moon"></div>
+
+    <div class="stars"></div>
+
+</div>
+
+<!-- ========================= -->
+<!-- LOADER -->
+<!-- ========================= -->
+
+<div id="loader">
+
+    <div class="loader-content">
+
+        <h1 class="loader-logo">
+
+            R <span>|</span> A
+
+        </h1>
+
+        <p>
+
+            Preparing Your Journey...
+
+        </p>
+
+        <div class="loader-line">
+
+            <div class="loader-progress"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ========================= -->
+<!-- HERO -->
+<!-- ========================= -->
+
+<section id="hero">
+
+    <div class="hero-image"></div>
+
+    <div class="overlay"></div>
+
+    <div class="hero-content">
+
+        <p class="eyebrow">
+
+            30 AUGUST 2026
+
+        </p>
+
+        <h1>
+
+            Rozar & Arifa
+
+        </h1>
+
+        <p class="tagline">
+
+Every journey begins with a single moment.<br>
+Ours became a lifetime.
+
+</p>
+
+        <button id="beginBtn">
+
+            Join Our Journey →
+
+        </button>
+
+        <div class="scroll-indicator">
+
+            ↓
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ========================= -->
+<!-- STORY -->
+<!-- ========================= -->
+
+<section id="story">
+
+    <div class="story-container">
+
+        <h2>Where It All Began</h2>
+
+        <img src="assets/images/story1.jpg" alt="Story Image">
+
+        <p>
+            Your first chapter goes here.
+        </p>
+
+    </div>
+
+</section>
+
+   <section id="gallery">
+
+    <div class="gallery-container">
+
+        <h2>Moments We Treasure</h2>
+
+        <div class="gallery-grid">
+
+            <img src="assets/images/gallery1.jpg" alt="">
+            <img src="assets/images/gallery2.jpg" alt="">
+            <img src="assets/images/gallery3.jpg" alt="">
+            <img src="assets/images/gallery4.jpg" alt="">
+            <img src="assets/images/gallery5.jpg" alt="">
+            <img src="assets/images/gallery6.jpg" alt="">
+
+        </div>
+
+    </div>
+
+</section> 
+
+<section id="countdown">
+
+    <div class="countdown-container">
+
+        <h2>Until Forever Begins</h2>
+
+        <div class="countdown-grid">
+
+            <div class="time-box">
+                <span id="days">00</span>
+                <p>Days</p>
+            </div>
+
+            <div class="time-box">
+                <span id="hours">00</span>
+                <p>Hours</p>
+            </div>
+
+            <div class="time-box">
+                <span id="minutes">00</span>
+                <p>Minutes</p>
+            </div>
+
+            <div class="time-box">
+                <span id="seconds">00</span>
+                <p>Seconds</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section id="events">
+
+    <div class="events-container">
+
+        <h2>Celebrate With Us</h2>
+
+        <div class="event-card">
+
+            <h3>Nikah</h3>
+
+            <p>30 August 2026</p>
+
+            <p>09:00 AM</p>
+
+            <p>NSK & NKR a/c MAHAL AND RESIDENCY</p>
+
+        </div>
+
+        <div class="event-card">
+
+            <h3>Sangeet</h3>
+
+            <p>29 August 2026</p>
+
+            <p>07:00 PM</p>
+
+            <p>NSK & NKR a/c MAHAL</p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section id="venue">
+
+    <div class="venue-container">
+
+        <h2>Find Your Way</h2>
+
+        <p class="venue-name">
+            NSK & NKR a/c MAHAL AND RESIDENCY
+        </p>
+
+        <p class="venue-address">
+            GST Main Rd, Lion City,<br>Thiru Nagar, Thanakkankulam<br>
+            Madurai, Tamil Nadu
+        </p>
+
+        <a
+            class="map-btn"
+            href="https://maps.app.goo.gl/nHmxp5HqnWTBi1R56"
+            target="_blank">
+
+            Open in Google Maps
+
+        </a>
+
+    </div>
+
+</section>
+
+<section id="rsvp">
+
+    <div class="rsvp-container">
+
+        <h2>Will You Celebrate With Us?</h2>
+
+        <p>Please let us know if you'll be joining us.</p>
+
+        <form id="rsvpForm">
+
+            <input
+                type="text"
+                placeholder="Your Name"
+                required
+            >
+
+            <input
+                type="number"
+                placeholder="Number of Guests"
+                min="1"
+                required
+            >
+
+            <select required>
+
+                <option value="">Will you attend?</option>
+
+                <option>Yes, I'll be there</option>
+
+                <option>Sorry, I can't make it</option>
+
+            </select>
+
+            <textarea
+                rows="5"
+                placeholder="Leave a message (Optional)"
+            ></textarea>
+
+            <button type="submit">
+
+                Send RSVP
+
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+<footer id="footer">
+
+    <div class="footer-content">
+
+        <h2>Thank You</h2>
+
+        <p>
+
+            Thank you for becoming part of our journey.
+
+        </p>
+
+        <h3>
+
+            Rozar ❤️ Arifa
+
+        </h3>
+
+        <p class="footer-date">
+
+            SEE YOU ON <br> 
+                <strong>Our Biggesst Day</strong>
+
+        </p>
+
+    </div>
+
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
+
+<link rel="stylesheet" href="css/style.css">
+
+<script src="js/script.js"></script>
