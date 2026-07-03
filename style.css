@@ -359,20 +359,6 @@ h1 {
     margin-left: var(--space-xs);
 }
 
-.scroll-indicator {
-    position: absolute;
-    left: 50%;
-    bottom: calc(var(--space-md) * 2);
-    color: var(--gold-soft);
-    font-size: var(--space-3xl);
-    transform: translateX(-50%);
-    animation: bounce 1.6s ease-in-out infinite;
-}
-
-@keyframes bounce {
-    50% { transform: translate(-50%, 10px); }
-}
-
 .section {
     padding: var(--space-section) 0;
 }
