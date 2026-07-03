@@ -2,6 +2,31 @@
    PROJECT RA
    Version : 0.1
 ========================================================== */
+:root{
+    --bg:#090909;
+    --bg-soft:#1b1b1b;
+
+    --text:#F8F5EF;
+    --gold:#D4AF37;
+    --emerald:#0E6B56;
+
+    --white:#ffffff;
+
+    --radius-sm:8px;
+    --radius-md:14px;
+    --radius-lg:24px;
+
+    --shadow-gold:0 0 40px rgba(212,175,55,.25);
+
+    --container:1200px;
+
+    --transition:.35s ease;
+
+    --font-heading:'Cinzel',serif;
+    --font-display:'Cormorant Garamond',serif;
+    --font-body:'Poppins',sans-serif;
+}
+
 html,
 body{
     width:100%;
@@ -19,9 +44,9 @@ html{
 
 body{
 
-    background:#090909;
+    background:var(--bg);
 
-    color:#F8F5EF;
+    color:var(--text);
 
     overflow:hidden;
 
@@ -157,7 +182,7 @@ LOADER
 
     font-family:'Cinzel',serif;
 
-    color:#D4AF37;
+    color:var(--gold);
 
     font-size:78px;
 
@@ -229,8 +254,8 @@ body{
 
     overflow:hidden;
 
-    font-family:'Poppins',sans-serif;
-
+    font-family:var(--font-body);
+    
 }
 
 /* ==========================================================
@@ -359,9 +384,9 @@ LOADER
 
 .loader-logo{
 
-    font-family:'Cinzel',serif;
+    font-family:var(--font-heading);
 
-    color:#D4AF37;
+    color:var(--gold);
 
     font-size:78px;
 
@@ -371,7 +396,7 @@ LOADER
 
 .loader-logo span{
 
-    color:white;
+    color:var(--text);
 
 }
 
@@ -383,7 +408,7 @@ LOADER
 
     letter-spacing:5px;
 
-    color:#ddd;
+    color:var(--text);
 
 }
 
@@ -393,7 +418,7 @@ LOADER
 
     height:2px;
 
-    background:#333;
+    background:var(--bg-soft);
 
     margin-top:40px;
 
@@ -407,7 +432,7 @@ LOADER
 
     height:100%;
 
-    background:#D4AF37;
+    background:var(--gold);
 
 }
 /* ==========================================================
