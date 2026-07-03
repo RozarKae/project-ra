@@ -144,14 +144,23 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-rsvpForm?.addEventListener("submit", (event) => {
+rsvpForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(rsvpForm);
     const name = String(formData.get("name") || "").trim();
 
+    try {
+        await fetch("https://formsubmit.co/arifabivikhan@gmail.com", {
+            method: "POST",
+            body: formData
+        });
+    } catch (error) {
+        console.error("Form submission error:", error);
+    }
+
     rsvpMessage.textContent = name
-        ? `Thank you, ${name}. Your RSVP has been noted.`
-        : "Thank you. Your RSVP has been noted.";
+        ? `Thank you, ${name}. Your RSVP has been sent!`
+        : "Thank you. Your RSVP has been sent!";
 
     rsvpForm.reset();
 });
