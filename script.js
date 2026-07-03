@@ -99,6 +99,51 @@ function updateCountdown() {
 updateCountdown();
 window.setInterval(updateCountdown, 1000);
 
+// Gallery Modal Functionality
+const galleryItems = document.querySelectorAll(".gallery-item");
+const modalOverlay = document.createElement("div");
+modalOverlay.className = "modal-overlay";
+document.body.appendChild(modalOverlay);
+
+let activeModal = null;
+
+function closeModal() {
+    if (activeModal) {
+        activeModal.classList.remove("active");
+        activeModal = null;
+    }
+    modalOverlay.classList.remove("active");
+    document.body.classList.remove("modal-open");
+}
+
+function openModal(modal) {
+    if (activeModal !== modal) {
+        closeModal();
+        activeModal = modal;
+        modal.classList.add("active");
+        modalOverlay.classList.add("active");
+        document.body.classList.add("modal-open");
+    }
+}
+
+galleryItems.forEach((item) => {
+    const modal = item.querySelector(".story-modal");
+    if (!modal) return;
+
+    item.addEventListener("click", (e) => {
+        e.stopPropagation();
+        openModal(modal);
+    });
+});
+
+modalOverlay.addEventListener("click", closeModal);
+
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+        closeModal();
+    }
+});
+
 rsvpForm?.addEventListener("submit", (event) => {
     event.preventDefault();
     const formData = new FormData(rsvpForm);
