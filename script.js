@@ -1,179 +1,112 @@
+document.body.classList.add("is-loading");
+
 const loader = document.getElementById("loader");
-const hero = document.getElementById("hero");
 const progress = document.querySelector(".loader-progress");
 const beginBtn = document.getElementById("beginBtn");
+const rsvpForm = document.getElementById("rsvpForm");
+const rsvpMessage = document.getElementById("rsvpMessage");
+const countdownEls = {
+    days: document.getElementById("days"),
+    hours: document.getElementById("hours"),
+    minutes: document.getElementById("minutes"),
+    seconds: document.getElementById("seconds")
+};
 
-// =========================================
-// LOADER
-// =========================================
+const hasGsap = () => Boolean(window.gsap);
 
-gsap.to(progress, {
-    width: "100%",
-    duration: 2,
-    ease: "power2.inOut"
-});
+function revealPage() {
+    document.body.classList.remove("is-loading");
+
+    if (!loader) {
+        return;
+    }
+
+    if (hasGsap()) {
+        gsap.to(loader, {
+            opacity: 0,
+            duration: 0.7,
+            onComplete: () => {
+                loader.classList.add("is-hidden");
+                gsap.from(".hero-content", {
+                    y: 38,
+                    opacity: 0,
+                    duration: 1,
+                    ease: "power2.out"
+                });
+            }
+        });
+        return;
+    }
+
+    loader.classList.add("is-hidden");
+}
 
 window.addEventListener("load", () => {
+    if (hasGsap() && progress) {
+        gsap.fromTo(progress, { width: "0%" }, { width: "100%", duration: 1.6, ease: "power2.inOut" });
+    }
 
-    gsap.from(".loader-logo", {
-        opacity: 0,
-        y: -30,
-        duration: 1
-    });
-
-    gsap.from(".loader-content p", {
-        opacity: 0,
-        delay: .4,
-        y: 20,
-        duration: 1
-    });
-
-    setTimeout(() => {
-
-        gsap.to("#loader", {
-
-            opacity: 0,
-
-            duration: .8,
-
-            onComplete: () => {
-
-                loader.style.display = "none";
-
-                document.body.style.overflow = "auto";
-
-                gsap.to("#hero", {
-
-                    opacity: 1,
-
-                    duration: 1.5
-
-                });
-
-                gsap.from(".hero-content", {
-
-                    y: 50,
-
-                    opacity: 0,
-
-                    duration: 1.5
-
-                });
-
-            }
-
-        });
-
-    }, 2200);
-
+    window.setTimeout(revealPage, 1800);
 });
 
-// =========================================
-// MOON
-// =========================================
-
-gsap.to(".moon", {
-
-    scale: 1.08,
-
-    duration: 5,
-
-    repeat: -1,
-
-    yoyo: true,
-
-    ease: "sine.inOut"
-
+beginBtn?.addEventListener("click", () => {
+    document.getElementById("story")?.scrollIntoView({ behavior: "smooth" });
 });
 
-// =========================================
-// HERO ZOOM
-// =========================================
+document.addEventListener("mousemove", (event) => {
+    if (!hasGsap() || window.matchMedia("(max-width: 820px)").matches) {
+        return;
+    }
 
-gsap.to(".hero-image", {
-
-    scale: 1.18,
-
-    duration: 35,
-
-    ease: "none"
-
-});
-
-// =========================================
-// PARALLAX
-// =========================================
-
-document.addEventListener("mousemove", (e) => {
-
-    const x = (e.clientX / window.innerWidth - .5) * 20;
-    const y = (e.clientY / window.innerHeight - .5) * 20;
+    const x = (event.clientX / window.innerWidth - 0.5) * 16;
+    const y = (event.clientY / window.innerHeight - 0.5) * 16;
 
     gsap.to(".hero-image", {
-
         x,
-
         y,
-
-        duration: 2,
-
+        duration: 1.4,
         ease: "power2.out"
-
     });
-
 });
 
-// =========================================
-// BUTTON
-// =========================================
+const weddingDate = new Date("2026-08-30T09:00:00+05:30").getTime();
 
-beginBtn.addEventListener("click", () => {
+function pad(value) {
+    return String(value).padStart(2, "0");
+}
 
-    document.getElementById("story").scrollIntoView({
+function updateCountdown() {
+    const distance = weddingDate - Date.now();
 
-        behavior: "smooth"
+    if (distance <= 0) {
+        countdownEls.days.textContent = "00";
+        countdownEls.hours.textContent = "00";
+        countdownEls.minutes.textContent = "00";
+        countdownEls.seconds.textContent = "00";
+        return;
+    }
 
-    });
+    const day = 1000 * 60 * 60 * 24;
+    const hour = 1000 * 60 * 60;
+    const minute = 1000 * 60;
 
-});
+    countdownEls.days.textContent = pad(Math.floor(distance / day));
+    countdownEls.hours.textContent = pad(Math.floor((distance % day) / hour));
+    countdownEls.minutes.textContent = pad(Math.floor((distance % hour) / minute));
+    countdownEls.seconds.textContent = pad(Math.floor((distance % minute) / 1000));
+}
 
-// =========================================
-// COUNTDOWN
-// =========================================
+updateCountdown();
+window.setInterval(updateCountdown, 1000);
 
-const weddingDate = new Date("August 30, 2026 09:00:00").getTime();
+rsvpForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(rsvpForm);
+    const name = String(formData.get("name") || "").trim();
 
-setInterval(() => {
+    rsvpMessage.textContent = name
+        ? `Thank you, ${name}. Your RSVP has been noted.`
+        : "Thank you. Your RSVP has been noted.";
 
-    const now = new Date().getTime();
-
-    const distance = weddingDate - now;
-
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    document.getElementById("days").textContent = days;
-    document.getElementById("hours").textContent = hours;
-    document.getElementById("minutes").textContent = minutes;
-    document.getElementById("seconds").textContent = seconds;
-
-},1000);
-
-// =========================================
-// RSVP
-// =========================================
-
-document
-.getElementById("rsvpForm")
-.addEventListener("submit", function(e){
-
-    e.preventDefault();
-
-    alert("Thank you! Your RSVP has been received.");
-
+    rsvpForm.reset();
 });
