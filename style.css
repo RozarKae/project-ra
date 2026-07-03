@@ -51,6 +51,10 @@
     --btn-min-height: 48px;
     --btn-padding-block: 14px;
     --btn-padding-inline: 26px;
+    --btn-border-color: rgba(241, 216, 139, 0.65);
+    --btn-border-color-hover: var(--gold-soft);
+    --btn-bg: rgba(212, 175, 55, 0.14);
+    --btn-bg-hover: rgba(212, 175, 55, 0.24);
     --field-min-height: 50px;
     --time-box-min-height: 150px;
     --time-box-min-height-mobile: 124px;
@@ -107,6 +111,39 @@ textarea {
 
 button {
     cursor: pointer;
+}
+
+.container {
+    width: min(var(--container), calc(100vw - (var(--space-xl) * 2)));
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.btn {
+    display: inline-flex;
+    min-height: var(--btn-min-height);
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--btn-border-color);
+    border-radius: var(--radius-pill);
+    background: var(--btn-bg);
+    color: var(--text);
+    padding: var(--btn-padding-block) var(--btn-padding-inline);
+    font-weight: 500;
+    letter-spacing: 1px;
+    transition: transform var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--btn-border-color-hover);
+    background: var(--btn-bg-hover);
+}
+
+.glass-card {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    box-shadow: var(--shadow);
 }
 
 .background {
@@ -317,34 +354,9 @@ h1 {
     line-height: 1.18;
 }
 
-#beginBtn,
-.map-btn,
-.rsvp-form button {
-    display: inline-flex;
-    min-height: var(--btn-min-height);
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(241, 216, 139, 0.65);
-    border-radius: var(--radius-pill);
-    background: rgba(212, 175, 55, 0.14);
-    color: var(--text);
-    padding: var(--btn-padding-block) var(--btn-padding-inline);
-    font-weight: 500;
-    letter-spacing: 1px;
-    transition: transform var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
-}
-
 #beginBtn::after {
     content: "→";
     margin-left: var(--space-xs);
-}
-
-#beginBtn:hover,
-.map-btn:hover,
-.rsvp-form button:hover {
-    transform: translateY(-2px);
-    border-color: var(--gold-soft);
-    background: rgba(212, 175, 55, 0.24);
 }
 
 .scroll-indicator {
@@ -362,8 +374,6 @@ h1 {
 }
 
 .section {
-    width: min(var(--container), calc(100vw - (var(--space-xl) * 2)));
-    margin: 0 auto;
     padding: var(--space-section) 0;
 }
 
@@ -403,16 +413,6 @@ h1 {
     background: linear-gradient(90deg, rgba(212, 175, 55, 0.08), transparent);
     font-family: var(--font-display);
     font-size: clamp(22px, 3vw, 32px);
-}
-
-.story-photo,
-.gallery-grid img,
-.event-card,
-.venue-panel,
-.rsvp-form {
-    border: 1px solid var(--line);
-    background: var(--surface);
-    box-shadow: var(--shadow);
 }
 
 .story-photo {
