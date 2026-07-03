@@ -2,6 +2,7 @@
    PROJECT RA
    Version : 0.1
 ========================================================== */
+
 :root{
     --bg:#090909;
     --bg-soft:#1b1b1b;
@@ -50,7 +51,7 @@ body{
 
     overflow:hidden;
 
-    font-family:'Poppins',sans-serif;
+    font-family:var(--font-body);
 
 }
 
@@ -158,7 +159,7 @@ LOADER
 
     inset:0;
 
-    background:#090909;
+    background:var(--bg);
 
     display:flex;
 
@@ -180,7 +181,7 @@ LOADER
 
 .loader-logo{
 
-    font-family:'Cinzel',serif;
+    font-family:var(--font-heading);
 
     color:var(--gold);
 
@@ -192,8 +193,7 @@ LOADER
 
 .loader-logo span{
 
-    color:white;
-
+color:var(--white);
 }
 
 .loader-content p{
@@ -228,6 +228,5 @@ LOADER
 
     height:100%;
 
-    background:#D4AF37;
-
+background:var(--gold);
 }
