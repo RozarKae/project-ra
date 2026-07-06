@@ -99,7 +99,7 @@ function updateCountdown() {
 updateCountdown();
 window.setInterval(updateCountdown, 1000);
 
-// Dynamic Gallery Full Frame Modal Creation
+// Dynamic Gallery Full Frame Modal Functionality
 const galleryItems = document.querySelectorAll(".gallery-item");
 const modalOverlay = document.createElement("div");
 modalOverlay.className = "modal-overlay";
@@ -128,7 +128,7 @@ document.body.appendChild(modalOverlay);
 function closeModal() {
     modalOverlay.classList.remove("active");
     document.body.classList.remove("modal-open");
-    // Clear elements after transition completes to prevent visual flashing on next open
+    // Clear sources after fade completes to prevent visual flashing on next trigger
     setTimeout(() => {
         modalImage.src = "";
         modalImage.alt = "";

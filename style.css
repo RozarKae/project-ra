@@ -1,8 +1,8 @@
 /* ==========================================================================
-   1. DESIGN SYSTEM VARIABLES (:root)
+   MODULE 1: DESIGN SYSTEM VARIABLES (:root)
    ========================================================================== */
 :root {
-    /* Color Channels (for scalable alpha-transparency modification) */
+    /* Color Channels (for scalable alpha-transparency modifiers) */
     --color-bg-rgb: 9, 9, 9;
     --color-text-rgb: 248, 242, 231;
     --color-gold-rgb: 212, 175, 55;
@@ -133,7 +133,7 @@
 }
 
 /* ==========================================================================
-   2. BROWSER RESET
+   MODULE 2: BASE RESET & GLOBAL HELPERS
    ========================================================================== */
 * {
     box-sizing: border-box;
@@ -174,14 +174,14 @@ button {
     cursor: pointer;
 }
 
-/* Combined Body Layout Utilities */
+/* Standardized Body Layout Helpers */
 body.is-loading,
 body.modal-open {
     overflow: hidden;
 }
 
 /* ==========================================================================
-   3. TYPOGRAPHY SYSTEM
+   MODULE 3: TYPOGRAPHY
    ========================================================================== */
 h1,
 h2,
@@ -257,7 +257,7 @@ nav a {
 }
 
 /* ==========================================================================
-   4. LAYOUT CONTAINERS & GRID STRUCTURES
+   MODULE 4: LAYOUT & GRID STYLES
    ========================================================================== */
 .container {
     width: min(var(--container-max-standard), calc(100vw - (var(--space-xl) * 2)));
@@ -275,7 +275,7 @@ nav a {
     text-align: center;
 }
 
-/* Consolidated Heading Margins and Line Heights */
+/* Consolidated Heading Layouts */
 .section-heading h2,
 .venue-panel h2 {
     margin-top: var(--space-xs);
@@ -344,13 +344,6 @@ nav a {
     text-transform: uppercase;
 }
 
-/* Form Structural Alignment Rules */
-.full-field,
-.rsvp-form button,
-.form-message {
-    grid-column: 1 / -1;
-}
-
 #footer {
     padding: 86px var(--space-xl) 52px;
     text-align: center;
@@ -375,9 +368,8 @@ nav a {
 }
 
 /* ==========================================================================
-   5. COMPONENT ELEMENTS & CARDS
+   MODULE 5: COMPONENT ASSETS (BUTTONS, TIMELINES, MODALS)
    ========================================================================== */
-/* Unified Card Structure Rules */
 .glass-card {
     border: 1px solid var(--color-line);
     background: var(--color-surface);
@@ -473,11 +465,6 @@ nav a {
     place-items: center;
     background: var(--color-bg-loader);
     transition: var(--transition-loader);
-}
-
-#loader.is-hidden {
-    visibility: hidden;
-    opacity: 0;
 }
 
 .loader-content {
@@ -597,7 +584,7 @@ nav {
     background: linear-gradient(90deg, rgba(var(--color-gold-rgb), 0.08), transparent);
 }
 
-/* Consolidated Image Structural Bounds */
+/* Consolidated Dimensional Image Classes */
 .story-photo img,
 .gallery-item img {
     width: 100%;
@@ -633,7 +620,7 @@ nav {
     filter: brightness(0.9);
 }
 
-/* Hide raw layout text nodes on gallery cards to act purely as dynamic JS source */
+/* Embedded markup node remains invisible to act purely as dynamic JS source */
 .story-modal {
     display: none;
 }
@@ -658,7 +645,7 @@ nav {
     pointer-events: auto;
 }
 
-/* Responsive Wrapper for centering full frame popups */
+/* Centered dynamic modal container */
 .modal-wrapper {
     position: relative;
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.98) 0%, rgba(var(--color-emerald-rgb), 0.05) 100%);
@@ -678,7 +665,7 @@ nav {
     transform: scale(1);
 }
 
-/* Visual bounds for full frame popup image */
+/* Visual bounds for full frame image */
 .modal-frame-img {
     width: 100%;
     height: auto;
@@ -688,7 +675,7 @@ nav {
     border-bottom: 1px solid var(--color-line);
 }
 
-/* Story rendering container below the visual asset */
+/* Story rendering pane below the picture */
 .modal-text-content {
     padding: var(--modal-padding);
     text-align: center;
@@ -714,7 +701,7 @@ nav {
     margin: 0;
 }
 
-/* Close interaction element inside the wrapper context */
+/* Floating overlay close element */
 .modal-close-btn {
     position: absolute;
     top: var(--space-sm);
@@ -823,7 +810,7 @@ nav {
 }
 
 /* ==========================================================================
-   6. ANIMATIONS
+   MODULE 6: ANIMATIONS
    ========================================================================== */
 @keyframes starsMove {
     from { transform: translateY(0); }
@@ -839,7 +826,32 @@ nav {
 }
 
 /* ==========================================================================
-   7. RESPONSIVE LAYOUTS (MEDIA BREAKPOINTS)
+   MODULE 7: UTILITIES & VISIBILITY STATES
+   ========================================================================== */
+.full-field,
+.rsvp-form button,
+.form-message {
+    grid-column: 1 / -1;
+}
+
+.form-message {
+    min-height: var(--space-2xl);
+    color: var(--color-gold-soft);
+    text-align: center;
+}
+
+#loader.is-hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ==========================================================================
+   MODULE 8: RESPONSIVE MEDIA QUERIES
    ========================================================================== */
 @media (max-width: 820px) {
     .site-header {
