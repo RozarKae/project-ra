@@ -99,44 +99,69 @@ function updateCountdown() {
 updateCountdown();
 window.setInterval(updateCountdown, 1000);
 
-// Gallery Modal Functionality
+// Dynamic Gallery Full Frame Modal Creation
 const galleryItems = document.querySelectorAll(".gallery-item");
 const modalOverlay = document.createElement("div");
 modalOverlay.className = "modal-overlay";
+
+const modalWrapper = document.createElement("div");
+modalWrapper.className = "modal-wrapper";
+
+const closeBtn = document.createElement("button");
+closeBtn.className = "modal-close-btn";
+closeBtn.innerHTML = "&times;";
+closeBtn.type = "button";
+closeBtn.setAttribute("aria-label", "Close modal");
+
+const modalImage = document.createElement("img");
+modalImage.className = "modal-frame-img";
+
+const modalContent = document.createElement("div");
+modalContent.className = "modal-text-content";
+
+modalWrapper.appendChild(closeBtn);
+modalWrapper.appendChild(modalImage);
+modalWrapper.appendChild(modalContent);
+modalOverlay.appendChild(modalWrapper);
 document.body.appendChild(modalOverlay);
 
-let activeModal = null;
-
 function closeModal() {
-    if (activeModal) {
-        activeModal.classList.remove("active");
-        activeModal = null;
-    }
     modalOverlay.classList.remove("active");
     document.body.classList.remove("modal-open");
+    // Clear elements after transition completes to prevent visual flashing on next open
+    setTimeout(() => {
+        modalImage.src = "";
+        modalImage.alt = "";
+        modalContent.innerHTML = "";
+    }, 350);
 }
 
-function openModal(modal) {
-    if (activeModal !== modal) {
-        closeModal();
-        activeModal = modal;
-        modal.classList.add("active");
-        modalOverlay.classList.add("active");
-        document.body.classList.add("modal-open");
-    }
+function openModal(imgSrc, imgAlt, htmlContent) {
+    modalImage.src = imgSrc;
+    modalImage.alt = imgAlt;
+    modalContent.innerHTML = htmlContent;
+
+    modalOverlay.classList.add("active");
+    document.body.classList.add("modal-open");
 }
 
 galleryItems.forEach((item) => {
-    const modal = item.querySelector(".story-modal");
-    if (!modal) return;
+    const img = item.querySelector("img");
+    const storyData = item.querySelector(".story-modal");
+    if (!img || !storyData) return;
 
     item.addEventListener("click", (e) => {
         e.stopPropagation();
-        openModal(modal);
+        openModal(img.src, img.alt, storyData.innerHTML);
     });
 });
 
-modalOverlay.addEventListener("click", closeModal);
+closeBtn.addEventListener("click", closeModal);
+modalOverlay.addEventListener("click", (e) => {
+    if (e.target === modalOverlay) {
+        closeModal();
+    }
+});
 
 document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
