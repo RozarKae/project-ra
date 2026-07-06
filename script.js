@@ -126,14 +126,28 @@ modalOverlay.appendChild(modalWrapper);
 document.body.appendChild(modalOverlay);
 
 function closeModal() {
-    modalOverlay.classList.remove("active");
-    document.body.classList.remove("modal-open");
-    // Clear sources after fade completes to prevent visual flashing on next trigger
-    setTimeout(() => {
+    if (hasGsap()) {
+        gsap.to(modalWrapper, {
+            scale: 0.8,
+            y: 40,
+            opacity: 0,
+            duration: 0.4,
+            ease: "power2.in",
+            onComplete: () => {
+                modalOverlay.classList.remove("active");
+                document.body.classList.remove("modal-open");
+                modalImage.src = "";
+                modalImage.alt = "";
+                modalContent.innerHTML = "";
+            }
+        });
+    } else {
+        modalOverlay.classList.remove("active");
+        document.body.classList.remove("modal-open");
         modalImage.src = "";
         modalImage.alt = "";
         modalContent.innerHTML = "";
-    }, 350);
+    }
 }
 
 function openModal(imgSrc, imgAlt, htmlContent) {
@@ -143,6 +157,13 @@ function openModal(imgSrc, imgAlt, htmlContent) {
 
     modalOverlay.classList.add("active");
     document.body.classList.add("modal-open");
+
+    if (hasGsap()) {
+        gsap.fromTo(modalWrapper, 
+            { scale: 0.7, y: 50, opacity: 0 }, 
+            { scale: 1, y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.4)" }
+        );
+    }
 }
 
 galleryItems.forEach((item) => {
@@ -168,6 +189,30 @@ document.addEventListener("keydown", (e) => {
         closeModal();
     }
 });
+
+// Fancy Section Stagger Animation Trigger
+if (hasGsap()) {
+    const animateOnScroll = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const target = entry.target;
+                if (target.classList.contains("event-card")) {
+                    gsap.fromTo(target, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" });
+                } else if (target.classList.contains("time-box")) {
+                    gsap.fromTo(target, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, ease: "back.out(1.7)" });
+                } else if (target.classList.contains("section-heading")) {
+                    gsap.fromTo(target.querySelectorAll(".eyebrow, h2, p"), 
+                        { y: 30, opacity: 0 }, 
+                        { y: 0, opacity: 1, duration: 1, stagger: 0.15, ease: "power2.out" }
+                    );
+                }
+                observer.unobserve(target);
+            }
+        });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".event-card, .time-box, .section-heading").forEach(el => animateOnScroll.observe(el));
+}
 
 rsvpForm?.addEventListener("submit", async (event) => {
     event.preventDefault();

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   MODULE 1: DESIGN SYSTEM VARIABLES (:root)
+   MODULE 1: CENTRAL DESIGN TOKENS
    ========================================================================== */
 :root {
     /* Color Channels (for scalable alpha-transparency modifiers) */
@@ -20,14 +20,14 @@
     --color-rose: rgb(var(--color-rose-rgb));
 
     /* Functional Colors & Transparencies */
-    --color-surface: rgba(18, 17, 15, 0.82);
+    --color-surface: rgba(18, 17, 15, 0.85);
     --color-line: rgba(var(--color-text-rgb), 0.16);
     --color-white-line: rgba(255, 255, 255, 0.12);
     --color-overlay-dark: rgba(0, 0, 0, 0.45);
-    --color-control-bg: rgba(0, 0, 0, 0.26);
+    --color-control-bg: rgba(0, 0, 0, 0.35);
     --color-bg-loader: #080808;
     --color-btn-bg: rgba(var(--color-gold-rgb), 0.14);
-    --color-btn-bg-hover: rgba(var(--color-gold-rgb), 0.24);
+    --color-btn-bg-hover: rgba(var(--color-gold-rgb), 0.28);
     --color-btn-border: rgba(var(--color-gold-soft-rgb), 0.65);
 
     /* Typography (Font Families) */
@@ -107,7 +107,13 @@
     /* Shadow Variations */
     --shadow-standard: 0 24px 80px rgba(0, 0, 0, 0.45);
     --shadow-text-hero: 0 16px 40px rgba(0, 0, 0, 0.55);
-    --shadow-moon: 0 0 150px rgba(var(--color-gold-rgb), 0.35);
+
+    /* High-Chroma Illuminated Neon Shadows */
+    --neon-gold: 0 0 4px #fff, 0 0 10px var(--color-gold-soft), 0 0 20px var(--color-gold), 0 0 40px rgba(var(--color-gold-rgb), 0.8);
+    --neon-emerald: 0 0 4px #fff, 0 0 10px #00ffb7, 0 0 20px var(--color-emerald), 0 0 40px rgba(var(--color-emerald-rgb), 0.8);
+    --neon-rose: 0 0 4px #fff, 0 0 10px #ff2e93, 0 0 20px var(--color-rose), 0 0 40px rgba(var(--color-rose-rgb), 0.8);
+
+    --shadow-moon: 0 0 100px rgba(var(--color-gold-rgb), 0.35), 0 0 40px rgba(var(--color-gold-rgb), 0.15);
     --shadow-modal: 0 30px 100px rgba(var(--color-gold-rgb), 0.4), inset 0 1px 0 rgba(var(--color-gold-rgb), 0.2);
 
     /* Transition Standardizations */
@@ -174,7 +180,6 @@ button {
     cursor: pointer;
 }
 
-/* Standardized Body Layout Helpers */
 body.is-loading,
 body.modal-open {
     overflow: hidden;
@@ -194,9 +199,9 @@ h1 {
     margin-top: 0;
     font-size: var(--font-size-hero-title);
     line-height: 0.95;
-    text-shadow: var(--shadow-text-hero);
     order: 0;
     margin-bottom: var(--space-4xl);
+    animation: neonFlicker 3s ease-in-out infinite alternate;
 }
 
 .brand {
@@ -205,6 +210,11 @@ h1 {
     font-size: var(--font-size-xl);
     font-weight: var(--font-weight-bold);
     letter-spacing: 4px;
+    transition: text-shadow var(--transition-fast);
+}
+
+.brand:hover {
+    text-shadow: var(--neon-gold);
 }
 
 nav a {
@@ -212,7 +222,12 @@ nav a {
     font-size: var(--font-size-base);
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    transition: color var(--transition-fast);
+    transition: color var(--transition-fast), text-shadow var(--transition-fast);
+}
+
+nav a:hover {
+    color: var(--color-gold-soft);
+    text-shadow: 0 0 8px var(--color-gold);
 }
 
 .eyebrow {
@@ -257,7 +272,7 @@ nav a {
 }
 
 /* ==========================================================================
-   MODULE 4: LAYOUT & GRID STYLES
+   MODULE 4: LAYOUT & GRID STRUCTURES
    ========================================================================== */
 .container {
     width: min(var(--container-max-standard), calc(100vw - (var(--space-xl) * 2)));
@@ -344,6 +359,13 @@ nav a {
     text-transform: uppercase;
 }
 
+/* Form Structural Alignment Rules */
+.full-field,
+.rsvp-form button,
+.form-message {
+    grid-column: 1 / -1;
+}
+
 #footer {
     padding: 86px var(--space-xl) 52px;
     text-align: center;
@@ -368,12 +390,19 @@ nav a {
 }
 
 /* ==========================================================================
-   MODULE 5: COMPONENT ASSETS (BUTTONS, TIMELINES, MODALS)
+   MODULE 5: COMPONENT ELEMENTS & CARDS
    ========================================================================== */
+/* Unified Card Structure Rules with Hover Glows */
 .glass-card {
     border: 1px solid var(--color-line);
     background: var(--color-surface);
     box-shadow: var(--shadow-standard);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.glass-card:hover {
+    border-color: rgba(var(--color-gold-soft-rgb), 0.7);
+    box-shadow: 0 0 30px rgba(var(--color-gold-rgb), 0.25);
 }
 
 .btn {
@@ -388,15 +417,17 @@ nav a {
     padding: var(--btn-padding-block) var(--btn-padding-inline);
     font-weight: var(--font-weight-medium);
     letter-spacing: 1px;
-    transition: transform var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast);
+    transition: transform var(--transition-fast), background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .btn:hover {
     transform: translateY(-2px);
     border-color: var(--color-gold-soft);
     background: var(--color-btn-bg-hover);
+    box-shadow: 0 0 15px rgba(var(--color-gold-rgb), 0.4);
 }
 
+/* Background System with arabesque star tile lattice pattern */
 .background {
     position: fixed;
     inset: 0;
@@ -404,9 +435,9 @@ nav a {
     overflow: hidden;
     isolation: isolate;
     background:
-        radial-gradient(circle at 80% 8%, rgba(var(--color-gold-rgb), 0.2), transparent 22rem),
-        radial-gradient(circle at 8% 36%, rgba(var(--color-emerald-rgb), 0.2), transparent 28rem),
-        radial-gradient(circle at 50% 100%, rgba(var(--color-rose-rgb), 0.14), transparent 30rem),
+        radial-gradient(circle at 80% 8%, rgba(var(--color-gold-rgb), 0.25), transparent 22rem),
+        radial-gradient(circle at 8% 36%, rgba(var(--color-emerald-rgb), 0.25), transparent 28rem),
+        radial-gradient(circle at 50% 100%, rgba(var(--color-rose-rgb), 0.18), transparent 30rem),
         linear-gradient(135deg, #040404 0%, #0b0908 45%, #060606 100%);
 }
 
@@ -418,11 +449,10 @@ nav a {
     pointer-events: none;
 }
 
+/* Moroccan Geometric Lattice Grid Overlay */
 .background::before {
-    background:
-        linear-gradient(120deg, transparent 0 46%, rgba(var(--color-gold-rgb), 0.08) 46% 54%, transparent 54% 100%),
-        linear-gradient(0deg, transparent 0 48%, rgba(var(--color-emerald-rgb), 0.1) 48% 52%, transparent 52% 100%);
-    opacity: 0.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M40 0L80 40L40 80L0 40Z' fill='none' stroke='rgba(212, 175, 55, 0.08)' stroke-width='0.8'/%3E%3Cpath d='M0 0h80v80H0z' fill='none' stroke='rgba(212, 175, 55, 0.03)' stroke-width='0.5'/%3E%3Cpath d='M0 40h80M40 0v80' fill='none' stroke='rgba(212, 175, 55, 0.05)' stroke-width='0.6'/%3E%3Ccircle cx='40' cy='40' r='12' fill='none' stroke='rgba(212, 175, 55, 0.09)' stroke-width='0.8'/%3E%3C/svg%3E");
+    opacity: 0.75;
 }
 
 .background::after {
@@ -444,6 +474,7 @@ nav a {
     opacity: 0.18;
     filter: blur(2px);
     box-shadow: var(--shadow-moon);
+    animation: moonFloat 8s ease-in-out infinite;
 }
 
 .stars {
@@ -467,6 +498,11 @@ nav a {
     transition: var(--transition-loader);
 }
 
+#loader.is-hidden {
+    visibility: hidden;
+    opacity: 0;
+}
+
 .loader-content {
     width: min(340px, calc(100vw - (var(--space-2xl) * 2)));
     text-align: center;
@@ -478,6 +514,7 @@ nav a {
     font-size: var(--font-size-5xl);
     letter-spacing: 14px;
     line-height: 1;
+    text-shadow: var(--neon-gold);
 }
 
 .loader-logo span {
@@ -584,7 +621,7 @@ nav {
     background: linear-gradient(90deg, rgba(var(--color-gold-rgb), 0.08), transparent);
 }
 
-/* Consolidated Dimensional Image Classes */
+/* Consolidated Image Structural Bounds */
 .story-photo img,
 .gallery-item img {
     width: 100%;
@@ -592,14 +629,17 @@ nav {
     object-fit: cover;
 }
 
+/* Pointed Mosque Window Mihrab Silhouette Profile */
 .story-photo {
     overflow: hidden;
-    border-radius: var(--radius-sm);
+    border-radius: 120px 120px var(--radius-sm) var(--radius-sm);
     padding: var(--space-xs);
+    border: 2px solid var(--color-gold-soft);
+    box-shadow: 0 0 30px rgba(var(--color-gold-rgb), 0.15);
 }
 
 .story-photo img {
-    border-radius: var(--radius-xs);
+    border-radius: 110px 110px var(--radius-xs) var(--radius-xs);
 }
 
 .gallery-item {
@@ -620,7 +660,7 @@ nav {
     filter: brightness(0.9);
 }
 
-/* Embedded markup node remains invisible to act purely as dynamic JS source */
+/* Hidden container markup for gallery narrative assets */
 .story-modal {
     display: none;
 }
@@ -628,8 +668,8 @@ nav {
 .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.9);
-    backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.92);
+    backdrop-filter: blur(12px);
     opacity: 0;
     transition: opacity var(--transition-slow);
     pointer-events: none;
@@ -645,37 +685,29 @@ nav {
     pointer-events: auto;
 }
 
-/* Centered dynamic modal container */
+/* Pointed Arch Mosque Window Silhouette modal card */
 .modal-wrapper {
     position: relative;
-    background: linear-gradient(135deg, rgba(0, 0, 0, 0.98) 0%, rgba(var(--color-emerald-rgb), 0.05) 100%);
-    border: 1px solid var(--color-gold-soft);
-    border-radius: var(--radius-lg);
-    max-width: var(--container-max-copy);
+    background: linear-gradient(180deg, #090909 0%, #111111 100%);
+    border: 2px solid var(--color-gold-soft);
+    border-radius: 200px 200px var(--radius-lg) var(--radius-lg);
+    max-width: 480px;
     width: 100%;
     display: flex;
     flex-direction: column;
     box-shadow: var(--shadow-modal);
     overflow: hidden;
-    transform: scale(0.9);
-    transition: transform var(--transition-slow) var(--ease-elastic);
 }
 
-.modal-overlay.active .modal-wrapper {
-    transform: scale(1);
-}
-
-/* Visual bounds for full frame image */
+/* Fully fills and opens the frame beautifully with pointed arches fitting */
 .modal-frame-img {
     width: 100%;
-    height: auto;
-    max-height: 60vh;
-    object-fit: contain;
-    background: #000;
-    border-bottom: 1px solid var(--color-line);
+    height: 380px;
+    object-fit: cover;
+    border-bottom: 2px solid var(--color-line);
 }
 
-/* Story rendering pane below the picture */
+/* Content block below full frame picture */
 .modal-text-content {
     padding: var(--modal-padding);
     text-align: center;
@@ -689,7 +721,8 @@ nav {
     display: block;
     margin-bottom: var(--space-md);
     font-weight: var(--font-weight-bold);
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
+    text-shadow: var(--neon-gold);
 }
 
 .modal-text-content p {
@@ -701,12 +734,12 @@ nav {
     margin: 0;
 }
 
-/* Floating overlay close element */
+/* Float visual close control */
 .modal-close-btn {
     position: absolute;
-    top: var(--space-sm);
-    right: var(--space-sm);
-    background: rgba(0, 0, 0, 0.6);
+    top: calc(var(--space-sm) + 4px);
+    right: calc(var(--space-sm) + 4px);
+    background: rgba(0, 0, 0, 0.7);
     border: 1px solid var(--color-line);
     color: var(--color-text);
     font-size: 24px;
@@ -719,13 +752,14 @@ nav {
     justify-content: center;
     cursor: pointer;
     z-index: 10;
-    transition: background var(--transition-fast), border-color var(--transition-fast);
+    transition: background var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .modal-close-btn:hover {
     background: rgba(var(--color-gold-rgb), 0.2);
     border-color: var(--color-gold-soft);
     color: var(--color-gold-soft);
+    box-shadow: 0 0 10px var(--color-gold);
 }
 
 .countdown-section {
@@ -742,7 +776,13 @@ nav {
     align-content: center;
     border: 1px solid rgba(var(--color-gold-rgb), 0.28);
     border-radius: var(--radius-sm);
-    background: rgba(0, 0, 0, 0.28);
+    background: rgba(0, 0, 0, 0.35);
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.time-box:hover {
+    border-color: var(--color-gold-soft);
+    box-shadow: 0 0 15px rgba(var(--color-gold-rgb), 0.3);
 }
 
 .time-box span {
@@ -750,6 +790,7 @@ nav {
     font-family: var(--font-heading);
     font-size: clamp(38px, 6vw, 70px);
     line-height: 1;
+    text-shadow: 0 0 8px rgba(var(--color-gold-rgb), 0.35);
 }
 
 .time-box p {
@@ -774,6 +815,11 @@ nav {
     margin: var(--space-xs) 0 var(--space-lg);
     color: var(--color-gold-soft);
     font-size: var(--font-size-event-title);
+    transition: text-shadow var(--transition-fast);
+}
+
+.event-card:hover h3 {
+    text-shadow: var(--neon-gold);
 }
 
 .event-card p {
@@ -792,6 +838,7 @@ nav {
     color: var(--color-text);
     padding: 13px 14px;
     outline: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .rsvp-form textarea {
@@ -801,12 +848,20 @@ nav {
 .rsvp-form input:focus,
 .rsvp-form select:focus,
 .rsvp-form textarea:focus {
-    border-color: rgba(var(--color-gold-soft-rgb), 0.72);
+    border-color: var(--color-gold-soft);
+    box-shadow: 0 0 15px rgba(var(--color-gold-rgb), 0.35);
 }
 
 .rsvp-form button {
     justify-self: center;
     min-width: 180px;
+}
+
+.form-message {
+    min-height: var(--space-2xl);
+    color: var(--color-gold-soft);
+    text-align: center;
+    text-shadow: 0 0 10px var(--color-gold);
 }
 
 /* ==========================================================================
@@ -825,6 +880,23 @@ nav {
     to { transform: scale(1.12) translateY(-16px); }
 }
 
+/* Smooth float on Glowing Background Moon */
+@keyframes moonFloat {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-10px) scale(1.03); box-shadow: 0 0 120px rgba(var(--color-gold-rgb), 0.45), 0 0 60px rgba(var(--color-gold-rgb), 0.25); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+/* Neon sign flickering turn-on phase */
+@keyframes neonFlicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+        text-shadow: var(--neon-gold);
+    }
+    20%, 24%, 55% {
+        text-shadow: none;
+    }
+}
+
 /* ==========================================================================
    MODULE 7: UTILITIES & VISIBILITY STATES
    ========================================================================== */
@@ -832,12 +904,6 @@ nav {
 .rsvp-form button,
 .form-message {
     grid-column: 1 / -1;
-}
-
-.form-message {
-    min-height: var(--space-2xl);
-    color: var(--color-gold-soft);
-    text-align: center;
 }
 
 #loader.is-hidden {
