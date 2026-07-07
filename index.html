@@ -48,12 +48,12 @@
                 <p class="eyebrow">30 August 2026</p>
                 <h1>Rozar & Arifa</h1>
                 <p class="tagline">Every journey begins with a single moment.<br>Ours became a lifetime.</p>
-                <button id="beginBtn" type="button">Join Our Journey</button>
-                <a class="scroll-indicator" href="#story" aria-label="Scroll to story">↓</a>
+                <button id="beginBtn" class="btn" type="button">Join Our Journey</button>
+                <a class="scroll-indicator" href="#story" aria-label="Scroll to story">&darr;</a>
             </div>
         </section>
 
-        <section id="story" class="section story-section">
+        <section id="story" class="section container story-section">
             <div class="section-heading">
                 <p class="eyebrow">Our Story</p>
                 <h2>Where It All Began</h2>
@@ -63,53 +63,55 @@
                     <p>With gratitude and joy, we invite you to celebrate the beginning of our new chapter. Your presence will make this day warmer, brighter, and unforgettable.</p>
                     <p>Come share the laughter, blessings, and memories as our families gather for a celebration of love.</p>
                 </div>
-                <div class="story-photo">
+                <div class="story-photo glass-card">
                     <img src="assets/images/story1.jpg" alt="Rozar and Arifa wedding story photograph">
                 </div>
             </div>
         </section>
 
-        <section id="gallery" class="section gallery-section">
+        <section id="gallery" class="section container gallery-section">
             <div class="section-heading">
                 <p class="eyebrow">Memories</p>
                 <h2>Moments We Treasure</h2>
             </div>
             <div class="gallery-grid">
-                <img src="assets/images/gallery1.jpg" alt="Wedding memory 1">
-                <img src="assets/images/gallery2.jpg" alt="Wedding memory 2">
-                <img src="assets/images/gallery3.jpg" alt="Wedding memory 3">
-                <img src="assets/images/gallery4.jpg" alt="Wedding memory 4">
-                <img src="assets/images/gallery5.jpg" alt="Wedding memory 5">
-                <img src="assets/images/gallery6.jpg" alt="Wedding memory 6">
+                <img class="glass-card" src="assets/images/gallery1.jpg" alt="Wedding memory 1">
+                <img class="glass-card" src="assets/images/gallery2.jpg" alt="Wedding memory 2">
+                <img class="glass-card" src="assets/images/gallery3.jpg" alt="Wedding memory 3">
+                <img class="glass-card" src="assets/images/gallery4.jpg" alt="Wedding memory 4">
+                <img class="glass-card" src="assets/images/gallery5.jpg" alt="Wedding memory 5">
+                <img class="glass-card" src="assets/images/gallery6.jpg" alt="Wedding memory 6">
             </div>
         </section>
 
         <section id="countdown" class="section countdown-section">
-            <div class="section-heading">
-                <p class="eyebrow">Counting Down</p>
-                <h2>Until Forever Begins</h2>
-            </div>
-            <div class="countdown-grid" aria-live="polite">
-                <div class="time-box"><span id="days">00</span><p>Days</p></div>
-                <div class="time-box"><span id="hours">00</span><p>Hours</p></div>
-                <div class="time-box"><span id="minutes">00</span><p>Minutes</p></div>
-                <div class="time-box"><span id="seconds">00</span><p>Seconds</p></div>
+            <div class="container">
+                <div class="section-heading">
+                    <p class="eyebrow">Counting Down</p>
+                    <h2>Until Forever Begins</h2>
+                </div>
+                <div class="countdown-grid" aria-live="polite">
+                    <div class="time-box"><span id="days">00</span><p>Days</p></div>
+                    <div class="time-box"><span id="hours">00</span><p>Hours</p></div>
+                    <div class="time-box"><span id="minutes">00</span><p>Minutes</p></div>
+                    <div class="time-box"><span id="seconds">00</span><p>Seconds</p></div>
+                </div>
             </div>
         </section>
 
-        <section id="events" class="section events-section">
+        <section id="events" class="section container events-section">
             <div class="section-heading">
                 <p class="eyebrow">Celebrations</p>
                 <h2>Celebrate With Us</h2>
             </div>
             <div class="events-grid">
-                <article class="event-card">
+                <article class="event-card glass-card">
                     <p class="event-date">29 August 2026</p>
                     <h3>Sangeet</h3>
                     <p>7:00 PM</p>
                     <p>NSK & NKR A/C Mahal</p>
                 </article>
-                <article class="event-card">
+                <article class="event-card glass-card">
                     <p class="event-date">30 August 2026</p>
                     <h3>Nikah</h3>
                     <p>9:00 AM</p>
@@ -118,41 +120,41 @@
             </div>
         </section>
 
-        <section id="venue" class="section venue-section">
-            <div class="venue-panel">
+        <section id="venue" class="section container venue-section">
+            <div class="venue-panel glass-card">
                 <div>
                     <p class="eyebrow">Venue</p>
                     <h2>Find Your Way</h2>
                     <p class="venue-name">NSK & NKR A/C Mahal and Residency</p>
                     <p class="venue-address">GST Main Rd, Lion City,<br>Thiru Nagar, Thanakkankulam,<br>Madurai, Tamil Nadu</p>
                 </div>
-                <a class="map-btn" href="https://maps.app.goo.gl/nHmxp5HqnWTBi1R56" target="_blank" rel="noopener">Open in Google Maps</a>
+                <a class="btn map-btn" href="https://maps.app.goo.gl/nHmxp5HqnWTBi1R56" target="_blank" rel="noopener">Open in Google Maps</a>
             </div>
         </section>
 
-        <section id="rsvp" class="section rsvp-section">
+        <section id="rsvp" class="section container rsvp-section">
             <div class="section-heading">
                 <p class="eyebrow">RSVP</p>
                 <h2>Will You Celebrate With Us?</h2>
                 <p>Please let us know if you will be joining us.</p>
             </div>
-            <form id="rsvpForm" class="rsvp-form">
+            <form id="rsvpForm" class="rsvp-form glass-card">
                 <label><span>Your Name</span><input name="name" type="text" autocomplete="name" required></label>
                 <label><span>Number of Guests</span><input name="guests" type="number" min="1" max="20" required></label>
                 <label><span>Will you attend?</span><select name="attendance" required><option value="">Select an option</option><option>Yes, I'll be there</option><option>Sorry, I can't make it</option></select></label>
                 <label class="full-field"><span>Leave a message</span><textarea name="message" rows="5" placeholder="Optional"></textarea></label>
-                <button type="submit">Send RSVP</button>
+                <button class="btn" type="submit">Send RSVP</button>
                 <p id="rsvpMessage" class="form-message" role="status"></p>
             </form>
         </section>
     </main>
 
     <footer id="footer">
-        <div class="footer-content">
+        <div class="footer-content container">
             <p class="eyebrow">With Love</p>
             <h2>Thank You</h2>
             <p>Thank you for becoming part of our journey.</p>
-            <h3>Rozar ♥ Arifa</h3>
+            <h3>Rozar &hearts; Arifa</h3>
             <p class="footer-date">See you on our biggest day</p>
         </div>
     </footer>
