@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
     <script src="script.js" defer></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -30,9 +31,16 @@
         </div>
     </div>
 
+    <div id="readingProgress" class="reading-progress-bar" aria-hidden="true"></div>
+
     <header class="site-header">
         <a href="#hero" class="brand">R & A</a>
-        <nav aria-label="Wedding sections">
+        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primary-nav">
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+        </button>
+        <nav id="primary-nav" aria-label="Wedding sections">
             <a href="#story">Story</a>
             <a href="#events">Events</a>
             <a href="#venue">Venue</a>
@@ -54,6 +62,7 @@
 
         <section id="story" class="section story-section container">
             <div class="section-heading">
+                <span class="chapter-number">Chapter I</span>
                 <p class="eyebrow">Our Story</p>
                 <h2>Where It All Began</h2>
             </div>
@@ -70,35 +79,37 @@
 
         <section id="gallery" class="section gallery-section container">
             <div class="section-heading">
+                <span class="chapter-number">Chapter II</span>
                 <p class="eyebrow">Memories</p>
                 <h2>Moments We Treasure</h2>
             </div>
             <div class="gallery-grid">
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery1.jpg" alt="Wedding memory 1"><div class="story-modal"><strong>Our First Selfie</strong><p>After class, while we were waiting to leave, you walked over with the simplest question: "Can we take a photo?" Little did we know that one small moment would become a memory we'd treasure forever.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery2.jpg" alt="Wedding memory 2"><div class="story-modal"><strong>📷 A Promise We Forgot</strong><p>Before we parted that day, we took a quick selfie, and I promised, "One day, I'll do a proper photoshoot for you." We both smiled, agreed... and somehow let that promise slip away—only for it to become another sweet memory that still makes us smile.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery3.jpg" alt="Wedding memory 3"><div class="story-modal"><strong>Laughs & Love</strong><p>You made me laugh until my sides hurt. Those genuine moments are what I treasure most.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery4.jpg" alt="Wedding memory 4"><div class="story-modal"><strong>Forever Smiling</strong><p>Every time I see you, my heart finds its smile. This was one of those perfect days.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery5.jpg" alt="Wedding memory 5"><div class="story-modal"><strong>Whispered Promises</strong><p>Words we only meant for each other. Dreams we shared under the stars.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery6.jpg" alt="Wedding memory 6"><div class="story-modal"><strong>Golden Hour Bliss</strong><p>When the sun painted everything gold, we felt like the richest people in the world.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery7.jpg" alt="Wedding memory 7"><div class="story-modal"><strong>Hand in Hand</strong><p>Your hand fit perfectly in mine. No words needed, just the feeling of being home.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery8.jpg" alt="Wedding memory 8"><div class="story-modal"><strong>Our Favorite Place</strong><p>The spot where we always escape from the world. Where time stops and only we exist.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery9.jpg" alt="Wedding memory 9"><div class="story-modal"><strong>Dancing in Dreams</strong><p>No music was needed. Your heartbeat was the only rhythm I wanted to follow.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery10.jpg" alt="Wedding memory 10"><div class="story-modal"><strong>Stolen Glances</strong><p>Those moments when you didn't know I was watching. The way love shows in the little things.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery11.jpg" alt="Wedding memory 11"><div class="story-modal"><strong>Lost in the Moment</strong><p>Everything else faded. There was only us, the sky, and infinite possibilities.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery12.jpg" alt="Wedding memory 12"><div class="story-modal"><strong>Hearts Entwined</strong><p>Two souls became one. A connection so deep, nothing could break it apart.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery13.jpg" alt="Wedding memory 13"><div class="story-modal"><strong>Sunrise Together</strong><p>Watching the day begin with you made every morning feel like a new love story.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery14.jpg" alt="Wedding memory 14"><div class="story-modal"><strong>Endless Summer</strong><p>Those carefree days felt like they would never end. But the best was yet to come.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery15.jpg" alt="Wedding memory 15"><div class="story-modal"><strong>Forever Begins</strong><p>The moment we both knew this was it. No more maybes, just a lifetime of yes.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery16.jpg" alt="Wedding memory 16"><div class="story-modal"><strong>Our Journey Home</strong><p>Wherever you are becomes home. The distance means nothing when love is this strong.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery17.jpg" alt="Wedding memory 17"><div class="story-modal"><strong>With Every Heartbeat</strong><p>I felt your love with every beat of my heart. A rhythm that only you could create.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery18.jpg" alt="Wedding memory 18"><div class="story-modal"><strong>The Love We Found</strong><p>What started as a chance meeting became the greatest discovery of our lives.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery19.jpg" alt="Wedding memory 19"><div class="story-modal"><strong>Till the End</strong><p>I promised to love you till the end of time. This is just the beautiful beginning.</p></div></figure>
-                <figure class="gallery-item"><img class="glass-card" src="assets/images/gallery20.jpg" alt="Wedding memory 20"><div class="story-modal"><strong>Our Last Pic as BF GF</strong><p>From this moment on, we are forever. Two hearts, one soul, infinite love. Mrs. & Mr., always.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">01</span><img class="glass-card" src="assets/images/gallery1.jpg" alt="Wedding memory 1"><div class="story-modal"><strong>Our First Selfie</strong><p>After class, while we were waiting to leave, you walked over with the simplest question: "Can we take a photo?" Little did we know that one small moment would become a memory we'd treasure forever.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">02</span><img class="glass-card" src="assets/images/gallery2.jpg" alt="Wedding memory 2"><div class="story-modal"><strong>📷 A Promise We Forgot</strong><p>Before we parted that day, we took a quick selfie, and I promised, "One day, I'll do a proper photoshoot for you." We both smiled, agreed... and somehow let that promise slip away—only for it to become another sweet memory that still makes us smile.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">03</span><img class="glass-card" src="assets/images/gallery3.jpg" alt="Wedding memory 3"><div class="story-modal"><strong>Laughs & Love</strong><p>You made me laugh until my sides hurt. Those genuine moments are what I treasure most.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">04</span><img class="glass-card" src="assets/images/gallery4.jpg" alt="Wedding memory 4"><div class="story-modal"><strong>Forever Smiling</strong><p>Every time I see you, my heart finds its smile. This was one of those perfect days.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">05</span><img class="glass-card" src="assets/images/gallery5.jpg" alt="Wedding memory 5"><div class="story-modal"><strong>Whispered Promises</strong><p>Words we only meant for each other. Dreams we shared under the stars.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">06</span><img class="glass-card" src="assets/images/gallery6.jpg" alt="Wedding memory 6"><div class="story-modal"><strong>Golden Hour Bliss</strong><p>When the sun painted everything gold, we felt like the richest people in the world.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">07</span><img class="glass-card" src="assets/images/gallery7.jpg" alt="Wedding memory 7"><div class="story-modal"><strong>Hand in Hand</strong><p>Your hand fit perfectly in mine. No words needed, just the feeling of being home.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">08</span><img class="glass-card" src="assets/images/gallery8.jpg" alt="Wedding memory 8"><div class="story-modal"><strong>Our Favorite Place</strong><p>The spot where we always escape from the world. Where time stops and only we exist.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">09</span><img class="glass-card" src="assets/images/gallery9.jpg" alt="Wedding memory 9"><div class="story-modal"><strong>Dancing in Dreams</strong><p>No music was needed. Your heartbeat was the only rhythm I wanted to follow.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">10</span><img class="glass-card" src="assets/images/gallery10.jpg" alt="Wedding memory 10"><div class="story-modal"><strong>Stolen Glances</strong><p>Those moments when you didn't know I was watching. The way love shows in the little things.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">11</span><img class="glass-card" src="assets/images/gallery11.jpg" alt="Wedding memory 11"><div class="story-modal"><strong>Lost in the Moment</strong><p>Everything else faded. There was only us, the sky, and infinite possibilities.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">12</span><img class="glass-card" src="assets/images/gallery12.jpg" alt="Wedding memory 12"><div class="story-modal"><strong>Hearts Entwined</strong><p>Two souls became one. A connection so deep, nothing could break it apart.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">13</span><img class="glass-card" src="assets/images/gallery13.jpg" alt="Wedding memory 13"><div class="story-modal"><strong>Sunrise Together</strong><p>Watching the day begin with you made every morning feel like a new love story.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">14</span><img class="glass-card" src="assets/images/gallery14.jpg" alt="Wedding memory 14"><div class="story-modal"><strong>Endless Summer</strong><p>Those carefree days felt like they would never end. But the best was yet to come.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">15</span><img class="glass-card" src="assets/images/gallery15.jpg" alt="Wedding memory 15"><div class="story-modal"><strong>Forever Begins</strong><p>The moment we both knew this was it. No more maybes, just a lifetime of yes.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">16</span><img class="glass-card" src="assets/images/gallery16.jpg" alt="Wedding memory 16"><div class="story-modal"><strong>Our Journey Home</strong><p>Wherever you are becomes home. The distance means nothing when love is this strong.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">17</span><img class="glass-card" src="assets/images/gallery17.jpg" alt="Wedding memory 17"><div class="story-modal"><strong>With Every Heartbeat</strong><p>I felt your love with every beat of my heart. A rhythm that only you could create.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">18</span><img class="glass-card" src="assets/images/gallery18.jpg" alt="Wedding memory 18"><div class="story-modal"><strong>The Love We Found</strong><p>What started as a chance meeting became the greatest discovery of our lives.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">19</span><img class="glass-card" src="assets/images/gallery19.jpg" alt="Wedding memory 19"><div class="story-modal"><strong>Till the End</strong><p>I promised to love you till the end of time. This is just the beautiful beginning.</p></div></figure>
+                <figure class="gallery-item"><span class="gallery-date">20</span><img class="glass-card" src="assets/images/gallery20.jpg" alt="Wedding memory 20"><div class="story-modal"><strong>Our Last Pic as BF GF</strong><p>From this moment on, we are forever. Two hearts, one soul, infinite love. Mrs. & Mr., always.</p></div></figure>
             </div>
         </section>
 
         <section id="countdown" class="section countdown-section container">
             <div class="section-heading">
+                <span class="chapter-number">The Countdown</span>
                 <p class="eyebrow">Counting Down</p>
                 <h2>Until Forever Begins</h2>
             </div>
@@ -112,6 +123,7 @@
 
         <section id="events" class="section events-section container">
             <div class="section-heading">
+                <span class="chapter-number">Chapter III</span>
                 <p class="eyebrow">Celebrations</p>
                 <h2>Celebrate With Us</h2>
             </div>
@@ -134,6 +146,7 @@
         <section id="venue" class="section venue-section container">
             <div class="venue-panel glass-card">
                 <div>
+                    <span class="chapter-number">Chapter IV</span>
                     <p class="eyebrow">Venue</p>
                     <h2>Find Your Way</h2>
                     <p class="venue-name">NSK & NKR A/C Mahal and Residency</p>
@@ -145,6 +158,7 @@
 
         <section id="rsvp" class="section rsvp-section container">
             <div class="section-heading">
+                <span class="chapter-number">Chapter V</span>
                 <p class="eyebrow">RSVP</p>
                 <h2>Will You Celebrate With Us?</h2>
                 <p>Please let us know if you will be joining us.</p>
@@ -162,6 +176,7 @@
 
     <footer id="footer">
         <div class="footer-content container">
+            <span class="chapter-number">Epilogue</span>
             <p class="eyebrow">With Love</p>
             <h2>Thank You</h2>
             <p>Thank you for becoming part of our journey.</p>

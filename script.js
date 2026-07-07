@@ -46,6 +46,7 @@ window.addEventListener("load", () => {
         gsap.fromTo(progress, { width: "0%" }, { width: "100%", duration: 1.6, ease: "power2.inOut" });
     }
 
+    createFloatingParticles();
     window.setTimeout(revealPage, 1800);
 });
 
@@ -190,28 +191,190 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-// Fancy Section Stagger Animation Trigger
-if (hasGsap()) {
-    const animateOnScroll = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const target = entry.target;
-                if (target.classList.contains("event-card")) {
-                    gsap.fromTo(target, { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 1.2, ease: "power3.out" });
-                } else if (target.classList.contains("time-box")) {
-                    gsap.fromTo(target, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, ease: "back.out(1.7)" });
-                } else if (target.classList.contains("section-heading")) {
-                    gsap.fromTo(target.querySelectorAll(".eyebrow, h2, p"), 
-                        { y: 30, opacity: 0 }, 
-                        { y: 0, opacity: 1, duration: 1, stagger: 0.15, ease: "power2.out" }
-                    );
-                }
-                observer.unobserve(target);
-            }
-        });
-    }, { threshold: 0.12 });
+// Cinematic Section ScrollTrigger Animations
+if (hasGsap() && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
 
-    document.querySelectorAll(".event-card, .time-box, .section-heading").forEach(el => animateOnScroll.observe(el));
+    // 1. Hero Parallax
+    gsap.to(".hero-image", {
+        scrollTrigger: {
+            trigger: "#hero",
+            start: "top top",
+            end: "bottom top",
+            scrub: true
+        },
+        yPercent: 12,
+        ease: "none"
+    });
+
+    // 2. Story Section Timeline
+    const storyTimeline = gsap.timeline({
+        scrollTrigger: {
+            trigger: "#story",
+            start: "top 80%"
+        }
+    });
+    storyTimeline
+        .from("#story .section-heading > *", {
+            y: 40,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power2.out"
+        })
+        .from("#story .story-copy", {
+            x: -50,
+            opacity: 0,
+            duration: 0.9,
+            ease: "power2.out"
+        }, "-=0.4")
+        .from("#story .story-photo", {
+            x: 50,
+            opacity: 0,
+            duration: 0.9,
+            ease: "power2.out"
+        }, "-=0.9");
+
+    // 3. Gallery Section Timeline (Chronological Journey)
+    const galleryTimeline = gsap.timeline({
+        scrollTrigger: {
+            trigger: "#gallery",
+            start: "top 80%"
+        }
+    });
+    galleryTimeline
+        .from("#gallery .section-heading > *", {
+            y: 40,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power2.out"
+        })
+        .from("#gallery .gallery-item", {
+            y: 45,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.08,
+            ease: "power2.out"
+        }, "-=0.4");
+
+    // 4. Countdown Section Timeline
+    const countdownTimeline = gsap.timeline({
+        scrollTrigger: {
+            trigger: "#countdown",
+            start: "top 80%"
+        }
+    });
+    countdownTimeline
+        .from("#countdown .section-heading > *", {
+            y: 40,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power2.out"
+        })
+        .from("#countdown .time-box", {
+            scale: 0.85,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "back.out(1.5)"
+        }, "-=0.4");
+
+    // 5. Events Section Timeline
+    const eventsTimeline = gsap.timeline({
+        scrollTrigger: {
+            trigger: "#events",
+            start: "top 80%"
+        }
+    });
+    eventsTimeline
+        .from("#events .section-heading > *", {
+            y: 40,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power2.out"
+        })
+        .from("#events .event-card", {
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            stagger: 0.15,
+            ease: "power3.out"
+        }, "-=0.4");
+
+    // 6. Venue Section Timeline
+    gsap.from("#venue .venue-panel", {
+        scrollTrigger: {
+            trigger: "#venue",
+            start: "top 85%"
+        },
+        y: 60,
+        opacity: 0,
+        duration: 1.1,
+        ease: "power3.out"
+    });
+
+    // 7. RSVP Section Timeline
+    const rsvpTimeline = gsap.timeline({
+        scrollTrigger: {
+            trigger: "#rsvp",
+            start: "top 80%"
+        }
+    });
+    rsvpTimeline
+        .from("#rsvp .section-heading > *", {
+            y: 40,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: "power2.out"
+        })
+        .from("#rsvp .rsvp-form", {
+            y: 40,
+            opacity: 0,
+            duration: 0.9,
+            ease: "power2.out"
+        }, "-=0.4");
+
+    // 8. Footer Section Timeline
+    gsap.from("#footer .footer-content > *", {
+        scrollTrigger: {
+            trigger: "#footer",
+            start: "top 90%"
+        },
+        y: 35,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power2.out"
+    });
+}
+
+// Dynamic Floating Gold Particles Generator
+function createFloatingParticles() {
+    const bgContainer = document.querySelector(".background");
+    if (!bgContainer) return;
+
+    const particleCount = 14;
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement("div");
+        particle.className = "floating-petal";
+        
+        particle.style.left = `${Math.random() * 100}vw`;
+        particle.style.bottom = `-${Math.random() * 20 + 10}px`;
+        
+        const size = Math.random() * 8 + 4;
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        
+        particle.style.opacity = Math.random() * 0.45 + 0.15;
+        particle.style.animationDelay = `${Math.random() * 12}s`;
+        particle.style.animationDuration = `${Math.random() * 18 + 18}s`;
+        
+        bgContainer.appendChild(particle);
+    }
 }
 
 rsvpForm?.addEventListener("submit", async (event) => {
@@ -233,4 +396,173 @@ rsvpForm?.addEventListener("submit", async (event) => {
         : "Thank you. Your RSVP has been sent!";
 
     rsvpForm.reset();
+});
+
+// ==========================================================================
+// NAVIGATION OVERHAUL DYNAMICS
+// ==========================================================================
+const siteHeader = document.querySelector(".site-header");
+const menuToggle = document.querySelector(".menu-toggle");
+const primaryNav = document.getElementById("primary-nav");
+const headerNavLinks = document.querySelectorAll("#primary-nav a");
+const readingProgressBar = document.getElementById("readingProgress");
+
+// 1. Reading Progress Bar & Header Show/Hide on Scroll
+let lastScrollPosition = window.scrollY;
+let isHeaderHidden = false;
+let isMenuOpen = false;
+
+function handleScrollDynamics() {
+    const currentScrollPosition = window.scrollY;
+    const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+    
+    // Update reading progress bar
+    const scrollPercentage = documentHeight > 0 ? (currentScrollPosition / documentHeight) * 100 : 0;
+    if (readingProgressBar) {
+        if (hasGsap()) {
+            gsap.to(readingProgressBar, { width: `${scrollPercentage}%`, duration: 0.1, overwrite: "auto" });
+        } else {
+            readingProgressBar.style.width = `${scrollPercentage}%`;
+        }
+    }
+
+    // Toggle frosted glass background class
+    if (currentScrollPosition > 50) {
+        siteHeader?.classList.add("scrolled");
+    } else {
+        siteHeader?.classList.remove("scrolled");
+    }
+
+    // Header hide on scroll down, show on scroll up using smooth GSAP
+    if (siteHeader && !isMenuOpen) {
+        const headerHeight = siteHeader.offsetHeight;
+        if (currentScrollPosition > lastScrollPosition && currentScrollPosition > headerHeight + 100) {
+            // Scrolling Down -> Hide
+            if (!isHeaderHidden) {
+                isHeaderHidden = true;
+                if (hasGsap()) {
+                    gsap.to(siteHeader, { yPercent: -108, duration: 0.4, ease: "power2.out" });
+                } else {
+                    siteHeader.style.transform = "translateY(-108%)";
+                }
+            }
+        } else if (currentScrollPosition < lastScrollPosition) {
+            // Scrolling Up -> Show
+            if (isHeaderHidden) {
+                isHeaderHidden = false;
+                if (hasGsap()) {
+                    gsap.to(siteHeader, { yPercent: 0, duration: 0.4, ease: "power2.out" });
+                } else {
+                    siteHeader.style.transform = "translateY(0)";
+                }
+            }
+        }
+    }
+
+    lastScrollPosition = currentScrollPosition;
+}
+
+window.addEventListener("scroll", handleScrollDynamics, { passive: true });
+handleScrollDynamics(); // Initial invocation
+
+// 2. Active Section Highlight Indicator in View
+const navObservedSections = document.querySelectorAll("section[id]");
+const observerOptions = {
+    root: null,
+    rootMargin: "-25% 0px -55% 0px",
+    threshold: 0
+};
+
+const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const sectionId = entry.target.getAttribute("id");
+            headerNavLinks.forEach(link => {
+                const targetHref = link.getAttribute("href");
+                if (targetHref === `#${sectionId}`) {
+                    link.classList.add("active");
+                } else {
+                    link.classList.remove("active");
+                }
+            });
+        }
+    });
+}, observerOptions);
+
+navObservedSections.forEach(section => sectionObserver.observe(section));
+
+// Fallback checking for bottom of page to ensure RSVP gets highlighted
+window.addEventListener("scroll", () => {
+    if ((window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 12) {
+        headerNavLinks.forEach(link => link.classList.remove("active"));
+        const lastNavLink = headerNavLinks[headerNavLinks.length - 1];
+        if (lastNavLink) lastNavLink.classList.add("active");
+    }
+}, { passive: true });
+
+// 3. Mobile Hamburger Overlay Menu with GSAP Slide & Stagger Animations
+let mobileMenuTimeline;
+
+if (hasGsap() && primaryNav) {
+    mobileMenuTimeline = gsap.timeline({ paused: true });
+    mobileMenuTimeline
+        .set(primaryNav, { visibility: "visible" })
+        .to(primaryNav, {
+            yPercent: 100, // animate top overlay from translate Y -100% to 0
+            opacity: 1,
+            duration: 0.55,
+            ease: "power3.inOut"
+        })
+        .from(headerNavLinks, {
+            y: 30,
+            opacity: 0,
+            duration: 0.4,
+            stagger: 0.1,
+            ease: "power2.out"
+        }, "-=0.25");
+}
+
+function toggleMobileMenu() {
+    isMenuOpen = !isMenuOpen;
+    menuToggle?.classList.toggle("open", isMenuOpen);
+    menuToggle?.setAttribute("aria-expanded", isMenuOpen);
+
+    if (isMenuOpen) {
+        primaryNav?.classList.add("open");
+        document.body.classList.add("modal-open"); // Reuses overflow: hidden scroll lock
+        
+        if (hasGsap() && mobileMenuTimeline) {
+            mobileMenuTimeline.play();
+        } else if (primaryNav) {
+            primaryNav.style.visibility = "visible";
+            primaryNav.style.transform = "translateY(0)";
+            primaryNav.style.opacity = "1";
+            primaryNav.style.pointerEvents = "auto";
+        }
+    } else {
+        document.body.classList.remove("modal-open");
+        if (hasGsap() && mobileMenuTimeline) {
+            mobileMenuTimeline.reverse();
+        } else if (primaryNav) {
+            primaryNav.style.transform = "translateY(-100%)";
+            primaryNav.style.opacity = "0";
+            primaryNav.style.pointerEvents = "none";
+            setTimeout(() => {
+                if (!isMenuOpen) primaryNav.style.visibility = "hidden";
+            }, 500);
+        }
+        setTimeout(() => {
+            if (!isMenuOpen) primaryNav?.classList.remove("open");
+        }, 550);
+    }
+}
+
+menuToggle?.addEventListener("click", toggleMobileMenu);
+
+headerNavLinks.forEach(link => {
+    link.addEventListener("click", () => {
+        if (isMenuOpen) {
+            toggleMobileMenu();
+        }
+    });
 });
