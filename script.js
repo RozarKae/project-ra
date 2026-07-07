@@ -104,7 +104,7 @@ function updateCountdown() {
 updateCountdown();
 window.setInterval(updateCountdown, 1000);
 
-// Dynamic Gallery Full Frame Modal Functionality (Gallery 2.0)
+// Dynamic Gallery Full Frame Modal Functionality (Gallery 2.0 Redesigned)
 const galleryItems = document.querySelectorAll(".gallery-item");
 const modalOverlay = document.createElement("div");
 modalOverlay.className = "modal-overlay";
@@ -133,6 +133,12 @@ nextBtn.setAttribute("aria-label", "Next memory");
 const modalImage = document.createElement("img");
 modalImage.className = "modal-frame-img";
 
+const modalImageContainer = document.createElement("div");
+modalImageContainer.className = "modal-image-container";
+modalImageContainer.appendChild(prevBtn);
+modalImageContainer.appendChild(nextBtn);
+modalImageContainer.appendChild(modalImage);
+
 const modalProgressContainer = document.createElement("div");
 modalProgressContainer.className = "modal-progress-container";
 const modalProgressBar = document.createElement("div");
@@ -142,12 +148,14 @@ modalProgressContainer.appendChild(modalProgressBar);
 const modalContent = document.createElement("div");
 modalContent.className = "modal-text-content";
 
+const modalDotsContainer = document.createElement("div");
+modalDotsContainer.className = "modal-dots-container";
+
 modalWrapper.appendChild(closeBtn);
-modalWrapper.appendChild(prevBtn);
-modalWrapper.appendChild(nextBtn);
-modalWrapper.appendChild(modalImage);
+modalWrapper.appendChild(modalImageContainer);
 modalWrapper.appendChild(modalProgressContainer);
 modalWrapper.appendChild(modalContent);
+modalWrapper.appendChild(modalDotsContainer);
 modalOverlay.appendChild(modalWrapper);
 document.body.appendChild(modalOverlay);
 
@@ -199,7 +207,24 @@ function updateModalProgressBar(index) {
     }
 }
 
-// 3. Carousel slide transition logic
+// 3. Render indicator dots
+function updateModalDots(index) {
+    let dotsHtml = "";
+    for (let i = 0; i < galleryItems.length; i++) {
+        dotsHtml += `<span class="modal-dot ${i === index ? 'active' : ''}" data-index="${i}" role="button" aria-label="Go to memory ${i + 1}"></span>`;
+    }
+    modalDotsContainer.innerHTML = dotsHtml;
+    
+    modalDotsContainer.querySelectorAll(".modal-dot").forEach(dot => {
+        dot.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const idx = parseInt(e.currentTarget.getAttribute("data-index"), 10);
+            transitionToMemory(idx);
+        });
+    });
+}
+
+// 4. Carousel slide transition logic
 function transitionToMemory(index) {
     if (isAnimating) return;
     isAnimating = true;
@@ -215,9 +240,9 @@ function transitionToMemory(index) {
 
     if (hasGsap()) {
         gsap.timeline()
-            .to([modalImage, modalContent], {
+            .to([modalImage, modalContent, modalDotsContainer], {
                 opacity: 0,
-                scale: 0.95,
+                scale: 0.96,
                 duration: 0.2,
                 ease: "power2.in",
                 onComplete: () => {
@@ -227,16 +252,18 @@ function transitionToMemory(index) {
                     const title = storyData.querySelector("strong").outerHTML;
                     const desc = storyData.querySelector("p").outerHTML;
                     modalContent.innerHTML = `
-                        <div class="modal-counter">Memory ${index + 1} of ${galleryItems.length}</div>
                         ${title}
+                        <div class="modal-separator" aria-hidden="true">♥</div>
                         ${desc}
+                        <div class="modal-counter">Memory ${index + 1} of ${galleryItems.length}</div>
                     `;
                     
                     preloadAdjacent(index);
                     updateModalProgressBar(index);
+                    updateModalDots(index);
                 }
             })
-            .to([modalImage, modalContent], {
+            .to([modalImage, modalContent, modalDotsContainer], {
                 opacity: 1,
                 scale: 1,
                 duration: 0.35,
@@ -252,12 +279,14 @@ function transitionToMemory(index) {
         const title = storyData.querySelector("strong").outerHTML;
         const desc = storyData.querySelector("p").outerHTML;
         modalContent.innerHTML = `
-            <div class="modal-counter">Memory ${index + 1} of ${galleryItems.length}</div>
             ${title}
+            <div class="modal-separator" aria-hidden="true">♥</div>
             ${desc}
+            <div class="modal-counter">Memory ${index + 1} of ${galleryItems.length}</div>
         `;
         preloadAdjacent(index);
         updateModalProgressBar(index);
+        updateModalDots(index);
         isAnimating = false;
         setupFocusableElements();
     }
@@ -273,7 +302,7 @@ function showPrevMemory() {
     transitionToMemory(idx);
 }
 
-// 4. Open/Close Modal controllers
+// 5. Open/Close Modal controllers
 function openModal(index) {
     previouslyFocusedEl = document.activeElement;
     currentMemoryIndex = index;
@@ -289,13 +318,15 @@ function openModal(index) {
     const title = storyData.querySelector("strong").outerHTML;
     const desc = storyData.querySelector("p").outerHTML;
     modalContent.innerHTML = `
-        <div class="modal-counter">Memory ${index + 1} of ${galleryItems.length}</div>
         ${title}
+        <div class="modal-separator" aria-hidden="true">♥</div>
         ${desc}
+        <div class="modal-counter">Memory ${index + 1} of ${galleryItems.length}</div>
     `;
 
     preloadAdjacent(index);
     updateModalProgressBar(index);
+    updateModalDots(index);
 
     modalOverlay.classList.add("active");
     document.body.classList.add("modal-open");
@@ -325,6 +356,7 @@ function closeModal() {
                 modalImage.src = "";
                 modalImage.alt = "";
                 modalContent.innerHTML = "";
+                modalDotsContainer.innerHTML = "";
                 if (previouslyFocusedEl) {
                     previouslyFocusedEl.focus();
                 }
@@ -336,6 +368,7 @@ function closeModal() {
         modalImage.src = "";
         modalImage.alt = "";
         modalContent.innerHTML = "";
+        modalDotsContainer.innerHTML = "";
         if (previouslyFocusedEl) {
             previouslyFocusedEl.focus();
         }
