@@ -595,25 +595,316 @@ function createFloatingParticles() {
     }
 }
 
-rsvpForm?.addEventListener("submit", async (event) => {
-    event.preventDefault();
+// ==========================================================================
+// RSVP WIZARD & GUEST EXPERIENCE
+// ==========================================================================
+const rsvpSteps = document.querySelectorAll(".rsvp-step");
+const rsvpProgressFill = document.querySelector(".rsvp-progress-fill");
+const rsvpProgressDots = document.querySelectorAll(".rsvp-progress-dot");
+
+const nameInput = rsvpForm?.querySelector('input[name="name"]');
+const attendanceSelect = rsvpForm?.querySelector('select[name="attendance"]');
+const guestsInput = rsvpForm?.querySelector('input[name="guests"]');
+const messageTextarea = rsvpForm?.querySelector('textarea[name="message"]');
+
+const nameError = document.getElementById("nameError");
+const attendanceError = document.getElementById("attendanceError");
+const guestsError = document.getElementById("guestsError");
+
+const summaryName = document.getElementById("summaryName");
+const summaryAttendance = document.getElementById("summaryAttendance");
+const summaryGuests = document.getElementById("summaryGuests");
+const summaryMessage = document.getElementById("summaryMessage");
+const summaryGuestsRow = document.getElementById("summaryGuestsRow");
+
+const rsvpLoadingState = document.querySelector(".rsvp-loading-state");
+const rsvpSuccessState = document.querySelector(".rsvp-success-state");
+const rsvpFailureState = document.querySelector(".rsvp-failure-state");
+const successPersonalMessage = document.getElementById("successPersonalMessage");
+
+const googleCalendarLink = document.getElementById("googleCalendarLink");
+const downloadIcsBtn = document.getElementById("downloadIcsBtn");
+const retrySubmitBtn = document.getElementById("retrySubmitBtn");
+
+let rsvpActiveStep = 1;
+let rsvpIsSubmitting = false;
+
+// 1. Wizard Navigation & Skips
+function updateRsvpProgress(step) {
+    let percent = 0;
+    if (step === 1) percent = 0;
+    else if (step === 2) percent = 50;
+    else if (step === 3 || step === 4) percent = 100;
+
+    if (rsvpProgressFill) {
+        rsvpProgressFill.style.width = `${percent}%`;
+    }
+
+    rsvpProgressDots.forEach(dot => {
+        const dotStep = parseInt(dot.getAttribute("data-step"), 10);
+        if (dotStep < step) {
+            dot.classList.add("completed");
+            dot.classList.remove("active");
+        } else if (dotStep === step) {
+            dot.classList.add("active");
+            dot.classList.remove("completed");
+        } else {
+            dot.classList.remove("active", "completed");
+        }
+    });
+}
+
+function transitionToRsvpStep(step) {
+    rsvpActiveStep = step;
+    rsvpSteps.forEach(slide => {
+        const slideStep = parseInt(slide.getAttribute("data-step"), 10);
+        if (slideStep === step) {
+            slide.classList.add("active");
+            const firstInput = slide.querySelector("input, select, textarea, button");
+            setTimeout(() => firstInput?.focus(), 80);
+        } else {
+            slide.classList.remove("active");
+        }
+    });
+
+    updateRsvpProgress(step);
+}
+
+// 2. Real-time Input Validation Helpers
+function validateName() {
+    const val = (nameInput?.value || "").trim();
+    if (!val) {
+        nameError.textContent = "Please enter your name.";
+        nameInput?.classList.add("invalid-field");
+        return false;
+    } else if (val.length < 2) {
+        nameError.textContent = "Name must be at least 2 characters.";
+        nameInput?.classList.add("invalid-field");
+        return false;
+    } else {
+        nameError.textContent = "";
+        nameInput?.classList.remove("invalid-field");
+        return true;
+    }
+}
+
+function validateAttendance() {
+    const val = attendanceSelect?.value || "";
+    if (!val) {
+        attendanceError.textContent = "Please select your attendance.";
+        attendanceSelect?.classList.add("invalid-field");
+        return false;
+    } else {
+        attendanceError.textContent = "";
+        attendanceSelect?.classList.remove("invalid-field");
+        return true;
+    }
+}
+
+function validateGuests() {
+    const isAttending = attendanceSelect?.value === "Yes, I'll be there";
+    if (!isAttending) return true;
+    
+    const val = parseInt(guestsInput?.value || "", 10);
+    if (isNaN(val) || val < 1 || val > 20) {
+        guestsError.textContent = "Number of guests must be between 1 and 20.";
+        guestsInput?.classList.add("invalid-field");
+        return false;
+    } else {
+        guestsError.textContent = "";
+        guestsInput?.classList.remove("invalid-field");
+        return true;
+    }
+}
+
+nameInput?.addEventListener("blur", validateName);
+nameInput?.addEventListener("input", validateName);
+attendanceSelect?.addEventListener("change", () => {
+    validateAttendance();
+    const isAttending = attendanceSelect.value === "Yes, I'll be there";
+    const guestLabel = document.getElementById("guestFieldLabel");
+    if (isAttending) {
+        guestLabel?.style.setProperty("display", "grid");
+        if (!guestsInput.value) guestsInput.value = 1;
+    } else {
+        guestLabel?.style.setProperty("display", "none");
+        guestsInput.value = "";
+    }
+});
+guestsInput?.addEventListener("blur", validateGuests);
+guestsInput?.addEventListener("input", validateGuests);
+
+// 3. Step buttons navigators
+rsvpForm?.querySelectorAll(".next-step-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        if (rsvpActiveStep === 1) {
+            const isNameValid = validateName();
+            const isAttendanceValid = validateAttendance();
+            if (isNameValid && isAttendanceValid) {
+                const isAttending = attendanceSelect.value === "Yes, I'll be there";
+                if (isAttending) {
+                    transitionToRsvpStep(2);
+                } else {
+                    guestsInput.value = "";
+                    buildSummary();
+                    transitionToRsvpStep(3);
+                }
+            }
+        } else if (rsvpActiveStep === 2) {
+            if (validateGuests()) {
+                buildSummary();
+                transitionToRsvpStep(3);
+            }
+        }
+    });
+});
+
+rsvpForm?.querySelectorAll(".prev-step-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        if (rsvpActiveStep === 3) {
+            const isAttending = attendanceSelect.value === "Yes, I'll be there";
+            if (isAttending) {
+                transitionToRsvpStep(2);
+            } else {
+                transitionToRsvpStep(1);
+            }
+        } else if (rsvpActiveStep === 2) {
+            transitionToRsvpStep(1);
+        }
+    });
+});
+
+// 4. Summary Review Loader
+function buildSummary() {
+    summaryName.textContent = (nameInput?.value || "").trim();
+    summaryAttendance.textContent = attendanceSelect?.value || "";
+    
+    const isAttending = attendanceSelect?.value === "Yes, I'll be there";
+    if (isAttending) {
+        summaryGuestsRow?.style.setProperty("display", "list-item");
+        summaryGuests.textContent = guestsInput?.value || "1";
+    } else {
+        summaryGuestsRow?.style.setProperty("display", "none");
+        summaryGuests.textContent = "0";
+    }
+    
+    const wish = (messageTextarea?.value || "").trim();
+    summaryMessage.textContent = wish ? wish : "No message left.";
+}
+
+// 5. Calendar Links & Downloads
+function setupCalendarIntegrations(name, attendance) {
+    const isAttending = attendance === "Yes, I'll be there";
+    
+    if (isAttending) {
+        successPersonalMessage.textContent = `Thank you, ${name}! We are thrilled that you will celebrate with us on 30 August 2026.`;
+        document.querySelector(".rsvp-calendar-wrapper")?.style.setProperty("display", "block");
+    } else {
+        successPersonalMessage.textContent = `Thank you for letting us know, ${name}. We will miss you, but we appreciate you sending your blessings!`;
+        document.querySelector(".rsvp-calendar-wrapper")?.style.setProperty("display", "none");
+    }
+
+    const startUtc = "20260830T033000Z";
+    const endUtc = "20260830T093000Z";
+    const title = encodeURIComponent("Rozar & Arifa's Wedding (Nikah)");
+    const details = encodeURIComponent("Join us for the Nikah ceremony at 9:00 AM. Venue: NSK & NKR A/C Mahal and Residency, Madurai.");
+    const location = encodeURIComponent("NSK & NKR A/C Mahal and Residency, GST Main Rd, Lion City, Thiru Nagar, Thanakkankulam, Madurai, Tamil Nadu");
+    
+    if (googleCalendarLink) {
+        googleCalendarLink.href = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startUtc}/${endUtc}&details=${details}&location=${location}`;
+    }
+
+    if (downloadIcsBtn) {
+        downloadIcsBtn.onclick = () => {
+            const icsContent = [
+                "BEGIN:VCALENDAR",
+                "VERSION:2.0",
+                "PRODID:-//Rozar Arifa//Wedding Invitation//EN",
+                "BEGIN:VEVENT",
+                "UID:wedding-rozar-arifa-2026",
+                "DTSTAMP:20260707T120000Z",
+                "DTSTART:20260830T033000Z",
+                "DTEND:20260830T093000Z",
+                "SUMMARY:Rozar & Arifa's Wedding (Nikah)",
+                "DESCRIPTION:Join us for the Nikah ceremony at 9:00 AM. Venue: NSK & NKR A/C Mahal and Residency, Madurai.",
+                "LOCATION:NSK & NKR A/C Mahal and Residency, GST Main Rd, Lion City, Thiru Nagar, Thanakkankulam, Madurai, Tamil Nadu",
+                "END:VEVENT",
+                "END:VCALENDAR"
+            ].join("\r\n");
+
+            const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "wedding-rozar-arifa.ics";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+    }
+}
+
+// 6. Submit RSVP Fetch Operations
+async function executeRsvpSubmission() {
+    if (rsvpIsSubmitting) return;
+    rsvpIsSubmitting = true;
+
+    transitionToRsvpStep(4);
+    
+    rsvpLoadingState.style.setProperty("display", "flex");
+    rsvpSuccessState.style.setProperty("display", "none");
+    rsvpFailureState.style.setProperty("display", "none");
+    
+    document.querySelector(".rsvp-progress-tracker")?.style.setProperty("display", "none");
+
     const formData = new FormData(rsvpForm);
     const name = String(formData.get("name") || "").trim();
+    const attendance = String(formData.get("attendance") || "");
 
     try {
-        await fetch("https://formsubmit.co/arifabivikhan@gmail.com", {
+        const response = await fetch("https://formsubmit.co/arifabivikhan@gmail.com", {
             method: "POST",
             body: formData
         });
+
+        if (!response.ok) throw new Error("Server error");
+        
+        localStorage.setItem("rsvpSubmitted", "true");
+        localStorage.setItem("rsvpGuestName", name);
+        localStorage.setItem("rsvpGuestAttendance", attendance);
+        
+        rsvpLoadingState.style.setProperty("display", "none");
+        rsvpSuccessState.style.setProperty("display", "flex");
+        setupCalendarIntegrations(name, attendance);
     } catch (error) {
-        console.error("Form submission error:", error);
+        console.error("Submission failed:", error);
+        rsvpLoadingState.style.setProperty("display", "none");
+        rsvpFailureState.style.setProperty("display", "flex");
+    } finally {
+        rsvpIsSubmitting = false;
     }
+}
 
-    rsvpMessage.textContent = name
-        ? `Thank you, ${name}. Your RSVP has been sent!`
-        : "Thank you. Your RSVP has been sent!";
+rsvpForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    executeRsvpSubmission();
+});
 
-    rsvpForm.reset();
+retrySubmitBtn?.addEventListener("click", executeRsvpSubmission);
+
+// 7. Duplicate Submission Lock Check on Page Load
+window.addEventListener("load", () => {
+    const isSubmitted = localStorage.getItem("rsvpSubmitted");
+    if (isSubmitted === "true") {
+        const name = localStorage.getItem("rsvpGuestName") || "Guest";
+        const attendance = localStorage.getItem("rsvpGuestAttendance") || "Yes, I'll be there";
+        
+        transitionToRsvpStep(4);
+        document.querySelector(".rsvp-progress-tracker")?.style.setProperty("display", "none");
+        rsvpLoadingState.style.setProperty("display", "none");
+        rsvpSuccessState.style.setProperty("display", "flex");
+        rsvpFailureState.style.setProperty("display", "none");
+        setupCalendarIntegrations(name, attendance);
+    }
 });
 
 // ==========================================================================

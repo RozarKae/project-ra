@@ -163,13 +163,115 @@
                 <h2>Will You Celebrate With Us?</h2>
                 <p>Please let us know if you will be joining us.</p>
             </div>
-            <form id="rsvpForm" class="rsvp-form glass-card">
-                <label><span>Your Name</span><input name="name" type="text" autocomplete="name" required></label>
-                <label><span>Number of Guests</span><input name="guests" type="number" min="1" max="20" required></label>
-                <label><span>Will you attend?</span><select name="attendance" required><option value="">Select an option</option><option>Yes, I'll be there</option><option>Sorry, I can't make it</option></select></label>
-                <label class="full-field"><span>Leave a message</span><textarea name="message" rows="5" placeholder="Optional"></textarea></label>
-                <button type="submit" class="btn">Send RSVP</button>
-                <p id="rsvpMessage" class="form-message" role="status"></p>
+            <form id="rsvpForm" class="rsvp-form glass-card" novalidate>
+                <!-- Wizard Progress Tracker -->
+                <div class="rsvp-progress-tracker" aria-hidden="true">
+                    <div class="rsvp-progress-line">
+                        <div class="rsvp-progress-fill"></div>
+                    </div>
+                    <div class="rsvp-progress-steps">
+                        <div class="rsvp-progress-dot active" data-step="1"><span>1</span></div>
+                        <div class="rsvp-progress-dot" data-step="2"><span>2</span></div>
+                        <div class="rsvp-progress-dot" data-step="3"><span>3</span></div>
+                    </div>
+                </div>
+
+                <!-- Step 1: Attendance Details -->
+                <div class="rsvp-step active" data-step="1">
+                    <label>
+                        <span>Your Name</span>
+                        <input name="name" type="text" autocomplete="name" required placeholder="Enter your full name">
+                        <span class="error-feedback" id="nameError" role="alert"></span>
+                    </label>
+                    <label>
+                        <span>Will you attend?</span>
+                        <select name="attendance" required>
+                            <option value="">Select an option</option>
+                            <option value="Yes, I'll be there">Yes, I'll be there</option>
+                            <option value="Sorry, I can't make it">Sorry, I can't make it</option>
+                        </select>
+                        <span class="error-feedback" id="attendanceError" role="alert"></span>
+                    </label>
+                    <div class="rsvp-actions">
+                        <button type="button" class="btn next-step-btn">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Guest Details & Message -->
+                <div class="rsvp-step" data-step="2">
+                    <label id="guestFieldLabel">
+                        <span>Number of Guests</span>
+                        <input name="guests" type="number" min="1" max="20" placeholder="e.g. 1">
+                        <span class="error-feedback" id="guestsError" role="alert"></span>
+                    </label>
+                    <label class="full-field">
+                        <span>Leave a message</span>
+                        <textarea name="message" rows="4" placeholder="Share a warm wish or special note (Optional)"></textarea>
+                    </label>
+                    <div class="rsvp-actions">
+                        <button type="button" class="btn prev-step-btn btn-secondary">Back</button>
+                        <button type="button" class="btn next-step-btn">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Confirmation Review -->
+                <div class="rsvp-step" data-step="3">
+                    <div class="rsvp-summary">
+                        <h3>Review Your RSVP Details</h3>
+                        <ul class="summary-list">
+                            <li><strong>Name:</strong> <span id="summaryName">-</span></li>
+                            <li><strong>Attendance:</strong> <span id="summaryAttendance">-</span></li>
+                            <li id="summaryGuestsRow"><strong>Guests:</strong> <span id="summaryGuests">-</span></li>
+                            <li><strong>Message:</strong> <span id="summaryMessage">-</span></li>
+                        </ul>
+                    </div>
+                    <div class="rsvp-actions">
+                        <button type="button" class="btn prev-step-btn btn-secondary">Back</button>
+                        <button type="submit" class="btn submit-rsvp-btn">Confirm & Send</button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Loading, Success & Failure Statuses -->
+                <div class="rsvp-step rsvp-status-step" data-step="4">
+                    <!-- Loading sub-state -->
+                    <div class="rsvp-status-content rsvp-loading-state" style="display: none;">
+                        <div class="rsvp-loader-spinner"></div>
+                        <p>Sending your response...</p>
+                    </div>
+                    
+                    <!-- Success sub-state -->
+                    <div class="rsvp-status-content rsvp-success-state" style="display: none;">
+                        <div class="rsvp-success-checkmark">&#10003;</div>
+                        <h3>RSVP Confirmed!</h3>
+                        <p id="successPersonalMessage"></p>
+                        
+                        <!-- Calendar integrations -->
+                        <div class="rsvp-calendar-wrapper">
+                            <p class="calendar-heading">Add this celebration to your calendar:</p>
+                            <div class="calendar-buttons">
+                                <a id="googleCalendarLink" href="" target="_blank" class="btn btn-sm calendar-btn">Google Calendar</a>
+                                <button type="button" id="downloadIcsBtn" class="btn btn-sm calendar-btn">Download .ICS</button>
+                            </div>
+                        </div>
+
+                        <!-- WhatsApp support button -->
+                        <div class="rsvp-whatsapp-wrapper">
+                            <a href="https://wa.me/918903333333?text=Hi%20Rozar%20and%20Arifa!%20Looking%20forward%20to%20your%20wedding!" target="_blank" class="btn whatsapp-btn">
+                                <span>💬 Chat on WhatsApp</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Failure sub-state -->
+                    <div class="rsvp-status-content rsvp-failure-state" style="display: none;">
+                        <div class="rsvp-failure-icon">&#9888;</div>
+                        <h3>Submission Failed</h3>
+                        <p>We couldn't submit your RSVP due to a network connection issue.</p>
+                        <div class="rsvp-actions">
+                            <button type="button" id="retrySubmitBtn" class="btn">Retry Submission</button>
+                        </div>
+                    </div>
+                </div>
             </form>
         </section>
     </main>

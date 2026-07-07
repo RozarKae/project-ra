@@ -398,6 +398,247 @@ nav a.active::after {
     grid-column: 1 / -1;
 }
 
+/* Wizard Progress Tracker */
+.rsvp-progress-tracker {
+    grid-column: 1 / -1;
+    margin-bottom: var(--space-xl);
+    position: relative;
+    width: 100%;
+}
+
+.rsvp-progress-line {
+    position: absolute;
+    top: 16px;
+    left: 15%;
+    right: 15%;
+    height: 2px;
+    background: rgba(var(--color-text-rgb), 0.12);
+    z-index: 1;
+}
+
+.rsvp-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--color-gold), var(--color-gold-soft));
+    box-shadow: 0 0 8px var(--color-gold);
+    transition: width var(--transition-medium);
+}
+
+.rsvp-progress-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+    padding: 0 15%;
+}
+
+.rsvp-progress-dot {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-round);
+    background: #090909;
+    border: 2px solid rgba(var(--color-text-rgb), 0.16);
+    color: var(--color-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.rsvp-progress-dot.active {
+    border-color: var(--color-gold-soft);
+    color: var(--color-gold-soft);
+    background: #111111;
+    box-shadow: 0 0 10px rgba(var(--color-gold-rgb), 0.5);
+}
+
+.rsvp-progress-dot.completed {
+    background: var(--color-gold-soft);
+    border-color: var(--color-gold-soft);
+    color: #090909;
+}
+
+.rsvp-step {
+    grid-column: 1 / -1;
+    display: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-lg);
+    width: 100%;
+}
+
+.rsvp-step.active {
+    display: grid;
+}
+
+.rsvp-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-md);
+    margin-top: var(--space-md);
+}
+
+.rsvp-actions .btn {
+    min-width: 130px;
+    padding: 12px 24px;
+}
+
+.rsvp-summary {
+    grid-column: 1 / -1;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    padding: var(--space-xl);
+    text-align: left;
+}
+
+.rsvp-summary h3 {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-lg);
+    color: var(--color-gold-soft);
+    margin-bottom: var(--space-md);
+    letter-spacing: 1px;
+}
+
+.summary-list {
+    list-style: none;
+    display: grid;
+    gap: var(--space-sm);
+}
+
+.summary-list li {
+    font-size: var(--font-size-md);
+    color: var(--color-muted);
+}
+
+.summary-list li strong {
+    color: var(--color-text);
+}
+
+.rsvp-status-step {
+    text-align: center;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--space-2xl) 0;
+}
+
+.rsvp-status-step.active {
+    display: flex;
+}
+
+.rsvp-status-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-md);
+    width: 100%;
+}
+
+.rsvp-loader-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid rgba(var(--color-gold-rgb), 0.15);
+    border-top: 3px solid var(--color-gold-soft);
+    border-radius: var(--radius-round);
+    animation: rsvpSpin 0.9s linear infinite;
+    box-shadow: 0 0 10px rgba(var(--color-gold-rgb), 0.1);
+    margin-bottom: var(--space-md);
+}
+
+@keyframes rsvpSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.rsvp-success-checkmark {
+    font-size: 52px;
+    color: #10b981;
+    text-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+    animation: successPop 0.5s var(--ease-elastic);
+    margin-bottom: var(--space-md);
+}
+
+.rsvp-failure-icon {
+    font-size: 52px;
+    color: var(--color-rose);
+    text-shadow: 0 0 20px rgba(var(--color-rose-rgb), 0.4);
+    animation: successPop 0.5s var(--ease-elastic);
+    margin-bottom: var(--space-md);
+}
+
+@keyframes successPop {
+    0% { transform: scale(0.6); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.error-feedback {
+    color: #ff5252;
+    font-size: var(--font-size-xs);
+    margin-top: 6px;
+    display: block;
+    min-height: 16px;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    text-align: left;
+}
+
+.rsvp-calendar-wrapper {
+    margin-top: var(--space-xl);
+    width: 100%;
+    max-width: 420px;
+    border-top: 1px solid var(--color-line);
+    padding-top: var(--space-xl);
+}
+
+.calendar-heading {
+    font-size: var(--font-size-sm);
+    color: var(--color-muted);
+    margin-bottom: var(--space-md);
+    letter-spacing: 1px;
+}
+
+.calendar-buttons {
+    display: flex;
+    gap: var(--space-md);
+    justify-content: center;
+}
+
+.calendar-buttons .btn {
+    min-width: 140px;
+    padding: 10px 16px;
+    font-size: var(--font-size-xs);
+}
+
+.rsvp-whatsapp-wrapper {
+    margin-top: var(--space-lg);
+}
+
+.rsvp-whatsapp-wrapper .whatsapp-btn {
+    border-color: rgba(37, 211, 102, 0.5);
+    background: rgba(37, 211, 102, 0.1);
+}
+
+.rsvp-whatsapp-wrapper .whatsapp-btn:hover {
+    background: rgba(37, 211, 102, 0.2);
+    border-color: #25d366;
+    box-shadow: 0 0 15px rgba(37, 211, 102, 0.3);
+}
+
+.btn-secondary {
+    background: transparent;
+    border-color: rgba(var(--color-text-rgb), 0.28);
+}
+
+.btn-secondary:hover {
+    background: rgba(var(--color-text-rgb), 0.05);
+    border-color: rgba(var(--color-text-rgb), 0.5);
+    box-shadow: none;
+}
+
 #footer {
     padding: 86px var(--space-xl) 52px;
     text-align: center;
