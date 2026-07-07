@@ -18,65 +18,6 @@ const hasGsap = () => {
     return !prefersReduce;
 };
 
-function splitTextIntoSpans(selector) {
-    if (!hasGsap()) return;
-    const element = document.querySelector(selector);
-    if (!element) return;
-    const text = element.textContent;
-    element.innerHTML = text
-        .split("")
-        .map(char => {
-            if (char === " ") return '<span class="char-span spacer-span">&nbsp;</span>';
-            return `<span class="char-span">${char}</span>`;
-        })
-        .join("");
-}
-
-function splitWordsIntoSpans(selector) {
-    if (!hasGsap()) return;
-    const element = document.querySelector(selector);
-    if (!element) return;
-    const words = element.innerHTML.split("<br>");
-    element.innerHTML = words
-        .map(line => {
-            const lineHtml = line.split(" ").map(word => `<span class="word-span">${word}</span>`).join(" ");
-            return `<span class="line-span">${lineHtml}</span>`;
-        })
-        .join("<br>");
-}
-
-function applyPersonalization() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const guestName = urlParams.get("guest") || urlParams.get("to");
-    if (guestName && guestName.trim()) {
-        const heroContent = document.querySelector(".hero-content");
-        const tagline = document.querySelector(".hero-content .tagline");
-        if (heroContent && tagline) {
-            const greeting = document.createElement("p");
-            greeting.className = "personal-greeting";
-            greeting.textContent = `Dear ${decodeURIComponent(guestName).trim()},`;
-            heroContent.insertBefore(greeting, tagline);
-        }
-    }
-}
-
-function initFloatingLabels() {
-    const fields = document.querySelectorAll(".floating-field input, .floating-field select, .floating-field textarea");
-    fields.forEach(field => {
-        const toggleValue = () => {
-            if (field.value && String(field.value).trim() !== "") {
-                field.classList.add("has-value");
-            } else {
-                field.classList.remove("has-value");
-            }
-        };
-        field.addEventListener("input", toggleValue);
-        field.addEventListener("change", toggleValue);
-        field.addEventListener("blur", toggleValue);
-        toggleValue();
-    });
-}
-
 function revealPage() {
     document.body.classList.remove("is-loading");
 
@@ -87,48 +28,15 @@ function revealPage() {
     if (hasGsap()) {
         gsap.to(loader, {
             opacity: 0,
-            duration: 0.8,
-            ease: "power2.inOut",
+            duration: 0.7,
             onComplete: () => {
                 loader.classList.add("is-hidden");
-                
-                splitTextIntoSpans(".hero-content h1");
-                splitWordsIntoSpans(".hero-content .tagline");
-                applyPersonalization();
-                initFloatingLabels();
-
-                const tl = gsap.timeline({ defaults: { ease: "cubic-bezier(0.22, 1, 0.36, 1)" } });
-                
-                const greeting = document.querySelector(".personal-greeting");
-                if (greeting) {
-                    tl.to(greeting, { opacity: 1, y: 0, duration: 1.1 });
-                }
-
-                tl.to(".hero-content h1 .char-span", {
-                    opacity: 1,
-                    y: 0,
-                    duration: 1.1,
-                    stagger: 0.04
-                }, greeting ? "-=0.7" : "0");
-
-                tl.from(".hero-content .eyebrow", {
+                gsap.from(".hero-content", {
+                    y: 38,
                     opacity: 0,
-                    y: 20,
-                    duration: 0.9
-                }, "-=0.8");
-
-                tl.from(".hero-content .word-span", {
-                    opacity: 0,
-                    y: 25,
                     duration: 1,
-                    stagger: 0.05
-                }, "-=0.8");
-
-                tl.from("#beginBtn", {
-                    opacity: 0,
-                    y: 20,
-                    duration: 0.8
-                }, "-=0.7");
+                    ease: "power2.out"
+                });
             }
         });
         return;
@@ -138,13 +46,8 @@ function revealPage() {
 }
 
 window.addEventListener("load", () => {
-    if (hasGsap()) {
-        // SVG loader drawing lines reveal
-        gsap.to(".loader-logo-svg .logo-ring", { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" });
-        gsap.to(".loader-logo-svg .logo-char", { strokeDashoffset: 0, duration: 1.4, ease: "power2.inOut", delay: 0.2 });
-        if (progress) {
-            gsap.fromTo(progress, { width: "0%" }, { width: "100%", duration: 1.6, ease: "power2.inOut" });
-        }
+    if (hasGsap() && progress) {
+        gsap.fromTo(progress, { width: "0%" }, { width: "100%", duration: 1.6, ease: "power2.inOut" });
     }
 
     createFloatingParticles();
@@ -152,20 +55,7 @@ window.addEventListener("load", () => {
 });
 
 beginBtn?.addEventListener("click", () => {
-    const target = document.getElementById("story");
-    if (!target) return;
-    if (hasGsap()) {
-        const targetPos = target.getBoundingClientRect().top + window.scrollY;
-        const obj = { y: window.scrollY };
-        gsap.to(obj, {
-            y: targetPos,
-            duration: 1.4,
-            ease: "cubic-bezier(0.22, 1, 0.36, 1)",
-            onUpdate: () => window.scrollTo(0, obj.y)
-        });
-    } else {
-        target.scrollIntoView({ behavior: "smooth" });
-    }
+    document.getElementById("story")?.scrollIntoView({ behavior: "smooth" });
 });
 
 document.addEventListener("mousemove", (event) => {
@@ -290,13 +180,13 @@ function setupFocusableElements() {
 function preloadAdjacent(index) {
     const total = galleryItems.length;
     if (total === 0) return;
-    
+
     const prevIdx = (index - 1 + total) % total;
     const nextIdx = (index + 1) % total;
-    
+
     const prevUrl = galleryItems[prevIdx].querySelector("img")?.src;
     const nextUrl = galleryItems[nextIdx].querySelector("img")?.src;
-    
+
     if (prevUrl) {
         const img1 = new Image();
         img1.src = prevUrl;
@@ -324,7 +214,7 @@ function updateModalDots(index) {
         dotsHtml += `<span class="modal-dot ${i === index ? 'active' : ''}" data-index="${i}" role="button" aria-label="Go to memory ${i + 1}"></span>`;
     }
     modalDotsContainer.innerHTML = dotsHtml;
-    
+
     modalDotsContainer.querySelectorAll(".modal-dot").forEach(dot => {
         dot.addEventListener("click", (e) => {
             e.stopPropagation();
@@ -339,7 +229,7 @@ function transitionToMemory(index) {
     if (isAnimating) return;
     isAnimating = true;
     currentMemoryIndex = index;
-    
+
     const targetItem = galleryItems[index];
     const img = targetItem.querySelector("img");
     const storyData = targetItem.querySelector(".story-modal");
@@ -358,7 +248,7 @@ function transitionToMemory(index) {
                 onComplete: () => {
                     modalImage.src = img.src;
                     modalImage.alt = img.alt;
-                    
+
                     const title = storyData.querySelector("strong").outerHTML;
                     const desc = storyData.querySelector("p").outerHTML;
                     modalContent.innerHTML = `
@@ -367,7 +257,7 @@ function transitionToMemory(index) {
                         ${desc}
                         <div class="modal-counter">Memory ${index + 1} of ${galleryItems.length}</div>
                     `;
-                    
+
                     preloadAdjacent(index);
                     updateModalProgressBar(index);
                     updateModalDots(index);
@@ -416,7 +306,7 @@ function showPrevMemory() {
 function openModal(index) {
     previouslyFocusedEl = document.activeElement;
     currentMemoryIndex = index;
-    
+
     const item = galleryItems[index];
     const img = item.querySelector("img");
     const storyData = item.querySelector(".story-modal");
@@ -424,7 +314,7 @@ function openModal(index) {
 
     modalImage.src = img.src;
     modalImage.alt = img.alt;
-    
+
     const title = storyData.querySelector("strong").outerHTML;
     const desc = storyData.querySelector("p").outerHTML;
     modalContent.innerHTML = `
@@ -442,33 +332,9 @@ function openModal(index) {
     document.body.classList.add("modal-open");
 
     if (hasGsap()) {
-        const rect = img.getBoundingClientRect();
-        const wrapperW = modalWrapper.offsetWidth || 720;
-        const wrapperH = modalWrapper.offsetHeight || 500;
-        
-        const startX = (rect.left + rect.width / 2) - window.innerWidth / 2;
-        const startY = (rect.top + rect.height / 2) - window.innerHeight / 2;
-        const startScaleX = rect.width / wrapperW;
-        const startScaleY = rect.height / wrapperH;
-        
-        gsap.fromTo(modalWrapper, 
-            {
-                x: startX,
-                y: startY,
-                scaleX: isNaN(startScaleX) || startScaleX === 0 ? 0.35 : startScaleX,
-                scaleY: isNaN(startScaleY) || startScaleY === 0 ? 0.35 : startScaleY,
-                opacity: 0.2
-            }, 
-            {
-                x: 0,
-                y: 0,
-                scaleX: 1,
-                scaleY: 1,
-                opacity: 1,
-                duration: 0.8,
-                ease: "cubic-bezier(0.22, 1, 0.36, 1)",
-                clearProps: "transform"
-            }
+        gsap.fromTo(modalWrapper,
+            { scale: 0.75, y: 40, opacity: 0 },
+            { scale: 1, y: 0, opacity: 1, duration: 0.55, ease: "back.out(1.35)" }
         );
     }
 
@@ -478,51 +344,34 @@ function openModal(index) {
 
 function closeModal() {
     if (hasGsap()) {
-        const item = galleryItems[currentMemoryIndex];
-        const img = item?.querySelector("img");
-        if (img) {
-            const rect = img.getBoundingClientRect();
-            const wrapperW = modalWrapper.offsetWidth || 720;
-            const wrapperH = modalWrapper.offsetHeight || 500;
-            
-            const endX = (rect.left + rect.width / 2) - window.innerWidth / 2;
-            const endY = (rect.top + rect.height / 2) - window.innerHeight / 2;
-            const endScaleX = rect.width / wrapperW;
-            const endScaleY = rect.height / wrapperH;
-
-            gsap.to(modalWrapper, {
-                x: endX,
-                y: endY,
-                scaleX: isNaN(endScaleX) || endScaleX === 0 ? 0.35 : endScaleX,
-                scaleY: isNaN(endScaleY) || endScaleY === 0 ? 0.35 : endScaleY,
-                opacity: 0,
-                duration: 0.7,
-                ease: "cubic-bezier(0.22, 1, 0.36, 1)",
-                onComplete: () => {
-                    modalOverlay.classList.remove("active");
-                    document.body.classList.remove("modal-open");
-                    gsap.set(modalWrapper, { clearProps: "all" });
-                    modalImage.src = "";
-                    modalImage.alt = "";
-                    modalContent.innerHTML = "";
-                    modalDotsContainer.innerHTML = "";
-                    if (previouslyFocusedEl) {
-                        previouslyFocusedEl.focus();
-                    }
+        gsap.to(modalWrapper, {
+            scale: 0.8,
+            y: 40,
+            opacity: 0,
+            duration: 0.35,
+            ease: "power2.in",
+            onComplete: () => {
+                modalOverlay.classList.remove("active");
+                document.body.classList.remove("modal-open");
+                modalImage.src = "";
+                modalImage.alt = "";
+                modalContent.innerHTML = "";
+                modalDotsContainer.innerHTML = "";
+                if (previouslyFocusedEl) {
+                    previouslyFocusedEl.focus();
                 }
-            });
-            return;
+            }
+        });
+    } else {
+        modalOverlay.classList.remove("active");
+        document.body.classList.remove("modal-open");
+        modalImage.src = "";
+        modalImage.alt = "";
+        modalContent.innerHTML = "";
+        modalDotsContainer.innerHTML = "";
+        if (previouslyFocusedEl) {
+            previouslyFocusedEl.focus();
         }
-    }
-    
-    modalOverlay.classList.remove("active");
-    document.body.classList.remove("modal-open");
-    modalImage.src = "";
-    modalImage.alt = "";
-    modalContent.innerHTML = "";
-    modalDotsContainer.innerHTML = "";
-    if (previouslyFocusedEl) {
-        previouslyFocusedEl.focus();
     }
 }
 
@@ -634,48 +483,20 @@ if (hasGsap() && window.ScrollTrigger) {
             opacity: 0,
             duration: 0.8,
             stagger: 0.15,
-            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+            ease: "power2.out"
         })
-        .from("#story .story-copy p", {
-            y: 25,
+        .from("#story .story-copy", {
+            x: -50,
             opacity: 0,
             duration: 0.9,
-            stagger: 0.22,
-            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-        }, "-=0.45")
+            ease: "power2.out"
+        }, "-=0.4")
         .from("#story .story-photo", {
-            scale: 0.94,
+            x: 50,
             opacity: 0,
-            duration: 1.1,
-            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-        }, "-=0.95");
-
-    // Parallax zoom effect inside the Mihrab image frame
-    gsap.fromTo("#story .story-photo img", 
-        { scale: 1.3 },
-        {
-            scale: 1.02,
-            scrollTrigger: {
-                trigger: "#story",
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true
-            },
-            ease: "none"
-        }
-    );
-
-    // Fade-in divider quote
-    gsap.from(".story-divider", {
-        opacity: 0,
-        y: 30,
-        duration: 1.2,
-        ease: "cubic-bezier(0.22, 1, 0.36, 1)",
-        scrollTrigger: {
-            trigger: ".story-divider",
-            start: "top 92%"
-        }
-    });
+            duration: 0.9,
+            ease: "power2.out"
+        }, "-=0.9");
 
     // 3. Gallery Section Timeline (Chronological Journey)
     const galleryTimeline = gsap.timeline({
@@ -713,22 +534,15 @@ if (hasGsap() && window.ScrollTrigger) {
             opacity: 0,
             duration: 0.8,
             stagger: 0.15,
-            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+            ease: "power2.out"
         })
         .from("#countdown .time-box", {
-            y: 30,
-            opacity: 0,
-            duration: 0.9,
-            stagger: 0.12,
-            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-        }, "-=0.4")
-        .from("#countdown .countdown-divider", {
-            scaleY: 0,
+            scale: 0.85,
             opacity: 0,
             duration: 0.8,
             stagger: 0.1,
-            ease: "power2.out"
-        }, "-=0.8");
+            ease: "back.out(1.5)"
+        }, "-=0.4");
 
     // 5. Events Section Timeline
     const eventsTimeline = gsap.timeline({
@@ -743,40 +557,15 @@ if (hasGsap() && window.ScrollTrigger) {
             opacity: 0,
             duration: 0.8,
             stagger: 0.15,
-            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+            ease: "power2.out"
         })
         .from("#events .event-card", {
-            y: 45,
+            y: 50,
             opacity: 0,
             duration: 1,
-            stagger: 0.2,
-            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+            stagger: 0.15,
+            ease: "power3.out"
         }, "-=0.4");
-
-    // Timeline active thread progress drawing
-    gsap.to(".timeline-thread-progress", {
-        height: "100%",
-        scrollTrigger: {
-            trigger: ".timeline-container",
-            start: "top 70%",
-            end: "bottom 70%",
-            scrub: true
-        },
-        ease: "none"
-    });
-
-    // Timeline dots activation trigger
-    document.querySelectorAll(".event-card").forEach(card => {
-        const dot = card.querySelector(".timeline-dot");
-        if (dot) {
-            ScrollTrigger.create({
-                trigger: card,
-                start: "top 70%",
-                onEnter: () => dot.classList.add("active"),
-                onLeaveBack: () => dot.classList.remove("active")
-            });
-        }
-    });
 
     // 6. Venue Section Timeline
     gsap.from("#venue .venue-panel", {
@@ -787,16 +576,7 @@ if (hasGsap() && window.ScrollTrigger) {
         y: 60,
         opacity: 0,
         duration: 1.1,
-        ease: "cubic-bezier(0.22, 1, 0.36, 1)",
-        onComplete: () => {
-            // Draw the route line on the map
-            gsap.fromTo("#venue .route-line", 
-                { strokeDasharray: 100, strokeDashoffset: 100 },
-                { strokeDashoffset: 0, duration: 1.8, ease: "power2.out" }
-            );
-            // Pulse ring reveal
-            gsap.to("#venue .map-pulse-ring", { opacity: 0.9, duration: 0.6, delay: 1.2 });
-        }
+        ease: "power3.out"
     });
 
     // 7. RSVP Section Timeline
@@ -822,48 +602,16 @@ if (hasGsap() && window.ScrollTrigger) {
         }, "-=0.4");
 
     // 8. Footer Section Timeline
-    const footerTimeline = gsap.timeline({
+    gsap.from("#footer .footer-content > *", {
         scrollTrigger: {
             trigger: "#footer",
-            start: "top 85%"
-        }
-    });
-    footerTimeline
-        .from("#footer .footer-content > *:not(.footer-signatures)", {
-            y: 35,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-        })
-        .to(".signatures-svg .sig-rozar", {
-            strokeDashoffset: 0,
-            duration: 1.6,
-            ease: "power1.inOut"
-        }, "-=0.3")
-        .to(".signatures-svg .sig-heart", {
-            strokeDashoffset: 0,
-            duration: 0.8,
-            ease: "power1.inOut"
-        }, "-=1.2")
-        .to(".signatures-svg .sig-arifa", {
-            strokeDashoffset: 0,
-            duration: 1.6,
-            ease: "power1.inOut"
-        }, "-=0.8");
-
-    // Moon Sunset on Footer Scroll
-    gsap.to(".moon", {
-        y: 120,
-        opacity: 0.02,
-        scale: 0.85,
-        scrollTrigger: {
-            trigger: "#footer",
-            start: "top bottom",
-            end: "bottom bottom",
-            scrub: true
+            start: "top 90%"
         },
-        ease: "none"
+        y: 35,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "power2.out"
     });
 }
 
@@ -878,18 +626,18 @@ function createFloatingParticles() {
     for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement("div");
         particle.className = "floating-petal";
-        
+
         particle.style.left = `${Math.random() * 100}vw`;
         particle.style.bottom = `-${Math.random() * 20 + 10}px`;
-        
+
         const size = Math.random() * 8 + 4;
         particle.style.width = `${size}px`;
         particle.style.height = `${size}px`;
-        
+
         particle.style.opacity = Math.random() * 0.45 + 0.15;
         particle.style.animationDelay = `${Math.random() * 12}s`;
         particle.style.animationDuration = `${Math.random() * 18 + 18}s`;
-        
+
         bgContainer.appendChild(particle);
     }
 }
@@ -1003,7 +751,7 @@ function validateAttendance() {
 function validateGuests() {
     const isAttending = attendanceSelect?.value === "Yes, I'll be there";
     if (!isAttending) return true;
-    
+
     const val = parseInt(guestsInput?.value || "", 10);
     if (isNaN(val) || val < 1 || val > 20) {
         guestsError.textContent = "Number of guests must be between 1 and 20.";
@@ -1023,13 +771,11 @@ attendanceSelect?.addEventListener("change", () => {
     const isAttending = attendanceSelect.value === "Yes, I'll be there";
     const guestLabel = document.getElementById("guestFieldLabel");
     if (isAttending) {
-        guestLabel?.style.setProperty("display", "flex");
+        guestLabel?.style.setProperty("display", "grid");
         if (!guestsInput.value) guestsInput.value = 1;
-        guestsInput.classList.add("has-value");
     } else {
         guestLabel?.style.setProperty("display", "none");
         guestsInput.value = "";
-        guestsInput.classList.remove("has-value");
     }
 });
 guestsInput?.addEventListener("blur", validateGuests);
@@ -1079,7 +825,7 @@ rsvpForm?.querySelectorAll(".prev-step-btn").forEach(btn => {
 function buildSummary() {
     summaryName.textContent = (nameInput?.value || "").trim();
     summaryAttendance.textContent = attendanceSelect?.value || "";
-    
+
     const isAttending = attendanceSelect?.value === "Yes, I'll be there";
     if (isAttending) {
         summaryGuestsRow?.style.setProperty("display", "list-item");
@@ -1088,7 +834,7 @@ function buildSummary() {
         summaryGuestsRow?.style.setProperty("display", "none");
         summaryGuests.textContent = "0";
     }
-    
+
     const wish = (messageTextarea?.value || "").trim();
     summaryMessage.textContent = wish ? wish : "No message left.";
 }
@@ -1096,7 +842,7 @@ function buildSummary() {
 // 5. Calendar Links & Downloads
 function setupCalendarIntegrations(name, attendance) {
     const isAttending = attendance === "Yes, I'll be there";
-    
+
     if (isAttending) {
         successPersonalMessage.textContent = `Thank you, ${name}! We are thrilled that you will celebrate with us on 30 August 2026.`;
         document.querySelector(".rsvp-calendar-wrapper")?.style.setProperty("display", "block");
@@ -1110,7 +856,7 @@ function setupCalendarIntegrations(name, attendance) {
     const title = encodeURIComponent("Rozar & Arifa's Wedding (Nikah)");
     const details = encodeURIComponent("Join us for the Nikah ceremony at 9:00 AM. Venue: NSK & NKR A/C Mahal and Residency, Madurai.");
     const location = encodeURIComponent("NSK & NKR A/C Mahal and Residency, GST Main Rd, Lion City, Thiru Nagar, Thanakkankulam, Madurai, Tamil Nadu");
-    
+
     if (googleCalendarLink) {
         googleCalendarLink.href = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startUtc}/${endUtc}&details=${details}&location=${location}`;
     }
@@ -1150,11 +896,11 @@ async function executeRsvpSubmission() {
     rsvpIsSubmitting = true;
 
     transitionToRsvpStep(4);
-    
+
     rsvpLoadingState.style.setProperty("display", "flex");
     rsvpSuccessState.style.setProperty("display", "none");
     rsvpFailureState.style.setProperty("display", "none");
-    
+
     document.querySelector(".rsvp-progress-tracker")?.style.setProperty("display", "none");
 
     const formData = new FormData(rsvpForm);
@@ -1168,18 +914,13 @@ async function executeRsvpSubmission() {
         });
 
         if (!response.ok) throw new Error("Server error");
-        
+
         localStorage.setItem("rsvpSubmitted", "true");
         localStorage.setItem("rsvpGuestName", name);
         localStorage.setItem("rsvpGuestAttendance", attendance);
-        
+
         rsvpLoadingState.style.setProperty("display", "none");
         rsvpSuccessState.style.setProperty("display", "flex");
-        
-        const seal = document.querySelector(".rsvp-wax-seal");
-        if (seal) {
-            seal.classList.add("stamp-active");
-        }
         setupCalendarIntegrations(name, attendance);
     } catch (error) {
         console.error("Submission failed:", error);
@@ -1203,18 +944,13 @@ window.addEventListener("load", () => {
     if (isSubmitted === "true") {
         const name = localStorage.getItem("rsvpGuestName") || "Guest";
         const attendance = localStorage.getItem("rsvpGuestAttendance") || "Yes, I'll be there";
-        
+
         transitionToRsvpStep(4);
         document.querySelector(".rsvp-progress-tracker")?.style.setProperty("display", "none");
         rsvpLoadingState.style.setProperty("display", "none");
         rsvpSuccessState.style.setProperty("display", "flex");
         rsvpFailureState.style.setProperty("display", "none");
         setupCalendarIntegrations(name, attendance);
-        
-        const seal = document.querySelector(".rsvp-wax-seal");
-        if (seal) {
-            seal.classList.add("stamp-active");
-        }
     }
 });
 
@@ -1235,7 +971,7 @@ let isMenuOpen = false;
 function handleScrollDynamics() {
     const currentScrollPosition = window.scrollY;
     const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
-    
+
     // Update reading progress bar
     const scrollPercentage = documentHeight > 0 ? (currentScrollPosition / documentHeight) * 100 : 0;
     if (readingProgressBar) {
@@ -1350,7 +1086,7 @@ function toggleMobileMenu() {
     if (isMenuOpen) {
         primaryNav?.classList.add("open");
         document.body.classList.add("modal-open"); // Reuses overflow: hidden scroll lock
-        
+
         if (hasGsap() && mobileMenuTimeline) {
             mobileMenuTimeline.play();
         } else if (primaryNav) {
