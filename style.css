@@ -1502,6 +1502,18 @@ nav {
     }
 }
 
+/* Focus Indicator System for Keyboard Accessibility */
+:focus-visible {
+    outline: 2px solid var(--color-gold) !important;
+    outline-offset: 4px !important;
+    box-shadow: 0 0 10px rgba(var(--color-gold-rgb), 0.6) !important;
+}
+
+.gallery-item:focus-visible {
+    outline-offset: -2px !important;
+    border-radius: var(--radius-sm) !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

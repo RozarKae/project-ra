@@ -12,7 +12,11 @@ const countdownEls = {
     seconds: document.getElementById("seconds")
 };
 
-const hasGsap = () => Boolean(window.gsap);
+const hasGsap = () => {
+    if (!window.gsap) return false;
+    const prefersReduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    return !prefersReduce;
+};
 
 function revealPage() {
     document.body.classList.remove("is-loading");
@@ -398,6 +402,14 @@ galleryItems.forEach((item, index) => {
         e.stopPropagation();
         openModal(index);
     });
+
+    item.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            e.stopPropagation();
+            openModal(index);
+        }
+    });
 });
 
 closeBtn.addEventListener("click", closeModal);
@@ -572,6 +584,8 @@ if (hasGsap() && window.ScrollTrigger) {
 
 // Dynamic Floating Gold Particles Generator
 function createFloatingParticles() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
     const bgContainer = document.querySelector(".background");
     if (!bgContainer) return;
 
