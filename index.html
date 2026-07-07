@@ -74,7 +74,11 @@
 
     <div id="loader" aria-label="Loading invitation">
         <div class="loader-content">
-            <p class="loader-logo">R <span>|</span> A</p>
+            <svg class="loader-logo-svg" viewBox="0 0 100 100" width="120" height="120" aria-hidden="true" style="margin: 0 auto 20px;">
+                <circle class="logo-ring" cx="50" cy="50" r="44" fill="none" stroke="var(--color-gold)" stroke-width="1.5" stroke-dasharray="280" stroke-dashoffset="280" />
+                <path class="logo-char letter-r" d="M36,64 V36 H47 C53,36 57,39 57,44 C57,48 53,50 48,51 L57,64 M36,50 H47" fill="none" stroke="var(--color-gold-soft)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="120" stroke-dashoffset="120" />
+                <path class="logo-char letter-a" d="M64,64 L54,36 L44,64 M48,55 H60" fill="none" stroke="var(--color-gold-soft)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="100" stroke-dashoffset="100" />
+            </svg>
             <p>Preparing your journey</p>
             <div class="loader-line">
                 <div class="loader-progress"></div>
@@ -119,12 +123,18 @@
             </div>
             <div class="story-layout">
                 <div class="story-copy">
-                    <p>With gratitude and joy, we invite you to celebrate the beginning of our new chapter. Your presence will make this day warmer, brighter, and unforgettable.</p>
-                    <p>Come share the laughter, blessings, and memories as our families gather for a celebration of love.</p>
+                    <p>It began with two completely opposite worlds colliding—one quiet and content in silence, the other full of words and restless energy. We crossed paths when a simple request was made for our first picture together, followed by a bold promise: "One day, I'll do a proper photoshoot for you." A promise that we both somehow let slip away, only for it to become the running joke that tied us together.</p>
+                    <p>From the cool breezes of Kodaikanal to the endless horizons of beach walks, we found our rhythm in between the contrasts. There were quiet compromises, differences that made us laugh, and challenges that tested our resolve. Yet, through every obstacle and distance, we realized that our paths didn't just cross; they ran parallel towards the same destination.</p>
+                    <p>With our families' warm blessings, our promise grew into a lifelong commitment at our engagement. Now, after months of waiting, our journey brings us here. As we stand on the threshold of our wedding, we invite you to be part of the moment our single steps become a shared lifetime.</p>
                 </div>
                 <div class="story-photo glass-card">
                     <img src="assets/images/story1.jpg" alt="Rozar and Arifa wedding story photograph" loading="lazy" decoding="async">
                 </div>
+            </div>
+            <div class="story-divider" aria-hidden="true">
+                <span class="divider-line"></span>
+                <span class="divider-quote">“And We created you in pairs” <br><small>— Quran 78:8</small></span>
+                <span class="divider-line"></span>
             </div>
         </section>
 
@@ -164,11 +174,22 @@
                 <p class="eyebrow">Counting Down</p>
                 <h2>Until Forever Begins</h2>
             </div>
-            <div class="countdown-grid" aria-live="polite">
-                <div class="time-box"><span id="days">00</span><p>Days</p></div>
-                <div class="time-box"><span id="hours">00</span><p>Hours</p></div>
-                <div class="time-box"><span id="minutes">00</span><p>Minutes</p></div>
-                <div class="time-box"><span id="seconds">00</span><p>Seconds</p></div>
+            <div class="countdown-wrap">
+                <!-- SVG Islamic Star Background -->
+                <svg class="countdown-bg-star" viewBox="0 0 100 100" width="300" height="300" aria-hidden="true">
+                    <path d="M50 5 L63 37 L95 50 L63 63 L50 95 L37 63 L5 50 L37 37 Z" fill="none" stroke="rgba(212, 175, 55, 0.05)" stroke-width="0.75" />
+                    <path d="M50 15 L59 41 L85 50 L59 59 L50 85 L41 59 L15 50 L41 41 Z" fill="none" stroke="rgba(212, 175, 55, 0.03)" stroke-width="0.5" />
+                    <circle cx="50" cy="50" r="10" fill="none" stroke="rgba(212, 175, 55, 0.04)" stroke-width="0.5" />
+                </svg>
+                <div class="countdown-grid" aria-live="polite">
+                    <div class="time-box"><span id="days">00</span><p>Days</p></div>
+                    <div class="countdown-divider" aria-hidden="true"></div>
+                    <div class="time-box"><span id="hours">00</span><p>Hours</p></div>
+                    <div class="countdown-divider" aria-hidden="true"></div>
+                    <div class="time-box"><span id="minutes">00</span><p>Minutes</p></div>
+                    <div class="countdown-divider" aria-hidden="true"></div>
+                    <div class="time-box"><span id="seconds">00</span><p>Seconds</p></div>
+                </div>
             </div>
         </section>
 
@@ -178,32 +199,52 @@
                 <p class="eyebrow">Celebrations</p>
                 <h2>Celebrate With Us</h2>
             </div>
-            <div class="events-grid">
-                <article class="event-card glass-card">
-                    <p class="event-date">29 August 2026</p>
-                    <h3>Sangeet</h3>
-                    <p>7:00 PM</p>
-                    <p>NSK & NKR A/C Mahal</p>
-                </article>
-                <article class="event-card glass-card">
-                    <p class="event-date">30 August 2026</p>
-                    <h3>Nikah</h3>
-                    <p>9:00 AM</p>
-                    <p>NSK & NKR A/C Mahal and Residency</p>
-                </article>
+            
+            <div class="timeline-container">
+                <!-- Golden active line thread -->
+                <div class="timeline-thread" aria-hidden="true">
+                    <div class="timeline-thread-progress"></div>
+                </div>
+                
+                <div class="timeline-events">
+                    <article class="event-card glass-card timeline-left">
+                        <div class="timeline-dot" aria-hidden="true"></div>
+                        <p class="event-date">29 August 2026</p>
+                        <h3>Sangeet</h3>
+                        <p class="event-time">7:00 PM</p>
+                        <p class="event-location">NSK & NKR A/C Mahal</p>
+                    </article>
+                    
+                    <article class="event-card glass-card timeline-right">
+                        <div class="timeline-dot" aria-hidden="true"></div>
+                        <p class="event-date">30 August 2026</p>
+                        <h3>Nikah</h3>
+                        <p class="event-time">9:00 AM</p>
+                        <p class="event-location">NSK & NKR A/C Mahal and Residency</p>
+                    </article>
+                </div>
             </div>
         </section>
 
         <section id="venue" class="section venue-section container">
             <div class="venue-panel glass-card">
-                <div>
+                <div class="venue-info">
                     <span class="chapter-number">Chapter IV</span>
                     <p class="eyebrow">Venue</p>
                     <h2>Find Your Way</h2>
                     <p class="venue-name">NSK & NKR A/C Mahal and Residency</p>
                     <p class="venue-address">GST Main Rd, Lion City,<br>Thiru Nagar, Thanakkankulam,<br>Madurai, Tamil Nadu</p>
+                    <a class="btn map-btn" href="https://maps.app.goo.gl/nHmxp5HqnWTBi1R56" target="_blank" rel="noopener" style="margin-top: 24px;">Open in Google Maps</a>
                 </div>
-                <a class="btn map-btn" href="https://maps.app.goo.gl/nHmxp5HqnWTBi1R56" target="_blank" rel="noopener">Open in Google Maps</a>
+                <div class="venue-map-illustration" aria-hidden="true">
+                    <svg viewBox="0 0 100 100" width="100%" height="100%">
+                        <path d="M10,20 Q40,30 90,10 M0,50 L100,50 M30,100 C40,70 60,30 70,0 M20,0 L80,100" stroke="rgba(255,255,255,0.06)" stroke-width="1.5" fill="none" />
+                        <path d="M50,10 Q60,40 50,90 M10,80 L90,80" stroke="rgba(255,255,255,0.04)" stroke-width="1" fill="none" />
+                        <path class="route-line" d="M15,20 L40,28 L50,50 L68,68" stroke="var(--color-gold)" stroke-width="2" fill="none" stroke-linecap="round" />
+                        <circle class="map-pulse-ring" cx="68" cy="68" r="8" fill="none" stroke="var(--color-gold)" stroke-width="1" />
+                        <circle cx="68" cy="68" r="3.5" fill="var(--color-gold-soft)" />
+                    </svg>
+                </div>
             </div>
         </section>
 
@@ -229,20 +270,20 @@
 
                 <!-- Step 1: Attendance Details -->
                 <div class="rsvp-step active" data-step="1">
-                    <label>
-                        <span>Your Name</span>
-                        <input name="name" type="text" autocomplete="name" required placeholder="Enter your full name">
+                    <div class="floating-field">
+                        <input id="rsvpName" name="name" type="text" autocomplete="name" required placeholder=" ">
+                        <label for="rsvpName">Your Name</label>
                         <span class="error-feedback" id="nameError" role="alert"></span>
-                    </label>
-                    <label>
-                        <span>Will you attend?</span>
-                        <select name="attendance" required>
-                            <option value="">Select an option</option>
+                    </div>
+                    <div class="floating-field">
+                        <select id="rsvpAttendance" name="attendance" required>
+                            <option value="" disabled selected hidden></option>
                             <option value="Yes, I'll be there">Yes, I'll be there</option>
                             <option value="Sorry, I can't make it">Sorry, I can't make it</option>
                         </select>
+                        <label for="rsvpAttendance">Will you attend?</label>
                         <span class="error-feedback" id="attendanceError" role="alert"></span>
-                    </label>
+                    </div>
                     <div class="rsvp-actions">
                         <button type="button" class="btn next-step-btn">Continue</button>
                     </div>
@@ -250,15 +291,15 @@
 
                 <!-- Step 2: Guest Details & Message -->
                 <div class="rsvp-step" data-step="2">
-                    <label id="guestFieldLabel">
-                        <span>Number of Guests</span>
-                        <input name="guests" type="number" min="1" max="20" placeholder="e.g. 1">
+                    <div class="floating-field" id="guestFieldLabel">
+                        <input id="rsvpGuests" name="guests" type="number" min="1" max="20" placeholder=" ">
+                        <label for="rsvpGuests">Number of Guests</label>
                         <span class="error-feedback" id="guestsError" role="alert"></span>
-                    </label>
-                    <label class="full-field">
-                        <span>Leave a message</span>
-                        <textarea name="message" rows="4" placeholder="Share a warm wish or special note (Optional)"></textarea>
-                    </label>
+                    </div>
+                    <div class="floating-field full-field">
+                        <textarea id="rsvpMessage" name="message" rows="4" placeholder=" "></textarea>
+                        <label for="rsvpMessage">Leave a message (Optional)</label>
+                    </div>
                     <div class="rsvp-actions">
                         <button type="button" class="btn prev-step-btn btn-secondary">Back</button>
                         <button type="button" class="btn next-step-btn">Continue</button>
@@ -292,7 +333,13 @@
                     
                     <!-- Success sub-state -->
                     <div class="rsvp-status-content rsvp-success-state" style="display: none;">
-                        <div class="rsvp-success-checkmark">&#10003;</div>
+                        <div class="rsvp-wax-seal" aria-hidden="true">
+                            <svg class="wax-seal-svg" viewBox="0 0 100 100" width="80" height="80">
+                                <path class="wax-base" d="M50,10 C65,8 88,14 88,38 C88,60 76,88 50,88 C24,88 12,65 12,45 C12,25 32,12 50,10 Z" fill="rgba(212, 175, 55, 0.95)" />
+                                <circle class="wax-ring" cx="50" cy="50" r="28" fill="none" stroke="#fff6cf" stroke-width="1.5" opacity="0.8" />
+                                <path class="wax-monogram" d="M42,60 V40 H48 C51,40 53,42 53,45 C53,48 51,49 48,50 L53,60 M42,50 H48 M58,60 L52,40 L46,60 M49,54 H55" fill="none" stroke="#fff6cf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
                         <h3>RSVP Confirmed!</h3>
                         <p id="successPersonalMessage"></p>
                         
@@ -333,7 +380,13 @@
             <p class="eyebrow">With Love</p>
             <h2>Thank You</h2>
             <p>Thank you for becoming part of our journey.</p>
-            <h3>Rozar <span class="heart-pulse">♥</span> Arifa</h3>
+            <div class="footer-signatures" aria-label="Rozar & Arifa Signatures">
+                <svg class="signatures-svg" viewBox="0 0 200 80" width="240" height="96">
+                    <path class="sig-path sig-rozar" d="M15,45 C25,15 35,20 40,35 C42,40 38,55 35,50 C32,45 45,35 55,30 C60,28 65,35 60,45 C58,48 55,50 60,42 C65,35 75,32 80,45 C82,48 85,50 90,45" fill="none" stroke="var(--color-gold-soft)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="250" stroke-dashoffset="250" />
+                    <path class="sig-path sig-heart" d="M96,42 C92,36 86,38 88,46 C90,52 98,58 100,60 C102,58 110,52 112,46 C114,38 108,36 104,42 Z" fill="none" stroke="var(--color-rose)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="100" stroke-dashoffset="100" />
+                    <path class="sig-path sig-arifa" d="M110,48 C115,35 125,25 130,35 C132,40 128,52 125,48 C122,44 135,32 145,28 C150,26 155,35 152,42 C150,45 145,46 150,40 C155,32 165,30 170,42 C172,45 178,48 185,42" fill="none" stroke="var(--color-gold-soft)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="250" stroke-dashoffset="250" />
+                </svg>
+            </div>
             <p class="footer-date">See you on our biggest day</p>
         </div>
     </footer>
