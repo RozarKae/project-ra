@@ -100,7 +100,7 @@ function updateCountdown() {
 updateCountdown();
 window.setInterval(updateCountdown, 1000);
 
-// Dynamic Gallery Full Frame Modal Functionality
+// Dynamic Gallery Full Frame Modal Functionality (Gallery 2.0)
 const galleryItems = document.querySelectorAll(".gallery-item");
 const modalOverlay = document.createElement("div");
 modalOverlay.className = "modal-overlay";
@@ -114,17 +114,198 @@ closeBtn.innerHTML = "&times;";
 closeBtn.type = "button";
 closeBtn.setAttribute("aria-label", "Close modal");
 
+const prevBtn = document.createElement("button");
+prevBtn.className = "modal-nav-btn prev-btn";
+prevBtn.innerHTML = "&#10094;";
+prevBtn.type = "button";
+prevBtn.setAttribute("aria-label", "Previous memory");
+
+const nextBtn = document.createElement("button");
+nextBtn.className = "modal-nav-btn next-btn";
+nextBtn.innerHTML = "&#10095;";
+nextBtn.type = "button";
+nextBtn.setAttribute("aria-label", "Next memory");
+
 const modalImage = document.createElement("img");
 modalImage.className = "modal-frame-img";
+
+const modalProgressContainer = document.createElement("div");
+modalProgressContainer.className = "modal-progress-container";
+const modalProgressBar = document.createElement("div");
+modalProgressBar.className = "modal-progress-bar";
+modalProgressContainer.appendChild(modalProgressBar);
 
 const modalContent = document.createElement("div");
 modalContent.className = "modal-text-content";
 
 modalWrapper.appendChild(closeBtn);
+modalWrapper.appendChild(prevBtn);
+modalWrapper.appendChild(nextBtn);
 modalWrapper.appendChild(modalImage);
+modalWrapper.appendChild(modalProgressContainer);
 modalWrapper.appendChild(modalContent);
 modalOverlay.appendChild(modalWrapper);
 document.body.appendChild(modalOverlay);
+
+let currentMemoryIndex = 0;
+let isAnimating = false;
+let previouslyFocusedEl = null;
+
+// Focus trapping variables
+let focusableElements = [];
+let firstFocusableEl = null;
+let lastFocusableEl = null;
+
+function setupFocusableElements() {
+    focusableElements = [closeBtn, prevBtn, nextBtn].filter(el => el && el.style.display !== "none");
+    if (focusableElements.length > 0) {
+        firstFocusableEl = focusableElements[0];
+        lastFocusableEl = focusableElements[focusableElements.length - 1];
+    }
+}
+
+// 1. Preload adjacent images
+function preloadAdjacent(index) {
+    const total = galleryItems.length;
+    if (total === 0) return;
+    
+    const prevIdx = (index - 1 + total) % total;
+    const nextIdx = (index + 1) % total;
+    
+    const prevUrl = galleryItems[prevIdx].querySelector("img")?.src;
+    const nextUrl = galleryItems[nextIdx].querySelector("img")?.src;
+    
+    if (prevUrl) {
+        const img1 = new Image();
+        img1.src = prevUrl;
+    }
+    if (nextUrl) {
+        const img2 = new Image();
+        img2.src = nextUrl;
+    }
+}
+
+// 2. Animate progress bar in modal
+function updateModalProgressBar(index) {
+    const percent = ((index + 1) / galleryItems.length) * 100;
+    if (hasGsap()) {
+        gsap.to(modalProgressBar, { width: `${percent}%`, duration: 0.35, ease: "power2.out" });
+    } else {
+        modalProgressBar.style.width = `${percent}%`;
+    }
+}
+
+// 3. Carousel slide transition logic
+function transitionToMemory(index) {
+    if (isAnimating) return;
+    isAnimating = true;
+    currentMemoryIndex = index;
+    
+    const targetItem = galleryItems[index];
+    const img = targetItem.querySelector("img");
+    const storyData = targetItem.querySelector(".story-modal");
+    if (!img || !storyData) {
+        isAnimating = false;
+        return;
+    }
+
+    if (hasGsap()) {
+        gsap.timeline()
+            .to([modalImage, modalContent], {
+                opacity: 0,
+                scale: 0.95,
+                duration: 0.2,
+                ease: "power2.in",
+                onComplete: () => {
+                    modalImage.src = img.src;
+                    modalImage.alt = img.alt;
+                    
+                    const title = storyData.querySelector("strong").outerHTML;
+                    const desc = storyData.querySelector("p").outerHTML;
+                    modalContent.innerHTML = `
+                        <div class="modal-counter">Memory ${index + 1} of ${galleryItems.length}</div>
+                        ${title}
+                        ${desc}
+                    `;
+                    
+                    preloadAdjacent(index);
+                    updateModalProgressBar(index);
+                }
+            })
+            .to([modalImage, modalContent], {
+                opacity: 1,
+                scale: 1,
+                duration: 0.35,
+                ease: "power2.out",
+                onComplete: () => {
+                    isAnimating = false;
+                    setupFocusableElements();
+                }
+            });
+    } else {
+        modalImage.src = img.src;
+        modalImage.alt = img.alt;
+        const title = storyData.querySelector("strong").outerHTML;
+        const desc = storyData.querySelector("p").outerHTML;
+        modalContent.innerHTML = `
+            <div class="modal-counter">Memory ${index + 1} of ${galleryItems.length}</div>
+            ${title}
+            ${desc}
+        `;
+        preloadAdjacent(index);
+        updateModalProgressBar(index);
+        isAnimating = false;
+        setupFocusableElements();
+    }
+}
+
+function showNextMemory() {
+    const idx = (currentMemoryIndex + 1) % galleryItems.length;
+    transitionToMemory(idx);
+}
+
+function showPrevMemory() {
+    const idx = (currentMemoryIndex - 1 + galleryItems.length) % galleryItems.length;
+    transitionToMemory(idx);
+}
+
+// 4. Open/Close Modal controllers
+function openModal(index) {
+    previouslyFocusedEl = document.activeElement;
+    currentMemoryIndex = index;
+    
+    const item = galleryItems[index];
+    const img = item.querySelector("img");
+    const storyData = item.querySelector(".story-modal");
+    if (!img || !storyData) return;
+
+    modalImage.src = img.src;
+    modalImage.alt = img.alt;
+    
+    const title = storyData.querySelector("strong").outerHTML;
+    const desc = storyData.querySelector("p").outerHTML;
+    modalContent.innerHTML = `
+        <div class="modal-counter">Memory ${index + 1} of ${galleryItems.length}</div>
+        ${title}
+        ${desc}
+    `;
+
+    preloadAdjacent(index);
+    updateModalProgressBar(index);
+
+    modalOverlay.classList.add("active");
+    document.body.classList.add("modal-open");
+
+    if (hasGsap()) {
+        gsap.fromTo(modalWrapper, 
+            { scale: 0.75, y: 40, opacity: 0 }, 
+            { scale: 1, y: 0, opacity: 1, duration: 0.55, ease: "back.out(1.35)" }
+        );
+    }
+
+    setupFocusableElements();
+    setTimeout(() => closeBtn.focus(), 120);
+}
 
 function closeModal() {
     if (hasGsap()) {
@@ -132,7 +313,7 @@ function closeModal() {
             scale: 0.8,
             y: 40,
             opacity: 0,
-            duration: 0.4,
+            duration: 0.35,
             ease: "power2.in",
             onComplete: () => {
                 modalOverlay.classList.remove("active");
@@ -140,6 +321,9 @@ function closeModal() {
                 modalImage.src = "";
                 modalImage.alt = "";
                 modalContent.innerHTML = "";
+                if (previouslyFocusedEl) {
+                    previouslyFocusedEl.focus();
+                }
             }
         });
     } else {
@@ -148,45 +332,79 @@ function closeModal() {
         modalImage.src = "";
         modalImage.alt = "";
         modalContent.innerHTML = "";
+        if (previouslyFocusedEl) {
+            previouslyFocusedEl.focus();
+        }
     }
 }
 
-function openModal(imgSrc, imgAlt, htmlContent) {
-    modalImage.src = imgSrc;
-    modalImage.alt = imgAlt;
-    modalContent.innerHTML = htmlContent;
+// 5. Focus trapping keyboard controls
+function handleFocusTrap(e) {
+    if (!modalOverlay.classList.contains("active")) return;
+    if (e.key !== "Tab") return;
 
-    modalOverlay.classList.add("active");
-    document.body.classList.add("modal-open");
-
-    if (hasGsap()) {
-        gsap.fromTo(modalWrapper, 
-            { scale: 0.7, y: 50, opacity: 0 }, 
-            { scale: 1, y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.4)" }
-        );
+    if (e.shiftKey) { // Shift + Tab
+        if (document.activeElement === firstFocusableEl) {
+            lastFocusableEl.focus();
+            e.preventDefault();
+        }
+    } else { // Tab
+        if (document.activeElement === lastFocusableEl) {
+            firstFocusableEl.focus();
+            e.preventDefault();
+        }
     }
 }
 
-galleryItems.forEach((item) => {
+document.addEventListener("keydown", handleFocusTrap);
+
+document.addEventListener("keydown", (e) => {
+    if (!modalOverlay.classList.contains("active")) return;
+
+    if (e.key === "Escape") {
+        closeModal();
+    } else if (e.key === "ArrowRight") {
+        showNextMemory();
+    } else if (e.key === "ArrowLeft") {
+        showPrevMemory();
+    }
+});
+
+// 6. Mobile Swipe gesture bindings
+let touchStartX = 0;
+let touchEndX = 0;
+
+modalWrapper.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+}, { passive: true });
+
+modalWrapper.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    const threshold = 55;
+    if (touchEndX < touchStartX - threshold) {
+        showNextMemory();
+    } else if (touchEndX > touchStartX + threshold) {
+        showPrevMemory();
+    }
+}, { passive: true });
+
+// 7. Grid items event bindings
+galleryItems.forEach((item, index) => {
     const img = item.querySelector("img");
     const storyData = item.querySelector(".story-modal");
     if (!img || !storyData) return;
 
     item.addEventListener("click", (e) => {
         e.stopPropagation();
-        openModal(img.src, img.alt, storyData.innerHTML);
+        openModal(index);
     });
 });
 
 closeBtn.addEventListener("click", closeModal);
+prevBtn.addEventListener("click", showPrevMemory);
+nextBtn.addEventListener("click", showNextMemory);
 modalOverlay.addEventListener("click", (e) => {
     if (e.target === modalOverlay) {
-        closeModal();
-    }
-});
-
-document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
         closeModal();
     }
 });
