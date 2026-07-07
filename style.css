@@ -758,7 +758,7 @@ nav a.active::after {
         radial-gradient(var(--color-gold) 0.8px, transparent 0.8px);
     background-size: 120px 120px, 200px 200px;
     opacity: 0.42;
-    animation: starsMove 120s linear infinite;
+    animation: starsMove 120s linear infinite, starsTwinkle 8s ease-in-out infinite alternate;
 }
 
 #loader {
@@ -1512,6 +1512,32 @@ nav {
 .gallery-item:focus-visible {
     outline-offset: -2px !important;
     border-radius: var(--radius-sm) !important;
+}
+
+.heart-pulse {
+    display: inline-block;
+    color: var(--color-gold);
+    animation: heartPulseKey 2.2s infinite ease-in-out;
+    text-shadow: 0 0 10px var(--color-gold);
+}
+
+.rsvp-form input:hover,
+.rsvp-form select:hover,
+.rsvp-form textarea:hover {
+    border-color: rgba(var(--color-gold-soft-rgb), 0.4);
+}
+
+@keyframes starsTwinkle {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 0.65; }
+}
+
+@keyframes heartPulseKey {
+    0% { transform: scale(1); }
+    14% { transform: scale(1.18); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.18); }
+    70% { transform: scale(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
