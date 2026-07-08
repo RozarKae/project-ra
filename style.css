@@ -2883,13 +2883,12 @@ nav {
     pointer-events: none;
 }
 
-/* Hero image cinematic clip-path reveal â€” only clips when card is visible */
 .story-card.expanded .layout-hero-side .story-img-wrap img {
     clip-path: inset(0 0% 0 0);
 }
 
 /* ==========================================================================
-   MODULE 14: FINAL MOMENT â€” CINEMATIC PAYOFF PANEL
+   MODULE 14: FINAL MOMENT — CINEMATIC PAYOFF PANEL
    ========================================================================== */
 
 .story-final-moment {
@@ -2943,6 +2942,50 @@ nav {
 .final-moment-line-2 {
     font-family: var(--font-display);
     font-size: clamp(18px, 3vw, 26px);
+    line-height: 1.4;
+    color: var(--color-gold-soft);
+    font-style: italic;
+    margin: 0;
+    opacity: 0;
+}
+
+.transition-continue-btn {
+    background: transparent;
+    border: 1px solid rgba(var(--color-gold-soft-rgb), 0.35);
+    color: var(--color-gold-soft);
+    font-family: var(--font-heading);
+    font-size: var(--font-size-sm);
+    letter-spacing: 1.5px;
+    padding: 12px 28px;
+    cursor: pointer;
+    border-radius: var(--radius-pill);
+    transition: all var(--transition-medium) var(--ease-standard);
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+.transition-continue-btn.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.9s var(--ease-standard) 0.3s, border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+}
+
+.transition-continue-btn:hover {
+    background: rgba(var(--color-gold-rgb), 0.1);
+    border-color: var(--color-gold-soft);
+    color: var(--color-text);
+    box-shadow: 0 0 20px rgba(var(--color-gold-rgb), 0.2);
+}
+
+/* ==========================================================================
+   MODULE 12: UNIQUE PHOTO LAYOUT VARIANTS
+   ========================================================================== */
+
+/* Polaroid trio — Ch1: rotated borders with white frames */
+.layout-polaroid-trio {
+    gap: var(--space-xl);
+    background: rgba(0,0,0,0.1);
+    padding: var(--space-xl);
     border-radius: var(--radius-sm);
 }
 
@@ -3491,5 +3534,60 @@ nav {
     }
     .slider-slide.is-far-next {
         transform: translate3d(180px, 15px, -100px) scale(0.75);
+    }
+}
+
+/* ==========================================================================
+   MODULE 17: FLOATING AUDIO TOGGLE
+   ========================================================================== */
+
+.floating-audio-btn {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 999;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(var(--color-bg-rgb), 0.85);
+    border: 1px solid rgba(var(--color-gold-soft-rgb), 0.3);
+    color: var(--color-gold-soft);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    transition: all 0.3s var(--ease-standard);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.floating-audio-btn:hover {
+    background: rgba(var(--color-gold-rgb), 0.15);
+    border-color: var(--color-gold-soft);
+    transform: scale(1.05);
+    box-shadow: 0 0 16px rgba(var(--color-gold-rgb), 0.3);
+}
+
+.floating-audio-btn:focus-visible {
+    outline: 2px solid var(--color-gold-soft);
+    outline-offset: 2px;
+}
+
+.floating-audio-btn svg {
+    display: block;
+    transition: transform 0.3s var(--ease-standard);
+}
+
+.floating-audio-btn:active svg {
+    transform: scale(0.9);
+}
+
+@media (max-width: 768px) {
+    .floating-audio-btn {
+        bottom: 16px;
+        left: 16px;
+        width: 42px;
+        height: 42px;
     }
 }

@@ -682,6 +682,11 @@ function setupProgressNavClickEvents() {
 
 if (openMemoryBookBtn && storyAccordion) {
     openMemoryBookBtn.addEventListener("click", () => {
+        // Unlock audio context and play page-turn sound with haptics
+        AudioManager.init();
+        AudioManager.playPageTurn();
+        AudioManager.triggerHaptic([60, 40, 60]);
+
         setupProgressNavClickEvents();
 
         const revealComplete = () => {
@@ -929,7 +934,10 @@ storyCards.forEach(card => {
         });
 
         if (!isExpanded) {
-            // Expand the clicked card
+            // Expand the clicked card and play premium shimmer with haptics
+            AudioManager.playShimmer();
+            AudioManager.triggerHaptic(40);
+
             card.classList.remove("collapsed");
             card.classList.add("expanded");
             body.style.maxHeight = body.scrollHeight + "px";
@@ -1602,6 +1610,10 @@ async function executeRsvpSubmission() {
         rsvpLoadingState.style.setProperty("display", "none");
         rsvpSuccessState.style.setProperty("display", "flex");
         
+        // Play success chime and premium double vibration pulse
+        AudioManager.playChime();
+        AudioManager.triggerHaptic([80, 50, 80, 50, 120]);
+
         const seal = document.querySelector(".rsvp-wax-seal");
         if (seal) {
             seal.classList.add("stamp-active");
@@ -1877,6 +1889,15 @@ function initChapterSlider(container) {
         }
 
         updateStates();
+
+        // Play soft whoosh and haptic on transitions if the card is active/expanded
+        const parentCard = container.closest('.story-card');
+        if (parentCard && !parentCard.classList.contains('collapsed')) {
+            AudioManager.playWhoosh();
+            if (!fromAuto) {
+                AudioManager.triggerHaptic(20);
+            }
+        }
     }
 
     /* Auto-play and progress fill */
@@ -2013,3 +2034,354 @@ function initChapterSlider(container) {
 
 // Initialize all sliders on page load
 document.querySelectorAll('[data-slider]').forEach(initChapterSlider);
+
+// =============================================================================
+// MODULE 18: PREMIUM SOUND DESIGN & HAPTIC FEEDBACK
+// =============================================================================
+
+const AudioManager = {
+    ctx: null,
+    muted: true,
+    ambientPad: null,
+    masterPadGain: null,
+
+    init() {
+        if (this.ctx) return;
+        
+        // Respect audio preference from localStorage
+        const savedMute = localStorage.getItem('project_ra_muted');
+        if (savedMute !== null) {
+            this.muted = savedMute === 'true';
+        }
+
+        // Initialize audio context
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return;
+        this.ctx = new AudioContextClass();
+
+        // Create ambient pad
+        this.createAmbientPad();
+
+        this.updateToggleUI();
+    },
+
+    toggleMute() {
+        this.init();
+        if (!this.ctx) return;
+
+        this.muted = !this.muted;
+        localStorage.setItem('project_ra_muted', this.muted);
+
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume();
+        }
+
+        if (this.muted) {
+            this.stopPad();
+        } else {
+            this.startPad();
+        }
+
+        this.updateToggleUI();
+        this.playClick();
+        this.triggerHaptic(30); // light haptic feedback on sound toggle
+    },
+
+    updateToggleUI() {
+        const btn = document.getElementById('floatingAudioToggle');
+        if (!btn) return;
+
+        if (this.muted) {
+            btn.innerHTML = `
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="audio-icon audio-muted">
+                    <path d="M11 5L6 9H2v6h4l5 4V5z M23 9l-6 6 M17 9l6 6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            `;
+            btn.setAttribute('aria-label', 'Enable sound');
+        } else {
+            btn.innerHTML = `
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="audio-icon audio-playing">
+                    <path d="M11 5L6 9H2v6h4l5 4V5z M15.54 8.46a5 5 0 0 1 0 7.07 M19.07 4.93a10 10 0 0 1 0 14.14" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            `;
+            btn.setAttribute('aria-label', 'Mute sound');
+        }
+    },
+
+    // Synthetic Ambient Pad drone (Warm & Cinematic)
+    createAmbientPad() {
+        if (!this.ctx) return;
+
+        // Clean up existing pad if any
+        this.stopPad();
+
+        // Frequencies for a warm major chord pad (C major: C3, G3, C4, E4)
+        const freqs = [130.81, 196.00, 261.63, 329.63];
+        const oscs = [];
+
+        // Main output master gain for pad
+        this.masterPadGain = this.ctx.createGain();
+        this.masterPadGain.gain.setValueAtTime(0, this.ctx.currentTime);
+        
+        // Lowpass filter to keep it soft, warm and elegant
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(450, this.ctx.currentTime);
+
+        this.masterPadGain.connect(filter);
+        filter.connect(this.ctx.destination);
+
+        freqs.forEach((freq, idx) => {
+            const osc = this.ctx.createOscillator();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+
+            // Volume gain for this individual oscillator
+            const oscGain = this.ctx.createGain();
+            oscGain.gain.setValueAtTime(idx === 0 ? 0.08 : 0.05, this.ctx.currentTime);
+
+            osc.connect(oscGain);
+            oscGain.connect(this.masterPadGain);
+            osc.start(0);
+
+            // Gentle detune/modulation LFO to simulate real instruments
+            const lfo = this.ctx.createOscillator();
+            const lfoGain = this.ctx.createGain();
+            lfo.type = 'sine';
+            lfo.frequency.setValueAtTime(0.2 + idx * 0.05, this.ctx.currentTime); // very slow LFO
+            lfoGain.gain.setValueAtTime(8, this.ctx.currentTime); // detuning depth
+
+            lfo.connect(lfoGain);
+            lfoGain.connect(osc.detune);
+            lfo.start(0);
+
+            oscs.push(osc);
+        });
+
+        this.ambientPad = oscs;
+    },
+
+    startPad() {
+        if (!this.ctx) return;
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume();
+        }
+        if (this.masterPadGain) {
+            // Fade in ambient pad smoothly over 3 seconds
+            this.masterPadGain.gain.cancelScheduledValues(this.ctx.currentTime);
+            this.masterPadGain.gain.setValueAtTime(this.masterPadGain.gain.value, this.ctx.currentTime);
+            this.masterPadGain.gain.linearRampToValueAtTime(0.12, this.ctx.currentTime + 3);
+        }
+    },
+
+    stopPad() {
+        if (this.masterPadGain) {
+            // Fade out pad smoothly over 1.5 seconds to avoid sudden cutoffs
+            this.masterPadGain.gain.cancelScheduledValues(this.ctx.currentTime);
+            this.masterPadGain.gain.setValueAtTime(this.masterPadGain.gain.value, this.ctx.currentTime);
+            this.masterPadGain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 1.5);
+        }
+    },
+
+    // Synthetic Sound Effects
+    playClick() {
+        if (this.muted || !this.ctx) return;
+        
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(750, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, this.ctx.currentTime + 0.04);
+        
+        gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
+        
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.05);
+    },
+
+    playPageTurn() {
+        if (this.muted || !this.ctx) return;
+
+        // Synthesize paper rustle using noise buffer
+        const bufferSize = this.ctx.sampleRate * 0.4; // 0.4 seconds
+        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+        }
+
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        // Bandpass filter to sculpt the white noise into a paper slide sound
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.Q.setValueAtTime(3.0, this.ctx.currentTime);
+        filter.frequency.setValueAtTime(1000, this.ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(350, this.ctx.currentTime + 0.4);
+
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.06, this.ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.12, this.ctx.currentTime + 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.4);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        noise.start();
+    },
+
+    playWhoosh() {
+        if (this.muted || !this.ctx) return;
+
+        const bufferSize = this.ctx.sampleRate * 0.35;
+        const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+        }
+
+        const noise = this.ctx.createBufferSource();
+        noise.buffer = buffer;
+
+        // Lowpass filter swept down for elegant whoosh
+        const filter = this.ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(600, this.ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(120, this.ctx.currentTime + 0.35);
+
+        const gain = this.ctx.createGain();
+        gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.35);
+
+        noise.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        noise.start();
+    },
+
+    playShimmer() {
+        if (this.muted || !this.ctx) return;
+
+        // Ascent shimmering notes (pentatonic star sparkles)
+        const notes = [880, 1100, 1320, 1650, 1980];
+        notes.forEach((freq, idx) => {
+            const delay = idx * 0.06;
+            setTimeout(() => {
+                if (this.muted || !this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                
+                gain.gain.setValueAtTime(0.02, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.35);
+                
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.4);
+            }, delay * 1000);
+        });
+    },
+
+    playChime() {
+        if (this.muted || !this.ctx) return;
+
+        // Ascending major arpeggio chime (C5 -> E5 -> G5 -> C6) for RSVP submit
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, idx) => {
+            const delay = idx * 0.12;
+            setTimeout(() => {
+                if (this.muted || !this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+
+                gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.8);
+
+                // Add a feedback delay line to simulate spatial resonance/reverb
+                const delayNode = this.ctx.createDelay();
+                delayNode.delayTime.value = 0.25;
+                const delayGain = this.ctx.createGain();
+                delayGain.gain.value = 0.3;
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                
+                gain.connect(delayNode);
+                delayNode.connect(delayGain);
+                delayGain.connect(this.ctx.destination);
+
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.9);
+            }, delay * 1000);
+        });
+    },
+
+    playNavigationClick() {
+        if (this.muted || !this.ctx) return;
+
+        // Two quick subtle tick-tocks
+        const times = [0, 0.07];
+        times.forEach((t) => {
+            setTimeout(() => {
+                if (this.muted || !this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(t === 0 ? 900 : 700, this.ctx.currentTime);
+                gain.gain.setValueAtTime(0.03, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.03);
+
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.04);
+            }, t * 1000);
+        });
+    },
+
+    // Web Vibration API
+    triggerHaptic(duration) {
+        if ('vibrate' in navigator) {
+            try {
+                navigator.vibrate(duration);
+            } catch (e) {
+                // fail silently
+            }
+        }
+    }
+};
+
+// Bind floating audio button on load
+document.getElementById('floatingAudioToggle')?.addEventListener('click', () => {
+    AudioManager.toggleMute();
+});
+
+// Bind map buttons clicks for directions click sound
+document.querySelectorAll('.map-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        AudioManager.playNavigationClick();
+    });
+});
+
+// Bind all standard buttons and slide transitions for standard clicks
+document.querySelectorAll('button:not(#floatingAudioToggle), .btn:not(.map-btn)').forEach(btn => {
+    btn.addEventListener('click', () => {
+        AudioManager.playClick();
+    });
+});
+
+// Load user audio preference on window load
+window.addEventListener('DOMContentLoaded', () => {
+    AudioManager.init();
+});

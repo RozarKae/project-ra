@@ -1,14 +1,34 @@
 $listener = New-Object System.Net.HttpListener
-$listener.Prefixes.Add("http://127.0.0.1:3000/")
+$bindAll = $true
+
 try {
+    $listener.Prefixes.Add("http://*:3000/")
     $listener.Start()
-    Write-Host "Local HTTP Server started successfully."
-    Write-Host "Listening on http://127.0.0.1:3000/"
-    Write-Host "Press Ctrl+C to stop the server."
+    Write-Host "HTTP Server started successfully on all interfaces."
+    Write-Host "Listening on port 3000."
+    
+    $ips = Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.IPAddress -notlike "127.*" -and $_.InterfaceAlias -notlike "*Loopback*" } | Select-Object -ExpandProperty IPAddress
+    Write-Host "To access from your mobile phone, connect to the same Wi-Fi and open:"
+    foreach ($ip in $ips) {
+        Write-Host "  http://$ip`:3000/"
+    }
 } catch {
-    Write-Host "Failed to start server: $_"
-    exit
+    Write-Host "Binding to all interfaces (port 3000) failed: $_"
+    Write-Host "Falling back to localhost (http://127.0.0.1:3000/)..."
+    
+    $listener = New-Object System.Net.HttpListener
+    $listener.Prefixes.Add("http://127.0.0.1:3000/")
+    try {
+        $listener.Start()
+        Write-Host "HTTP Server started successfully on localhost."
+        Write-Host "Listening on http://127.0.0.1:3000/"
+    } catch {
+        Write-Host "Failed to start server on localhost: $_"
+        exit
+    }
 }
+
+Write-Host "Press Ctrl+C to stop the server."
 
 while ($listener.IsListening) {
     try {
