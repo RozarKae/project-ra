@@ -81,8 +81,14 @@
 
     <div id="loader" aria-label="Loading invitation">
         <div class="loader-content">
-            <p class="loader-logo">R <span>|</span> A</p>
-            <p>Preparing your journey</p>
+            <div class="loader-logo-svg" aria-hidden="true" style="margin-bottom: 24px;">
+                <svg viewBox="0 0 100 100" width="120" height="120">
+                    <circle class="logo-ring" cx="50" cy="50" r="42" fill="none" stroke="var(--color-gold-soft)" stroke-width="1.5" stroke-dasharray="270" stroke-dashoffset="270" />
+                    <path class="logo-char char-r" d="M38,62 V38 H48 C53,38 56,41 56,45 C56,49 53,51 48,51 L56,62 M38,51 H48" fill="none" stroke="var(--color-gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="120" stroke-dashoffset="120" />
+                    <path class="logo-char char-a" d="M62,62 L55,38 L48,62 M50,55 H60" fill="none" stroke="var(--color-gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="100" stroke-dashoffset="100" />
+                </svg>
+            </div>
+            <p style="margin-top: 16px;">Preparing your journey</p>
             <div class="loader-line">
                 <div class="loader-progress"></div>
             </div>
@@ -126,171 +132,380 @@
             </div>
             <div class="story-layout">
                 <div class="story-copy">
-                    <p>With gratitude and joy, we invite you to celebrate the beginning of our new chapter. Your
-                        presence will make this day warmer, brighter, and unforgettable.</p>
-                    <p>Come share the laughter, blessings, and memories as our families gather for a celebration of
-                        love.</p>
+                    <p>It started with a simple promise—a photoshoot to capture a moment. We were two different worlds: Rozar, with his calm and logical architecture, and Arifa, with her vibrant and emotional colors. We didn't expect the camera to capture a connection that would slowly redraw our lives.</p>
+                    <p>From the misty heights of Kodaikanal to quiet beach walks at sunset, we found a comfortable silence. It wasn't loud, and it wasn't rushed. We shared conversations that felt like returning home, and realized that our different paths were mapping the exact same destination.</p>
+                    <p>With the blessing of our families, we now stand ready. We have waited for this day, through patience and prayer. We invite you to be there as we exchange our vows and begin the journey of a lifetime under the grace of the Almighty.</p>
                 </div>
                 <div class="story-photo glass-card">
                     <img src="assets/images/story1.jpg" alt="Rozar and Arifa wedding story photograph" loading="lazy"
                         decoding="async">
                 </div>
             </div>
+            <!-- Transitional divider -->
+            <div class="story-divider" aria-hidden="true">
+                <div class="divider-line"></div>
+                <div class="divider-quote">
+                    "And We created you in pairs."
+                    <small>Surah An-Naba 78:8</small>
+                </div>
+                <div class="divider-line"></div>
+            </div>
         </section>
 
         <section id="gallery" class="section gallery-section container">
-            <div class="section-heading">
-                <span class="chapter-number">Chapter II</span>
-                <p class="eyebrow">Memories</p>
-                <h2>Moments We Treasure</h2>
+            <!-- Floating Desktop Story progress navigator -->
+            <div class="story-nav-desktop" id="storyNavDesktop" aria-label="Story Progress">
+                <div class="story-nav-line">
+                    <div class="story-nav-line-progress"></div>
+                </div>
+                <button type="button" class="story-nav-step active" data-chapter="1" aria-label="Navigate to Chapter 1"><span class="step-icon">○</span><span class="step-num">01</span></button>
+                <button type="button" class="story-nav-step" data-chapter="2" aria-label="Navigate to Chapter 2"><span class="step-icon">○</span><span class="step-num">02</span></button>
+                <button type="button" class="story-nav-step" data-chapter="3" aria-label="Navigate to Chapter 3"><span class="step-icon">○</span><span class="step-num">03</span></button>
+                <button type="button" class="story-nav-step" data-chapter="4" aria-label="Navigate to Chapter 4"><span class="step-icon">○</span><span class="step-num">04</span></button>
             </div>
-            <div class="gallery-grid">
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 1 of 20"><span class="gallery-date">01</span><img class="glass-card"
-                        src="assets/images/gallery1.jpg" alt="Wedding memory 1" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Our First Selfie</strong>
-                        <p>After class, while we were waiting to leave, you walked over with the simplest question: "Can
-                            we take a photo?" Little did we know that one small moment would become a memory we'd
-                            treasure forever.</p>
+
+            <!-- Editorial Introduction -->
+            <div class="gallery-intro-card glass-card text-center" style="max-width: var(--container-max-copy); margin: 0 auto var(--space-4xl); padding: var(--space-xl) var(--space-lg);">
+                <span class="chapter-number" style="margin-bottom: var(--space-md);">Chronicle</span>
+                <h2 style="font-size: clamp(26px, 4.5vw, 42px); line-height: 1.15; font-family: var(--font-heading); color: var(--color-text); margin-bottom: var(--space-sm);">Every Love Story Begins With A Single Moment</h2>
+                <p style="color: var(--color-muted); font-size: var(--font-size-base); margin-bottom: var(--space-xl); max-width: 500px; margin-left: auto; margin-right: auto; text-transform: none; letter-spacing: 0.5px;">Every smile, every challenge, every promise brought us one step closer to forever.</p>
+                <button type="button" id="openMemoryBookBtn" class="btn">Open Our Memory Book</button>
+            </div>
+
+            <!-- The Accordion Story Album (Initially Hidden) -->
+            <div class="story-accordion" id="storyAccordion" style="display: none; max-width: 1000px; margin: 0 auto;">
+                
+                <!-- Mobile Story progress indicator -->
+                <div class="story-nav-mobile" id="storyNavMobile" aria-label="Story Progress Mobile">
+                    <div class="mobile-nav-line">
+                        <div class="mobile-nav-line-progress"></div>
                     </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 2 of 20"><span class="gallery-date">02</span><img class="glass-card"
-                        src="assets/images/gallery2.jpg" alt="Wedding memory 2" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>📷 A Promise We Forgot</strong>
-                        <p>Before we parted that day, we took a quick selfie, and I promised, "One day, I'll do a proper
-                            photoshoot for you." We both smiled, agreed... and somehow let that promise slip away—only
-                            for it to become another sweet memory that still makes us smile.</p>
+                    <div class="mobile-nav-steps">
+                        <button type="button" class="mobile-nav-step active" data-chapter="1"><span>01</span></button>
+                        <button type="button" class="mobile-nav-step" data-chapter="2"><span>02</span></button>
+                        <button type="button" class="mobile-nav-step" data-chapter="3"><span>03</span></button>
+                        <button type="button" class="mobile-nav-step" data-chapter="4"><span>04</span></button>
                     </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 3 of 20"><span class="gallery-date">03</span><img class="glass-card"
-                        src="assets/images/gallery3.jpg" alt="Wedding memory 3" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Laughs & Love</strong>
-                        <p>You made me laugh until my sides hurt. Those genuine moments are what I treasure most.</p>
+                </div>
+                
+                <!-- CHAPTER 01 -->
+                <div class="story-card collapsed" id="chapter1" tabindex="0">
+                    <div class="card-header">
+                        <div class="card-header-bg" style="background-image: url('assets/images/gallery1.jpg');"></div>
+                        <div class="card-header-overlay"></div>
+                        <div class="card-header-content">
+                            <span class="card-chapter-num">Chapter I</span>
+                            <h3 class="card-chapter-title">🌱 How It Started</h3>
+                            <p class="card-chapter-subtitle">Where Forever Quietly Began</p>
+                            <p class="card-chapter-preview">Every beautiful love story begins with a moment that seems ordinary at first...</p>
+                        </div>
+                        <div class="card-header-chevron">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
                     </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 4 of 20"><span class="gallery-date">04</span><img class="glass-card"
-                        src="assets/images/gallery4.jpg" alt="Wedding memory 4" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Forever Smiling</strong>
-                        <p>Every time I see you, my heart finds its smile. This was one of those perfect days.</p>
+                    <div class="card-body">
+                        <div class="card-body-inner">
+                            <p class="chapter-summary">Every beautiful love story begins with a moment that seems ordinary at first. A simple conversation, a shared smile, and a photograph taken without a second thought slowly became the first page of a story neither of us knew we were writing. Looking back now, we realize that forever often begins in the quietest moments.</p>
+                            
+                            <div class="editorial-layout layout-hero-side">
+                                <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery1.jpg" alt="Our First Selfie" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Our First Selfie</strong>
+                                        <span class="caption-date">21 February 2024</span>
+                                        <p>Where it all quietly began. A simple prompt, an ordinary smile, and the first page of a story we didn't know we were writing.</p>
+                                    </figcaption>
+                                </figure>
+                            </div>
+
+                            <div class="editorial-layout layout-strip">
+                                <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery2.jpg" alt="A Promise We Forgot" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>A Promise We Forgot</strong>
+                                        <span class="caption-date">14 March 2024</span>
+                                        <p>We took a quick snapshot and promised to do a proper photoshoot. It became a sweet reminder.</p>
+                                    </figcaption>
+                                </figure>
+                                <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery3.jpg" alt="Laughs & Love" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Laughs & Love</strong>
+                                        <span class="caption-date">02 April 2024</span>
+                                        <p>You made me laugh until my sides hurt. Genuine moments we treasure most.</p>
+                                    </figcaption>
+                                </figure>
+                                <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery4.jpg" alt="Forever Smiling" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Forever Smiling</strong>
+                                        <span class="caption-date">18 April 2024</span>
+                                        <p>Every time I see you, my heart finds its smile. One of those perfect days.</p>
+                                    </figcaption>
+                                </figure>
+                            </div>
+
+                            <blockquote class="editorial-quote">
+                                "In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine."
+                                <cite>— Maya Angelou</cite>
+                            </blockquote>
+
+                            <div class="chapter-closing">
+                                <div class="chapter-closing-line"></div>
+                                <p>Sometimes the smallest moments become the biggest memories.</p>
+                                <div class="chapter-closing-line"></div>
+                            </div>
+                        </div>
                     </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 5 of 20"><span class="gallery-date">05</span><img class="glass-card"
-                        src="assets/images/gallery5.jpg" alt="Wedding memory 5" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Whispered Promises</strong>
-                        <p>Words we only meant for each other. Dreams we shared under the stars.</p>
+                </div>
+
+                <!-- CHAPTER 02 -->
+                <div class="story-card collapsed" id="chapter2" tabindex="0">
+                    <div class="card-header">
+                        <div class="card-header-bg" style="background-image: url('assets/images/gallery5.jpg');"></div>
+                        <div class="card-header-overlay"></div>
+                        <div class="card-header-content">
+                            <span class="card-chapter-num">Chapter II</span>
+                            <h3 class="card-chapter-title">❤️ How Love Grew</h3>
+                            <p class="card-chapter-subtitle">A Thousand Little Moments</p>
+                            <p class="card-chapter-preview">What started as friendship slowly blossomed into something far more beautiful...</p>
+                        </div>
+                        <div class="card-header-chevron">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
                     </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 6 of 20"><span class="gallery-date">06</span><img class="glass-card"
-                        src="assets/images/gallery6.jpg" alt="Wedding memory 6" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Golden Hour Bliss</strong>
-                        <p>When the sun painted everything gold, we felt like the richest people in the world.</p>
+                    <div class="card-body">
+                        <div class="card-body-inner">
+                            <p class="chapter-summary">What started as friendship slowly blossomed into something far more beautiful. Every conversation became longer, every laugh more meaningful, and every memory more precious. Through countless ordinary days, we unknowingly built a love filled with trust, comfort, and endless happiness.</p>
+                            
+                            <div class="editorial-layout layout-asymmetric">
+                                <figure class="story-img-wrap gallery-item item-left" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery5.jpg" alt="Whispered Promises" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Whispered Promises</strong>
+                                        <span class="caption-date">05 May 2024</span>
+                                        <p>Words we only meant for each other. Dreams we shared under the stars.</p>
+                                    </figcaption>
+                                </figure>
+                                <figure class="story-img-wrap gallery-item item-right" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery6.jpg" alt="Golden Hour Bliss" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Golden Hour Bliss</strong>
+                                        <span class="caption-date">23 May 2024</span>
+                                        <p>When the sun painted everything gold, we felt like the richest people in the world.</p>
+                                    </figcaption>
+                                </figure>
+                            </div>
+
+                            <div class="editorial-layout layout-strip">
+                                <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery7.jpg" alt="Hand in Hand" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Hand in Hand</strong>
+                                        <span class="caption-date">12 June 2024</span>
+                                        <p>Your hand fit perfectly in mine. No words needed, just the feeling of being home.</p>
+                                    </figcaption>
+                                </figure>
+                                <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery8.jpg" alt="Our Favorite Place" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Our Favorite Place</strong>
+                                        <span class="caption-date">29 June 2024</span>
+                                        <p>The spot where we always escape from the world. Where time stops.</p>
+                                    </figcaption>
+                                </figure>
+                                <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery9.jpg" alt="Under the Sunset" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Under the Sunset</strong>
+                                        <span class="caption-date">15 July 2024</span>
+                                        <p>Sunsets are proof that endings can be beautiful too. Our favorite routine.</p>
+                                    </figcaption>
+                                </figure>
+                            </div>
+
+                            <div class="editorial-layout layout-hero-side">
+                                <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery10.jpg" alt="A Thousand Laughs" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>A Thousand Laughs</strong>
+                                        <span class="caption-date">04 August 2024</span>
+                                        <p>We built our connection on shared jokes and comforting silences.</p>
+                                    </figcaption>
+                                </figure>
+                            </div>
+
+                            <div class="chapter-closing">
+                                <div class="chapter-closing-line"></div>
+                                <p>Love wasn't built in one day—it grew beautifully through countless little moments.</p>
+                                <div class="chapter-closing-line"></div>
+                            </div>
+                        </div>
                     </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 7 of 20"><span class="gallery-date">07</span><img class="glass-card"
-                        src="assets/images/gallery7.jpg" alt="Wedding memory 7" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Hand in Hand</strong>
-                        <p>Your hand fit perfectly in mine. No words needed, just the feeling of being home.</p>
+                </div>
+
+                <!-- CHAPTER 03 -->
+                <div class="story-card collapsed" id="chapter3" tabindex="0">
+                    <div class="card-header">
+                        <div class="card-header-bg" style="background-image: url('assets/images/gallery11.jpg');"></div>
+                        <div class="card-header-overlay"></div>
+                        <div class="card-header-content">
+                            <span class="card-chapter-num">Chapter III</span>
+                            <h3 class="card-chapter-title">🌧 The Challenges We Overcame</h3>
+                            <p class="card-chapter-subtitle">Together Through Every Season</p>
+                            <p class="card-chapter-preview">Every journey has its trials, and ours was no different. We faced waiting...</p>
+                        </div>
+                        <div class="card-header-chevron">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
                     </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 8 of 20"><span class="gallery-date">08</span><img class="glass-card"
-                        src="assets/images/gallery8.jpg" alt="Wedding memory 8" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Our Favorite Place</strong>
-                        <p>The spot where we always escape from the world. Where time stops and only we exist.</p>
+                    <div class="card-body">
+                        <div class="card-body-inner">
+                            <p class="chapter-summary">Every journey has its trials, and ours was no different. We faced moments of uncertainty, distance, misunderstandings, and waiting. Yet every challenge taught us patience, strengthened our trust, and reminded us that true love isn't measured by perfect days, but by the courage to hold on through imperfect ones.</p>
+                            
+                            <div class="editorial-layout layout-hero-side">
+                                <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery11.jpg" alt="Holding On" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Holding On</strong>
+                                        <span class="caption-date">10 September 2024</span>
+                                        <p>In moments of uncertainty, finding patience and quiet support made all the difference.</p>
+                                    </figcaption>
+                                </figure>
+                            </div>
+
+                            <div class="editorial-layout layout-asymmetric">
+                                <figure class="story-img-wrap gallery-item item-left" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery12.jpg" alt="Through the Distance" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Through the Distance</strong>
+                                        <span class="caption-date">28 October 2024</span>
+                                        <p>Distance only makes the heart grow fonder, proving that love knows no boundaries.</p>
+                                    </figcaption>
+                                </figure>
+                                <figure class="story-img-wrap gallery-item item-right" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery13.jpg" alt="Waiting & Hope" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Waiting & Hope</strong>
+                                        <span class="caption-date">14 November 2024</span>
+                                        <p>Patience in prayers. Waiting for the day we wouldn't have to say goodbye.</p>
+                                    </figcaption>
+                                </figure>
+                            </div>
+
+                            <div class="editorial-layout layout-hero-side">
+                                <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery14.jpg" alt="Endless Summer" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Endless Summer</strong>
+                                        <span class="caption-date">11 December 2024</span>
+                                        <p>Emerging from difficult seasons, we found ourselves closer, stronger, and more sure.</p>
+                                    </figcaption>
+                                </figure>
+                            </div>
+
+                            <div class="chapter-closing">
+                                <div class="chapter-closing-line"></div>
+                                <p>Every challenge became another reason to choose each other.</p>
+                                <div class="chapter-closing-line"></div>
+                            </div>
+                        </div>
                     </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 9 of 20"><span class="gallery-date">09</span><img class="glass-card"
-                        src="assets/images/gallery9.jpg" alt="Wedding memory 9" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Dancing in Dreams</strong>
-                        <p>No music was needed. Your heartbeat was the only rhythm I wanted to follow.</p>
+                </div>
+
+                <!-- CHAPTER 04 -->
+                <div class="story-card collapsed" id="chapter4" tabindex="0">
+                    <div class="card-header">
+                        <div class="card-header-bg" style="background-image: url('assets/images/gallery15.jpg');"></div>
+                        <div class="card-header-overlay"></div>
+                        <div class="card-header-content">
+                            <span class="card-chapter-num">Chapter IV</span>
+                            <h3 class="card-chapter-title">💍 The Day We Said Yes</h3>
+                            <p class="card-chapter-subtitle">The Beginning of Forever</p>
+                            <p class="card-chapter-preview">Every chapter of our journey led us to this unforgettable moment...</p>
+                        </div>
+                        <div class="card-header-chevron">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
                     </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 10 of 20"><span class="gallery-date">10</span><img class="glass-card"
-                        src="assets/images/gallery10.jpg" alt="Wedding memory 10" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Stolen Glances</strong>
-                        <p>Those moments when you didn't know I was watching. The way love shows in the little things.
-                        </p>
+                    <div class="card-body">
+                        <div class="card-body-inner">
+                            <p class="chapter-summary">Every chapter of our journey led us to this unforgettable moment. Surrounded by the love and blessings of our families, we chose forever. Our engagement wasn't the end of our story—it was the beginning of a new chapter, one that now brings us here, inviting you to celebrate the greatest day of our lives together.</p>
+                            
+                            <div class="editorial-layout layout-hero-side">
+                                <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery15.jpg" alt="Forever Begins" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Forever Begins</strong>
+                                        <span class="caption-date">08 January 2025</span>
+                                        <p>The moment we chose forever. With rings exchanged and hearts united, our true journey starts.</p>
+                                    </figcaption>
+                                </figure>
+                            </div>
+
+                            <div class="editorial-layout layout-strip">
+                                <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery16.jpg" alt="Our Journey Home" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Our Journey Home</strong>
+                                        <span class="caption-date">20 January 2025</span>
+                                        <p>Wherever you are is home. No more distances, just our shared lifetime.</p>
+                                    </figcaption>
+                                </figure>
+                                <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery17.jpg" alt="With Every Heartbeat" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>With Every Heartbeat</strong>
+                                        <span class="caption-date">10 February 2025</span>
+                                        <p>I felt your love in every beat of my heart. A beautiful rhythm.</p>
+                                    </figcaption>
+                                </figure>
+                                <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery18.jpg" alt="The Love We Found" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>The Love We Found</strong>
+                                        <span class="caption-date">28 February 2025</span>
+                                        <p>What started as a chance meeting became the greatest discovery of our lives.</p>
+                                    </figcaption>
+                                </figure>
+                            </div>
+
+                            <div class="editorial-layout layout-asymmetric">
+                                <figure class="story-img-wrap gallery-item item-left" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery19.jpg" alt="Till the End" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Till the End</strong>
+                                        <span class="caption-date">15 March 2025</span>
+                                        <p>A promise to stand by each other till the end of time. A lifetime of yes.</p>
+                                    </figcaption>
+                                </figure>
+                                <figure class="story-img-wrap gallery-item item-right" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                    <img src="assets/images/gallery20.jpg" alt="Last Pic as BF GF" loading="lazy" decoding="async" class="glass-card">
+                                    <figcaption class="caption-card">
+                                        <strong>Last Pic as BF GF</strong>
+                                        <span class="caption-date">30 March 2025</span>
+                                        <p>Our last picture before taking the vows. The countdown is finally on.</p>
+                                    </figcaption>
+                                </figure>
+                            </div>
+
+                            <div class="chapter-closing">
+                                <div class="chapter-closing-line"></div>
+                                <p>And now, our greatest adventure is about to begin.</p>
+                                <div class="chapter-closing-line"></div>
+                            </div>
+                        </div>
                     </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 11 of 20"><span class="gallery-date">11</span><img class="glass-card"
-                        src="assets/images/gallery11.jpg" alt="Wedding memory 11" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Lost in the Moment</strong>
-                        <p>Everything else faded. There was only us, the sky, and infinite possibilities.</p>
-                    </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 12 of 20"><span class="gallery-date">12</span><img class="glass-card"
-                        src="assets/images/gallery12.jpg" alt="Wedding memory 12" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Hearts Entwined</strong>
-                        <p>Two souls became one. A connection so deep, nothing could break it apart.</p>
-                    </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 13 of 20"><span class="gallery-date">13</span><img class="glass-card"
-                        src="assets/images/gallery13.jpg" alt="Wedding memory 13" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Sunrise Together</strong>
-                        <p>Watching the day begin with you made every morning feel like a new love story.</p>
-                    </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 14 of 20"><span class="gallery-date">14</span><img class="glass-card"
-                        src="assets/images/gallery14.jpg" alt="Wedding memory 14" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Endless Summer</strong>
-                        <p>Those carefree days felt like they would never end. But the best was yet to come.</p>
-                    </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 15 of 20"><span class="gallery-date">15</span><img class="glass-card"
-                        src="assets/images/gallery15.jpg" alt="Wedding memory 15" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Forever Begins</strong>
-                        <p>The moment we both knew this was it. No more maybes, just a lifetime of yes.</p>
-                    </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 16 of 20"><span class="gallery-date">16</span><img class="glass-card"
-                        src="assets/images/gallery16.jpg" alt="Wedding memory 16" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Our Journey Home</strong>
-                        <p>Wherever you are becomes home. The distance means nothing when love is this strong.</p>
-                    </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 17 of 20"><span class="gallery-date">17</span><img class="glass-card"
-                        src="assets/images/gallery17.jpg" alt="Wedding memory 17" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>With Every Heartbeat</strong>
-                        <p>I felt your love with every beat of my heart. A rhythm that only you could create.</p>
-                    </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 18 of 20"><span class="gallery-date">18</span><img class="glass-card"
-                        src="assets/images/gallery18.jpg" alt="Wedding memory 18" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>The Love We Found</strong>
-                        <p>What started as a chance meeting became the greatest discovery of our lives.</p>
-                    </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 19 of 20"><span class="gallery-date">19</span><img class="glass-card"
-                        src="assets/images/gallery19.jpg" alt="Wedding memory 19" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Till the End</strong>
-                        <p>I promised to love you till the end of time. This is just the beautiful beginning.</p>
-                    </div>
-                </figure>
-                <figure class="gallery-item" tabindex="0" role="button" aria-haspopup="dialog"
-                    aria-label="Open memory 20 of 20"><span class="gallery-date">20</span><img class="glass-card"
-                        src="assets/images/gallery20.jpg" alt="Wedding memory 20" loading="lazy" decoding="async">
-                    <div class="story-modal"><strong>Our Last Pic as BF GF</strong>
-                        <p>From this moment on, we are forever. Two hearts, one soul, infinite love. Mrs. & Mr., always.
-                        </p>
-                    </div>
-                </figure>
+                </div>
+
+                <!-- Concluding Message (Initially Hidden) -->
+                <div class="story-conclusion-panel glass-card text-center" id="storyConclusion" style="display: none; margin-top: var(--space-4xl); padding: var(--space-2xl) var(--space-xl);">
+                    <p class="conclusion-text" style="font-size: clamp(16px, 3.2vw, 22px); line-height: 1.75; font-family: var(--font-display); color: var(--color-gold-soft); margin-bottom: var(--space-2xl); max-width: 750px; margin-left: auto; margin-right: auto; text-shadow: 0 0 6px rgba(var(--color-gold-rgb), 0.2); text-transform: none; letter-spacing: 0.5px;">
+                        "Every memory, every challenge, and every promise has led us to this beautiful beginning. Our story is still being written, and it wouldn't be complete without the people who have supported us along the way. We would be honored to have you join us as we begin the next chapter of our forever."
+                    </p>
+                    <button type="button" id="joinSayIDoBtn" class="btn">✨ Join Us As We Say "I Do"</button>
+                </div>
+
             </div>
         </section>
 
@@ -300,18 +515,21 @@
                 <p class="eyebrow">Counting Down</p>
                 <h2>Until Forever Begins</h2>
             </div>
-            <div class="countdown-grid" aria-live="polite">
-                <div class="time-box"><span id="days">00</span>
-                    <p>Days</p>
-                </div>
-                <div class="time-box"><span id="hours">00</span>
-                    <p>Hours</p>
-                </div>
-                <div class="time-box"><span id="minutes">00</span>
-                    <p>Minutes</p>
-                </div>
-                <div class="time-box"><span id="seconds">00</span>
-                    <p>Seconds</p>
+            <div class="countdown-wrap">
+                <!-- SVG Islamic Star Background -->
+                <svg class="countdown-bg-star" viewBox="0 0 100 100" width="300" height="300" aria-hidden="true">
+                    <path d="M50 5 L63 37 L95 50 L63 63 L50 95 L37 63 L5 50 L37 37 Z" fill="none" stroke="rgba(212, 175, 55, 0.05)" stroke-width="0.75" />
+                    <path d="M50 15 L59 41 L85 50 L59 59 L50 85 L41 59 L15 50 L41 41 Z" fill="none" stroke="rgba(212, 175, 55, 0.03)" stroke-width="0.5" />
+                    <circle cx="50" cy="50" r="10" fill="none" stroke="rgba(212, 175, 55, 0.04)" stroke-width="0.5" />
+                </svg>
+                <div class="countdown-grid" aria-live="polite">
+                    <div class="time-box"><span id="days">00</span><p>Days</p></div>
+                    <div class="countdown-divider" aria-hidden="true"></div>
+                    <div class="time-box"><span id="hours">00</span><p>Hours</p></div>
+                    <div class="countdown-divider" aria-hidden="true"></div>
+                    <div class="time-box"><span id="minutes">00</span><p>Minutes</p></div>
+                    <div class="countdown-divider" aria-hidden="true"></div>
+                    <div class="time-box"><span id="seconds">00</span><p>Seconds</p></div>
                 </div>
             </div>
         </section>
@@ -322,34 +540,52 @@
                 <p class="eyebrow">Celebrations</p>
                 <h2>Celebrate With Us</h2>
             </div>
-            <div class="events-grid">
-                <article class="event-card glass-card">
-                    <p class="event-date">29 August 2026</p>
-                    <h3>Sangeet</h3>
-                    <p>7:00 PM</p>
-                    <p>NSK & NKR A/C Mahal</p>
-                </article>
-                <article class="event-card glass-card">
-                    <p class="event-date">30 August 2026</p>
-                    <h3>Nikah</h3>
-                    <p>9:00 AM</p>
-                    <p>NSK & NKR A/C Mahal and Residency</p>
-                </article>
+            
+            <div class="timeline-container">
+                <!-- Golden active line thread -->
+                <div class="timeline-thread" aria-hidden="true">
+                    <div class="timeline-thread-progress"></div>
+                </div>
+                
+                <div class="timeline-events">
+                    <article class="event-card glass-card timeline-left">
+                        <div class="timeline-dot" aria-hidden="true"></div>
+                        <p class="event-date">29 August 2026</p>
+                        <h3>Sangeet</h3>
+                        <p class="event-time">7:00 PM</p>
+                        <p class="event-location">NSK & NKR A/C Mahal</p>
+                    </article>
+                    
+                    <article class="event-card glass-card timeline-right">
+                        <div class="timeline-dot" aria-hidden="true"></div>
+                        <p class="event-date">30 August 2026</p>
+                        <h3>Nikah</h3>
+                        <p class="event-time">9:00 AM</p>
+                        <p class="event-location">NSK & NKR A/C Mahal and Residency</p>
+                    </article>
+                </div>
             </div>
         </section>
 
         <section id="venue" class="section venue-section container">
             <div class="venue-panel glass-card">
-                <div>
+                <div class="venue-info">
                     <span class="chapter-number">Chapter IV</span>
                     <p class="eyebrow">Venue</p>
                     <h2>Find Your Way</h2>
                     <p class="venue-name">NSK & NKR A/C Mahal and Residency</p>
-                    <p class="venue-address">GST Main Rd, Lion City,<br>Thiru Nagar, Thanakkankulam,<br>Madurai, Tamil
-                        Nadu</p>
+                    <p class="venue-address">GST Main Rd, Lion City,<br>Thiru Nagar, Thanakkankulam,<br>Madurai, Tamil Nadu</p>
+                    <a class="btn map-btn" href="https://maps.app.goo.gl/nHmxp5HqnWTBi1R56" target="_blank" rel="noopener" style="margin-top: 24px;">Open in Google Maps</a>
                 </div>
-                <a class="btn map-btn" href="https://maps.app.goo.gl/nHmxp5HqnWTBi1R56" target="_blank"
-                    rel="noopener">Open in Google Maps</a>
+                <div class="venue-map-illustration" aria-hidden="true">
+                    <svg viewBox="0 0 100 100" width="100%" height="100%">
+                        <path d="M10,20 Q40,30 90,10 M0,50 L100,50 M30,100 C40,70 60,30 70,0 M20,0 L80,100" stroke="rgba(255,255,255,0.06)" stroke-width="1.5" fill="none" />
+                        <path d="M50,10 Q60,40 50,90 M10,80 L90,80" stroke="rgba(255,255,255,0.04)" stroke-width="1" fill="none" />
+                        <path class="route-line" d="M15,20 L40,28 L50,50 L68,68" stroke="var(--color-gold)" stroke-width="2" fill="none" stroke-linecap="round" />
+                        <circle class="map-pulse-ring" cx="68" cy="68" r="8" fill="none" stroke="var(--color-gold)" stroke-width="1" />
+                        <circle cx="68" cy="68" r="3.5" fill="var(--color-gold-soft)" />
+                    </svg>
+                </div>
             </div>
         </section>
 
@@ -375,20 +611,20 @@
 
                 <!-- Step 1: Attendance Details -->
                 <div class="rsvp-step active" data-step="1">
-                    <label>
-                        <span>Your Name</span>
-                        <input name="name" type="text" autocomplete="name" required placeholder="Enter your full name">
+                    <div class="floating-field">
+                        <input id="rsvpName" name="name" type="text" autocomplete="name" required placeholder=" ">
+                        <label for="rsvpName">Your Name</label>
                         <span class="error-feedback" id="nameError" role="alert"></span>
-                    </label>
-                    <label>
-                        <span>Will you attend?</span>
-                        <select name="attendance" required>
-                            <option value="">Select an option</option>
+                    </div>
+                    <div class="floating-field">
+                        <select id="rsvpAttendance" name="attendance" required>
+                            <option value="" disabled selected hidden></option>
                             <option value="Yes, I'll be there">Yes, I'll be there</option>
                             <option value="Sorry, I can't make it">Sorry, I can't make it</option>
                         </select>
+                        <label for="rsvpAttendance">Will you attend?</label>
                         <span class="error-feedback" id="attendanceError" role="alert"></span>
-                    </label>
+                    </div>
                     <div class="rsvp-actions">
                         <button type="button" class="btn next-step-btn">Continue</button>
                     </div>
@@ -396,16 +632,15 @@
 
                 <!-- Step 2: Guest Details & Message -->
                 <div class="rsvp-step" data-step="2">
-                    <label id="guestFieldLabel">
-                        <span>Number of Guests</span>
-                        <input name="guests" type="number" min="1" max="20" placeholder="e.g. 1">
+                    <div class="floating-field" id="guestFieldLabel">
+                        <input id="rsvpGuests" name="guests" type="number" min="1" max="20" placeholder=" ">
+                        <label for="rsvpGuests">Number of Guests</label>
                         <span class="error-feedback" id="guestsError" role="alert"></span>
-                    </label>
-                    <label class="full-field">
-                        <span>Leave a message</span>
-                        <textarea name="message" rows="4"
-                            placeholder="Share a warm wish or special note (Optional)"></textarea>
-                    </label>
+                    </div>
+                    <div class="floating-field full-field">
+                        <textarea id="rsvpMessage" name="message" rows="4" placeholder=" "></textarea>
+                        <label for="rsvpMessage">Leave a message (Optional)</label>
+                    </div>
                     <div class="rsvp-actions">
                         <button type="button" class="btn prev-step-btn btn-secondary">Back</button>
                         <button type="button" class="btn next-step-btn">Continue</button>
@@ -436,28 +671,31 @@
                         <div class="rsvp-loader-spinner"></div>
                         <p>Sending your response...</p>
                     </div>
-
+                    
                     <!-- Success sub-state -->
                     <div class="rsvp-status-content rsvp-success-state" style="display: none;">
-                        <div class="rsvp-success-checkmark">&#10003;</div>
+                        <div class="rsvp-wax-seal" aria-hidden="true">
+                            <svg class="wax-seal-svg" viewBox="0 0 100 100" width="80" height="80">
+                                <path class="wax-base" d="M50,10 C65,8 88,14 88,38 C88,60 76,88 50,88 C24,88 12,65 12,45 C12,25 32,12 50,10 Z" fill="rgba(212, 175, 55, 0.95)" />
+                                <circle class="wax-ring" cx="50" cy="50" r="28" fill="none" stroke="#fff6cf" stroke-width="1.5" opacity="0.8" />
+                                <path class="wax-monogram" d="M42,60 V40 H48 C51,40 53,42 53,45 C53,48 51,49 48,50 L53,60 M42,50 H48 M58,60 L52,40 L46,60 M49,54 H55" fill="none" stroke="#fff6cf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
                         <h3>RSVP Confirmed!</h3>
                         <p id="successPersonalMessage"></p>
-
+                        
                         <!-- Calendar integrations -->
                         <div class="rsvp-calendar-wrapper">
                             <p class="calendar-heading">Add this celebration to your calendar:</p>
                             <div class="calendar-buttons">
-                                <a id="googleCalendarLink" href="" target="_blank"
-                                    class="btn btn-sm calendar-btn">Google Calendar</a>
-                                <button type="button" id="downloadIcsBtn" class="btn btn-sm calendar-btn">Download
-                                    .ICS</button>
+                                <a id="googleCalendarLink" href="" target="_blank" class="btn btn-sm calendar-btn">Google Calendar</a>
+                                <button type="button" id="downloadIcsBtn" class="btn btn-sm calendar-btn">Download .ICS</button>
                             </div>
                         </div>
 
                         <!-- WhatsApp support button -->
                         <div class="rsvp-whatsapp-wrapper">
-                            <a href="https://wa.me/918903333333?text=Hi%20Rozar%20and%20Arifa!%20Looking%20forward%20to%20your%20wedding!"
-                                target="_blank" class="btn whatsapp-btn">
+                            <a href="https://wa.me/918903333333?text=Hi%20Rozar%20and%20Arifa!%20Looking%20forward%20to%20your%20wedding!" target="_blank" class="btn whatsapp-btn">
                                 <span>💬 Chat on WhatsApp</span>
                             </a>
                         </div>
@@ -483,7 +721,13 @@
             <p class="eyebrow">With Love</p>
             <h2>Thank You</h2>
             <p>Thank you for becoming part of our journey.</p>
-            <h3>Rozar <span class="heart-pulse">♥</span> Arifa</h3>
+            <div class="footer-signatures" aria-label="Rozar & Arifa Signatures">
+                <svg class="signatures-svg" viewBox="0 0 200 80" width="240" height="96">
+                    <path class="sig-path sig-rozar" d="M15,45 C25,15 35,20 40,35 C42,40 38,55 35,50 C32,45 45,35 55,30 C60,28 65,35 60,45 C58,48 55,50 60,42 C65,35 75,32 80,45 C82,48 85,50 90,45" fill="none" stroke="var(--color-gold-soft)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="250" stroke-dashoffset="250" />
+                    <path class="sig-path sig-heart" d="M96,42 C92,36 86,38 88,46 C90,52 98,58 100,60 C102,58 110,52 112,46 C114,38 108,36 104,42 Z" fill="none" stroke="var(--color-rose)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="100" stroke-dashoffset="100" />
+                    <path class="sig-path sig-arifa" d="M110,48 C115,35 125,25 130,35 C132,40 128,52 125,48 C122,44 135,32 145,28 C150,26 155,35 152,42 C150,45 145,46 150,40 C155,32 165,30 170,42 C172,45 178,48 185,42" fill="none" stroke="var(--color-gold-soft)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="250" stroke-dashoffset="250" />
+                </svg>
+            </div>
             <p class="footer-date">See you on our biggest day</p>
         </div>
     </footer>

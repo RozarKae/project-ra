@@ -18,6 +18,65 @@ const hasGsap = () => {
     return !prefersReduce;
 };
 
+function splitTextIntoSpans(selector) {
+    if (!hasGsap()) return;
+    const element = document.querySelector(selector);
+    if (!element) return;
+    const text = element.textContent;
+    element.innerHTML = text
+        .split("")
+        .map(char => {
+            if (char === " ") return '<span class="char-span spacer-span">&nbsp;</span>';
+            return `<span class="char-span">${char}</span>`;
+        })
+        .join("");
+}
+
+function splitWordsIntoSpans(selector) {
+    if (!hasGsap()) return;
+    const element = document.querySelector(selector);
+    if (!element) return;
+    const words = element.innerHTML.split("<br>");
+    element.innerHTML = words
+        .map(line => {
+            const lineHtml = line.split(" ").map(word => `<span class="word-span">${word}</span>`).join(" ");
+            return `<span class="line-span">${lineHtml}</span>`;
+        })
+        .join("<br>");
+}
+
+function applyPersonalization() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const guestName = urlParams.get("guest") || urlParams.get("to");
+    if (guestName && guestName.trim()) {
+        const heroContent = document.querySelector(".hero-content");
+        const tagline = document.querySelector(".hero-content .tagline");
+        if (heroContent && tagline) {
+            const greeting = document.createElement("p");
+            greeting.className = "personal-greeting";
+            greeting.textContent = `Dear ${decodeURIComponent(guestName).trim()},`;
+            heroContent.insertBefore(greeting, tagline);
+        }
+    }
+}
+
+function initFloatingLabels() {
+    const fields = document.querySelectorAll(".floating-field input, .floating-field select, .floating-field textarea");
+    fields.forEach(field => {
+        const toggleValue = () => {
+            if (field.value && String(field.value).trim() !== "") {
+                field.classList.add("has-value");
+            } else {
+                field.classList.remove("has-value");
+            }
+        };
+        field.addEventListener("input", toggleValue);
+        field.addEventListener("change", toggleValue);
+        field.addEventListener("blur", toggleValue);
+        toggleValue();
+    });
+}
+
 function revealPage() {
     document.body.classList.remove("is-loading");
 
@@ -28,15 +87,48 @@ function revealPage() {
     if (hasGsap()) {
         gsap.to(loader, {
             opacity: 0,
-            duration: 0.7,
+            duration: 0.8,
+            ease: "power2.inOut",
             onComplete: () => {
                 loader.classList.add("is-hidden");
-                gsap.from(".hero-content", {
-                    y: 38,
+                
+                splitTextIntoSpans(".hero-content h1");
+                splitWordsIntoSpans(".hero-content .tagline");
+                applyPersonalization();
+                initFloatingLabels();
+
+                const tl = gsap.timeline({ defaults: { ease: "cubic-bezier(0.22, 1, 0.36, 1)" } });
+                
+                const greeting = document.querySelector(".personal-greeting");
+                if (greeting) {
+                    tl.to(greeting, { opacity: 1, y: 0, duration: 1.1 });
+                }
+
+                tl.to(".hero-content h1 .char-span", {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.1,
+                    stagger: 0.04
+                }, greeting ? "-=0.7" : "0");
+
+                tl.from(".hero-content .eyebrow", {
                     opacity: 0,
+                    y: 20,
+                    duration: 0.9
+                }, "-=0.8");
+
+                tl.from(".hero-content .word-span", {
+                    opacity: 0,
+                    y: 25,
                     duration: 1,
-                    ease: "power2.out"
-                });
+                    stagger: 0.05
+                }, "-=0.8");
+
+                tl.from("#beginBtn", {
+                    opacity: 0,
+                    y: 20,
+                    duration: 0.8
+                }, "-=0.7");
             }
         });
         return;
@@ -46,8 +138,12 @@ function revealPage() {
 }
 
 window.addEventListener("load", () => {
-    if (hasGsap() && progress) {
-        gsap.fromTo(progress, { width: "0%" }, { width: "100%", duration: 1.6, ease: "power2.inOut" });
+    if (hasGsap()) {
+        gsap.to(".loader-logo-svg .logo-ring", { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" });
+        gsap.to(".loader-logo-svg .logo-char", { strokeDashoffset: 0, duration: 1.4, ease: "power2.inOut", delay: 0.2 });
+        if (progress) {
+            gsap.fromTo(progress, { width: "0%" }, { width: "100%", duration: 1.6, ease: "power2.inOut" });
+        }
     }
 
     createFloatingParticles();
@@ -55,7 +151,20 @@ window.addEventListener("load", () => {
 });
 
 beginBtn?.addEventListener("click", () => {
-    document.getElementById("story")?.scrollIntoView({ behavior: "smooth" });
+    const target = document.getElementById("story");
+    if (!target) return;
+    if (hasGsap()) {
+        const targetPos = target.getBoundingClientRect().top + window.scrollY;
+        const obj = { y: window.scrollY };
+        gsap.to(obj, {
+            y: targetPos,
+            duration: 1.4,
+            ease: "cubic-bezier(0.22, 1, 0.36, 1)",
+            onUpdate: () => window.scrollTo(0, obj.y)
+        });
+    } else {
+        target.scrollIntoView({ behavior: "smooth" });
+    }
 });
 
 document.addEventListener("mousemove", (event) => {
@@ -232,7 +341,7 @@ function transitionToMemory(index) {
 
     const targetItem = galleryItems[index];
     const img = targetItem.querySelector("img");
-    const storyData = targetItem.querySelector(".story-modal");
+    const storyData = targetItem.querySelector(".caption-card");
     if (!img || !storyData) {
         isAnimating = false;
         return;
@@ -250,9 +359,11 @@ function transitionToMemory(index) {
                     modalImage.alt = img.alt;
 
                     const title = storyData.querySelector("strong").outerHTML;
+                    const dateText = storyData.querySelector(".caption-date").outerHTML;
                     const desc = storyData.querySelector("p").outerHTML;
                     modalContent.innerHTML = `
                         ${title}
+                        ${dateText}
                         <div class="modal-separator" aria-hidden="true">♥</div>
                         ${desc}
                         <div class="modal-counter">Memory ${index + 1} of ${galleryItems.length}</div>
@@ -277,9 +388,11 @@ function transitionToMemory(index) {
         modalImage.src = img.src;
         modalImage.alt = img.alt;
         const title = storyData.querySelector("strong").outerHTML;
+        const dateText = storyData.querySelector(".caption-date").outerHTML;
         const desc = storyData.querySelector("p").outerHTML;
         modalContent.innerHTML = `
             ${title}
+            ${dateText}
             <div class="modal-separator" aria-hidden="true">♥</div>
             ${desc}
             <div class="modal-counter">Memory ${index + 1} of ${galleryItems.length}</div>
@@ -309,16 +422,18 @@ function openModal(index) {
 
     const item = galleryItems[index];
     const img = item.querySelector("img");
-    const storyData = item.querySelector(".story-modal");
+    const storyData = item.querySelector(".caption-card");
     if (!img || !storyData) return;
 
     modalImage.src = img.src;
     modalImage.alt = img.alt;
 
     const title = storyData.querySelector("strong").outerHTML;
+    const dateText = storyData.querySelector(".caption-date").outerHTML;
     const desc = storyData.querySelector("p").outerHTML;
     modalContent.innerHTML = `
         ${title}
+        ${dateText}
         <div class="modal-separator" aria-hidden="true">♥</div>
         ${desc}
         <div class="modal-counter">Memory ${index + 1} of ${galleryItems.length}</div>
@@ -332,9 +447,33 @@ function openModal(index) {
     document.body.classList.add("modal-open");
 
     if (hasGsap()) {
-        gsap.fromTo(modalWrapper,
-            { scale: 0.75, y: 40, opacity: 0 },
-            { scale: 1, y: 0, opacity: 1, duration: 0.55, ease: "back.out(1.35)" }
+        const rect = img.getBoundingClientRect();
+        const wrapperW = modalWrapper.offsetWidth || 720;
+        const wrapperH = modalWrapper.offsetHeight || 500;
+        
+        const startX = (rect.left + rect.width / 2) - window.innerWidth / 2;
+        const startY = (rect.top + rect.height / 2) - window.innerHeight / 2;
+        const startScaleX = rect.width / wrapperW;
+        const startScaleY = rect.height / wrapperH;
+        
+        gsap.fromTo(modalWrapper, 
+            {
+                x: startX,
+                y: startY,
+                scaleX: isNaN(startScaleX) || startScaleX === 0 ? 0.35 : startScaleX,
+                scaleY: isNaN(startScaleY) || startScaleY === 0 ? 0.35 : startScaleY,
+                opacity: 0.2
+            }, 
+            {
+                x: 0,
+                y: 0,
+                scaleX: 1,
+                scaleY: 1,
+                opacity: 1,
+                duration: 0.8,
+                ease: "cubic-bezier(0.22, 1, 0.36, 1)",
+                clearProps: "transform"
+            }
         );
     }
 
@@ -344,34 +483,51 @@ function openModal(index) {
 
 function closeModal() {
     if (hasGsap()) {
-        gsap.to(modalWrapper, {
-            scale: 0.8,
-            y: 40,
-            opacity: 0,
-            duration: 0.35,
-            ease: "power2.in",
-            onComplete: () => {
-                modalOverlay.classList.remove("active");
-                document.body.classList.remove("modal-open");
-                modalImage.src = "";
-                modalImage.alt = "";
-                modalContent.innerHTML = "";
-                modalDotsContainer.innerHTML = "";
-                if (previouslyFocusedEl) {
-                    previouslyFocusedEl.focus();
+        const item = galleryItems[currentMemoryIndex];
+        const img = item?.querySelector("img");
+        if (img) {
+            const rect = img.getBoundingClientRect();
+            const wrapperW = modalWrapper.offsetWidth || 720;
+            const wrapperH = modalWrapper.offsetHeight || 500;
+            
+            const endX = (rect.left + rect.width / 2) - window.innerWidth / 2;
+            const endY = (rect.top + rect.height / 2) - window.innerHeight / 2;
+            const endScaleX = rect.width / wrapperW;
+            const endScaleY = rect.height / wrapperH;
+
+            gsap.to(modalWrapper, {
+                x: endX,
+                y: endY,
+                scaleX: isNaN(endScaleX) || endScaleX === 0 ? 0.35 : endScaleX,
+                scaleY: isNaN(endScaleY) || endScaleY === 0 ? 0.35 : endScaleY,
+                opacity: 0,
+                duration: 0.7,
+                ease: "cubic-bezier(0.22, 1, 0.36, 1)",
+                onComplete: () => {
+                    modalOverlay.classList.remove("active");
+                    document.body.classList.remove("modal-open");
+                    gsap.set(modalWrapper, { clearProps: "all" });
+                    modalImage.src = "";
+                    modalImage.alt = "";
+                    modalContent.innerHTML = "";
+                    modalDotsContainer.innerHTML = "";
+                    if (previouslyFocusedEl) {
+                        previouslyFocusedEl.focus();
+                    }
                 }
-            }
-        });
-    } else {
-        modalOverlay.classList.remove("active");
-        document.body.classList.remove("modal-open");
-        modalImage.src = "";
-        modalImage.alt = "";
-        modalContent.innerHTML = "";
-        modalDotsContainer.innerHTML = "";
-        if (previouslyFocusedEl) {
-            previouslyFocusedEl.focus();
+            });
+            return;
         }
+    }
+    
+    modalOverlay.classList.remove("active");
+    document.body.classList.remove("modal-open");
+    modalImage.src = "";
+    modalImage.alt = "";
+    modalContent.innerHTML = "";
+    modalDotsContainer.innerHTML = "";
+    if (previouslyFocusedEl) {
+        previouslyFocusedEl.focus();
     }
 }
 
@@ -428,7 +584,7 @@ modalWrapper.addEventListener("touchend", (e) => {
 // 7. Grid items event bindings
 galleryItems.forEach((item, index) => {
     const img = item.querySelector("img");
-    const storyData = item.querySelector(".story-modal");
+    const storyData = item.querySelector(".caption-card");
     if (!img || !storyData) return;
 
     item.addEventListener("click", (e) => {
@@ -453,6 +609,188 @@ modalOverlay.addEventListener("click", (e) => {
         closeModal();
     }
 });
+
+// Story Memory Book Accordion Logic
+const openMemoryBookBtn = document.getElementById("openMemoryBookBtn");
+const storyAccordion = document.getElementById("storyAccordion");
+const storyConclusion = document.getElementById("storyConclusion");
+const joinSayIDoBtn = document.getElementById("joinSayIDoBtn");
+
+function updateStoryProgress(activeChapter) {
+    const desktopSteps = document.querySelectorAll(".story-nav-step");
+    const mobileSteps = document.querySelectorAll(".mobile-nav-step");
+    
+    desktopSteps.forEach(step => {
+        const ch = parseInt(step.getAttribute("data-chapter"), 10);
+        step.classList.remove("active", "completed");
+        if (ch === activeChapter) {
+            step.classList.add("active");
+        } else if (ch < activeChapter) {
+            step.classList.add("completed");
+        }
+    });
+
+    mobileSteps.forEach(step => {
+        const ch = parseInt(step.getAttribute("data-chapter"), 10);
+        step.classList.remove("active", "completed");
+        if (ch === activeChapter) {
+            step.classList.add("active");
+        } else if (ch < activeChapter) {
+            step.classList.add("completed");
+        }
+    });
+
+    const percent = ((activeChapter - 1) / 3) * 100;
+    const desktopLine = document.querySelector(".story-nav-line-progress");
+    const mobileLine = document.querySelector(".mobile-nav-line-progress");
+    if (desktopLine) desktopLine.style.height = `${percent}%`;
+    if (mobileLine) mobileLine.style.width = `${percent}%`;
+}
+
+function setupProgressNavClickEvents() {
+    const navSteps = document.querySelectorAll(".story-nav-step, .mobile-nav-step");
+    navSteps.forEach(step => {
+        step.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const chNum = parseInt(step.getAttribute("data-chapter"), 10);
+            const targetCard = document.getElementById(`chapter${chNum}`);
+            if (targetCard) {
+                if (targetCard.classList.contains("collapsed")) {
+                    const header = targetCard.querySelector(".card-header");
+                    header.click();
+                } else {
+                    const header = targetCard.querySelector(".card-header");
+                    const headerRect = header.getBoundingClientRect();
+                    const targetY = window.scrollY + headerRect.top - 80;
+                    const obj = { y: window.scrollY };
+                    if (hasGsap()) {
+                        gsap.to(obj, {
+                            y: targetY,
+                            duration: 0.6,
+                            ease: "power2.out",
+                            onUpdate: () => window.scrollTo(0, obj.y)
+                        });
+                    } else {
+                        window.scrollTo({ top: targetY, behavior: "smooth" });
+                    }
+                }
+                updateStoryProgress(chNum);
+            }
+        });
+    });
+}
+
+if (openMemoryBookBtn && storyAccordion) {
+    openMemoryBookBtn.addEventListener("click", () => {
+        setupProgressNavClickEvents();
+        if (hasGsap()) {
+            gsap.timeline()
+                .to(".gallery-intro-card", {
+                    opacity: 0,
+                    y: -30,
+                    duration: 0.5,
+                    onComplete: () => {
+                        document.querySelector(".gallery-intro-card").style.display = "none";
+                        storyAccordion.style.display = "block";
+                        storyConclusion.style.display = "block";
+                    }
+                })
+                .fromTo(storyAccordion, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" })
+                .fromTo(storyConclusion, { opacity: 0 }, { opacity: 1, duration: 0.6 }, "-=0.2")
+                .eventCallback("onComplete", () => {
+                    document.getElementById("storyNavDesktop")?.classList.add("visible");
+                    if (window.ScrollTrigger) ScrollTrigger.refresh();
+                });
+        } else {
+            document.querySelector(".gallery-intro-card").style.display = "none";
+            storyAccordion.style.display = "block";
+            storyConclusion.style.display = "block";
+            document.getElementById("storyNavDesktop")?.classList.add("visible");
+        }
+    });
+}
+
+// Accordion Expand/Collapse Logic
+const storyCards = document.querySelectorAll(".story-card");
+storyCards.forEach(card => {
+    const header = card.querySelector(".card-header");
+    const body = card.querySelector(".card-body");
+
+    const toggleAccordion = () => {
+        const isExpanded = !card.classList.contains("collapsed");
+
+        // Collapse all cards first
+        storyCards.forEach(c => {
+            c.classList.add("collapsed");
+            c.classList.remove("expanded");
+            c.querySelector(".card-body").style.maxHeight = null;
+        });
+
+        if (!isExpanded) {
+            // Expand the clicked card
+            card.classList.remove("collapsed");
+            card.classList.add("expanded");
+            body.style.maxHeight = body.scrollHeight + "px";
+
+            const chNum = parseInt(card.id.replace("chapter", ""), 10);
+            updateStoryProgress(chNum);
+
+            // Scroll card header into viewport smoothly
+            setTimeout(() => {
+                const headerRect = header.getBoundingClientRect();
+                const targetY = window.scrollY + headerRect.top - 80;
+                const obj = { y: window.scrollY };
+                if (hasGsap()) {
+                    gsap.to(obj, {
+                        y: targetY,
+                        duration: 0.6,
+                        ease: "power2.out",
+                        onUpdate: () => window.scrollTo(0, obj.y)
+                    });
+                } else {
+                    window.scrollTo({ top: targetY, behavior: "smooth" });
+                }
+            }, 300);
+        }
+
+        // Refresh ScrollTrigger parameters
+        setTimeout(() => {
+            if (window.ScrollTrigger) ScrollTrigger.refresh();
+        }, 800);
+    };
+
+    header.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleAccordion();
+    });
+
+    card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggleAccordion();
+        }
+    });
+});
+
+// Final transition scroll down
+if (joinSayIDoBtn) {
+    joinSayIDoBtn.addEventListener("click", () => {
+        const target = document.getElementById("countdown");
+        if (!target) return;
+        if (hasGsap()) {
+            const targetPos = target.getBoundingClientRect().top + window.scrollY;
+            const obj = { y: window.scrollY };
+            gsap.to(obj, {
+                y: targetPos,
+                duration: 1.4,
+                ease: "cubic-bezier(0.22, 1, 0.36, 1)",
+                onUpdate: () => window.scrollTo(0, obj.y)
+            });
+        } else {
+            target.scrollIntoView({ behavior: "smooth" });
+        }
+    });
+}
 
 // Cinematic Section ScrollTrigger Animations
 if (hasGsap() && window.ScrollTrigger) {
@@ -483,22 +821,56 @@ if (hasGsap() && window.ScrollTrigger) {
             opacity: 0,
             duration: 0.8,
             stagger: 0.15,
-            ease: "power2.out"
+            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
         })
         .from("#story .story-copy", {
             x: -50,
             opacity: 0,
             duration: 0.9,
-            ease: "power2.out"
+            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
         }, "-=0.4")
-        .from("#story .story-photo", {
-            x: 50,
+        .from("#story .story-copy p", {
+            y: 25,
             opacity: 0,
             duration: 0.9,
-            ease: "power2.out"
-        }, "-=0.9");
+            stagger: 0.22,
+            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+        }, "-=0.45")
+        .from("#story .story-photo", {
+            scale: 0.94,
+            opacity: 0,
+            duration: 1.1,
+            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+        }, "-=0.95");
 
-    // 3. Gallery Section Timeline (Chronological Journey)
+    // Parallax zoom effect inside the Mihrab image frame
+    gsap.fromTo("#story .story-photo img", 
+        { scale: 1.3 },
+        {
+            scale: 1.02,
+            scrollTrigger: {
+                trigger: "#story",
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
+            },
+            ease: "none"
+        }
+    );
+
+    // Fade-in divider quote
+    gsap.from(".story-divider", {
+        opacity: 0,
+        y: 30,
+        duration: 1.2,
+        ease: "cubic-bezier(0.22, 1, 0.36, 1)",
+        scrollTrigger: {
+            trigger: ".story-divider",
+            start: "top 92%"
+        }
+    });
+
+    // 3. Gallery Section Timeline (Editorial Intro Reveal)
     const galleryTimeline = gsap.timeline({
         scrollTrigger: {
             trigger: "#gallery",
@@ -506,20 +878,44 @@ if (hasGsap() && window.ScrollTrigger) {
         }
     });
     galleryTimeline
-        .from("#gallery .section-heading > *", {
-            y: 40,
+        .from(".gallery-intro-card > *", {
+            y: 35,
             opacity: 0,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: "power2.out"
-        })
-        .from("#gallery .gallery-item", {
-            y: 45,
-            opacity: 0,
-            duration: 0.8,
-            stagger: 0.08,
-            ease: "power2.out"
-        }, "-=0.4");
+            duration: 0.9,
+            stagger: 0.18,
+            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+        });
+
+    // 3b. Gallery Section ScrollTriggers for Progress Navigator
+    ScrollTrigger.create({
+        trigger: "#gallery",
+        start: "top 20%",
+        end: "bottom 80%",
+        onEnter: () => {
+            if (document.getElementById("storyAccordion").style.display !== "none") {
+                document.getElementById("storyNavDesktop")?.classList.add("visible");
+            }
+        },
+        onLeave: () => document.getElementById("storyNavDesktop")?.classList.remove("visible"),
+        onEnterBack: () => {
+            if (document.getElementById("storyAccordion").style.display !== "none") {
+                document.getElementById("storyNavDesktop")?.classList.add("visible");
+            }
+        },
+        onLeaveBack: () => document.getElementById("storyNavDesktop")?.classList.remove("visible")
+    });
+
+    const cards = document.querySelectorAll(".story-card");
+    cards.forEach(card => {
+        const chNum = parseInt(card.id.replace("chapter", ""), 10);
+        ScrollTrigger.create({
+            trigger: card,
+            start: "top 40%",
+            end: "bottom 40%",
+            onEnter: () => updateStoryProgress(chNum),
+            onEnterBack: () => updateStoryProgress(chNum)
+        });
+    });
 
     // 4. Countdown Section Timeline
     const countdownTimeline = gsap.timeline({
@@ -534,15 +930,22 @@ if (hasGsap() && window.ScrollTrigger) {
             opacity: 0,
             duration: 0.8,
             stagger: 0.15,
-            ease: "power2.out"
+            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
         })
         .from("#countdown .time-box", {
-            scale: 0.85,
+            y: 30,
+            opacity: 0,
+            duration: 0.9,
+            stagger: 0.12,
+            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+        }, "-=0.4")
+        .from("#countdown .countdown-divider", {
+            scaleY: 0,
             opacity: 0,
             duration: 0.8,
             stagger: 0.1,
-            ease: "back.out(1.5)"
-        }, "-=0.4");
+            ease: "power2.out"
+        }, "-=0.8");
 
     // 5. Events Section Timeline
     const eventsTimeline = gsap.timeline({
@@ -557,15 +960,40 @@ if (hasGsap() && window.ScrollTrigger) {
             opacity: 0,
             duration: 0.8,
             stagger: 0.15,
-            ease: "power2.out"
+            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
         })
         .from("#events .event-card", {
-            y: 50,
+            y: 45,
             opacity: 0,
             duration: 1,
-            stagger: 0.15,
-            ease: "power3.out"
+            stagger: 0.2,
+            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
         }, "-=0.4");
+
+    // Timeline active thread progress drawing
+    gsap.to(".timeline-thread-progress", {
+        height: "100%",
+        scrollTrigger: {
+            trigger: ".timeline-container",
+            start: "top 70%",
+            end: "bottom 70%",
+            scrub: true
+        },
+        ease: "none"
+    });
+
+    // Timeline dots activation trigger
+    document.querySelectorAll(".event-card").forEach(card => {
+        const dot = card.querySelector(".timeline-dot");
+        if (dot) {
+            ScrollTrigger.create({
+                trigger: card,
+                start: "top 70%",
+                onEnter: () => dot.classList.add("active"),
+                onLeaveBack: () => dot.classList.remove("active")
+            });
+        }
+    });
 
     // 6. Venue Section Timeline
     gsap.from("#venue .venue-panel", {
@@ -576,7 +1004,16 @@ if (hasGsap() && window.ScrollTrigger) {
         y: 60,
         opacity: 0,
         duration: 1.1,
-        ease: "power3.out"
+        ease: "cubic-bezier(0.22, 1, 0.36, 1)",
+        onComplete: () => {
+            // Draw the route line on the map
+            gsap.fromTo("#venue .route-line", 
+                { strokeDasharray: 100, strokeDashoffset: 100 },
+                { strokeDashoffset: 0, duration: 1.8, ease: "power2.out" }
+            );
+            // Pulse ring reveal
+            gsap.to("#venue .map-pulse-ring", { opacity: 0.9, duration: 0.6, delay: 1.2 });
+        }
     });
 
     // 7. RSVP Section Timeline
@@ -611,7 +1048,25 @@ if (hasGsap() && window.ScrollTrigger) {
         opacity: 0,
         duration: 0.8,
         stagger: 0.15,
-        ease: "power2.out"
+        ease: "cubic-bezier(0.22, 1, 0.36, 1)",
+        onComplete: () => {
+            // Draw cursive signatures paths
+            gsap.to("#footer .sig-rozar", { strokeDashoffset: 0, duration: 1.5, ease: "power1.inOut" });
+            gsap.to("#footer .sig-heart", { strokeDashoffset: 0, duration: 0.8, ease: "power1.inOut", delay: 1.1 });
+            gsap.to("#footer .sig-arifa", { strokeDashoffset: 0, duration: 1.5, ease: "power1.inOut", delay: 1.4 });
+        }
+    });
+
+    // Translate moon background on scroll
+    gsap.to(".background .moon", {
+        y: 100,
+        scrollTrigger: {
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: true
+        },
+        ease: "none"
     });
 }
 
@@ -771,11 +1226,13 @@ attendanceSelect?.addEventListener("change", () => {
     const isAttending = attendanceSelect.value === "Yes, I'll be there";
     const guestLabel = document.getElementById("guestFieldLabel");
     if (isAttending) {
-        guestLabel?.style.setProperty("display", "grid");
+        guestLabel?.style.setProperty("display", "flex");
         if (!guestsInput.value) guestsInput.value = 1;
+        guestsInput.classList.add("has-value");
     } else {
         guestLabel?.style.setProperty("display", "none");
         guestsInput.value = "";
+        guestsInput.classList.remove("has-value");
     }
 });
 guestsInput?.addEventListener("blur", validateGuests);
@@ -921,6 +1378,11 @@ async function executeRsvpSubmission() {
 
         rsvpLoadingState.style.setProperty("display", "none");
         rsvpSuccessState.style.setProperty("display", "flex");
+        
+        const seal = document.querySelector(".rsvp-wax-seal");
+        if (seal) {
+            seal.classList.add("stamp-active");
+        }
         setupCalendarIntegrations(name, attendance);
     } catch (error) {
         console.error("Submission failed:", error);
@@ -951,6 +1413,11 @@ window.addEventListener("load", () => {
         rsvpSuccessState.style.setProperty("display", "flex");
         rsvpFailureState.style.setProperty("display", "none");
         setupCalendarIntegrations(name, attendance);
+        
+        const seal = document.querySelector(".rsvp-wax-seal");
+        if (seal) {
+            seal.classList.add("stamp-active");
+        }
     }
 });
 
