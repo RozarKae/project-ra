@@ -2796,24 +2796,6 @@ nav {
     .hero-content #beginBtn {
         order: 7;
         margin-top: var(--space-md);
-    }
-}
-
-    .section {
-        width: calc(100vw - 28px);
-    }
-
-    .gallery-grid {
-        gap: var(--space-xs);
-    }
-
-    .time-box {
-        min-height: var(--time-box-min-height-mobile);
-    }
-
-    .loader-logo {
-        font-size: var(--font-size-4xl);
-    }
 }
 
 /* Focus Indicator System for Keyboard Accessibility */
