@@ -22,14 +22,26 @@ function splitTextIntoSpans(selector) {
     if (!hasGsap()) return;
     const element = document.querySelector(selector);
     if (!element) return;
-    const text = element.textContent;
-    element.innerHTML = text
-        .split("")
-        .map(char => {
-            if (char === " ") return '<span class="char-span spacer-span">&nbsp;</span>';
-            return `<span class="char-span">${char}</span>`;
-        })
-        .join("");
+    
+    const nobrkSpans = element.querySelectorAll('.nobrk');
+    if (nobrkSpans.length > 0) {
+        nobrkSpans.forEach(span => {
+            const text = span.textContent;
+            span.innerHTML = text
+                .split("")
+                .map(char => `<span class="char-span">${char}</span>`)
+                .join("");
+        });
+    } else {
+        const text = element.textContent;
+        element.innerHTML = text
+            .split("")
+            .map(char => {
+                if (char === " ") return '<span class="char-span spacer-span">&nbsp;</span>';
+                return `<span class="char-span">${char}</span>`;
+            })
+            .join("");
+    }
 }
 
 function splitWordsIntoSpans(selector) {
@@ -93,43 +105,54 @@ function revealPage() {
                 loader.classList.add("is-hidden");
                 
                 splitTextIntoSpans(".hero-content h1");
-                splitWordsIntoSpans(".hero-content .tagline");
                 applyPersonalization();
                 initFloatingLabels();
+ 
+                 const tl = gsap.timeline({ defaults: { ease: "cubic-bezier(0.22, 1, 0.36, 1)" } });
+                 
+                 const greeting = document.querySelector(".personal-greeting");
+                 if (greeting) {
+                     tl.to(greeting, { opacity: 1, y: 0, duration: 1.1 });
+                 }
+ 
+                 // Elegant reveal of the luxury quotes and dividers
+                 tl.from(".hero-quote", {
+                     opacity: 0,
+                     y: 20,
+                     duration: 1.2
+                 }, greeting ? "-=0.7" : "0");
 
-                const tl = gsap.timeline({ defaults: { ease: "cubic-bezier(0.22, 1, 0.36, 1)" } });
-                
-                const greeting = document.querySelector(".personal-greeting");
-                if (greeting) {
-                    tl.to(greeting, { opacity: 1, y: 0, duration: 1.1 });
-                }
+                 tl.from(".hero-support", {
+                     opacity: 0,
+                     y: 20,
+                     duration: 1.1
+                 }, "-=0.9");
 
-                tl.to(".hero-content h1 .char-span", {
-                    opacity: 1,
-                    y: 0,
-                    duration: 1.1,
-                    stagger: 0.04
-                }, greeting ? "-=0.7" : "0");
+                 tl.from(".hero-divider-gold", {
+                     scaleX: 0,
+                     opacity: 0,
+                     duration: 1.0
+                 }, "-=0.8");
 
-                tl.from(".hero-content .eyebrow", {
-                    opacity: 0,
-                    y: 20,
-                    duration: 0.9
-                }, "-=0.8");
-
-                tl.from(".hero-content .word-span", {
-                    opacity: 0,
-                    y: 25,
-                    duration: 1,
-                    stagger: 0.05
-                }, "-=0.8");
-
-                tl.from("#beginBtn", {
-                    opacity: 0,
-                    y: 20,
-                    duration: 0.8
-                }, "-=0.7");
-            }
+                 tl.from(".hero-content .eyebrow", {
+                     opacity: 0,
+                     y: 15,
+                     duration: 0.9
+                 }, "-=0.8");
+ 
+                 tl.to(".hero-content h1 .char-span", {
+                     opacity: 1,
+                     y: 0,
+                     duration: 1.1,
+                     stagger: 0.035
+                 }, "-=0.8");
+ 
+                 tl.from("#beginBtn", {
+                     opacity: 0,
+                     y: 20,
+                     duration: 0.8
+                 }, "-=0.7");
+             }
         });
         return;
     }
