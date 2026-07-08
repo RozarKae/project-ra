@@ -2429,13 +2429,13 @@ nav {
     transform: translateY(-50%);
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 28px;
+    align-items: flex-start;
+    gap: var(--space-lg);
     z-index: 100;
-    padding: var(--space-md) var(--space-xs);
+    padding: var(--space-xl) var(--space-lg);
     background: rgba(9, 9, 9, 0.45);
     border: 1px solid rgba(var(--color-gold-soft-rgb), 0.12);
-    border-radius: var(--radius-pill);
+    border-radius: var(--radius-sm);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     opacity: 0;
@@ -2450,8 +2450,9 @@ nav {
 
 .story-nav-line {
     position: absolute;
-    top: 24px;
-    bottom: 24px;
+    left: 27px;
+    top: var(--space-xl);
+    bottom: var(--space-xl);
     width: 1px;
     background: rgba(var(--color-text-rgb), 0.15);
     z-index: 1;
@@ -2468,75 +2469,66 @@ nav {
 .story-nav-step {
     position: relative;
     z-index: 2;
-    width: 32px;
-    height: 32px;
-    border-radius: var(--radius-round);
-    border: 1px solid rgba(var(--color-text-rgb), 0.2);
-    background: #090909;
+    background: transparent;
+    border: none;
     color: var(--color-muted);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
+    font-family: var(--font-heading);
+    font-size: var(--font-size-base);
     display: flex;
     align-items: center;
-    justify-content: center;
     cursor: pointer;
     transition: all var(--transition-medium) var(--ease-standard);
+    padding: 0;
 }
 
 .story-nav-step .step-icon {
-    font-size: 10px;
-    transition: opacity var(--transition-fast);
+    width: 18px;
+    display: inline-block;
+    color: var(--color-muted);
+    font-size: 14px;
+    margin-right: 8px;
+    text-align: center;
 }
 
 .story-nav-step .step-num {
-    position: absolute;
-    left: 42px;
-    font-family: var(--font-heading);
-    font-size: var(--font-size-xs);
     color: var(--color-muted);
-    opacity: 0;
-    transform: translateX(-5px);
-    transition: all var(--transition-fast) var(--ease-standard);
-    pointer-events: none;
-}
-
-.story-nav-step:hover .step-num {
-    opacity: 1;
-    transform: translateX(0);
+    transition: color var(--transition-fast);
 }
 
 /* Active Step Glow State */
 .story-nav-step.active {
-    border-color: var(--color-emerald);
     color: var(--color-emerald);
-    background: rgba(var(--color-emerald-rgb), 0.12);
-    box-shadow: 0 0 12px rgba(var(--color-emerald-rgb), 0.55);
+}
+
+.story-nav-step.active .step-icon {
+    display: none;
 }
 
 .story-nav-step.active .step-num {
-    color: var(--color-text);
-    opacity: 1;
-    transform: translateX(0);
+    color: var(--color-emerald);
+    text-shadow: 0 0 10px rgba(var(--color-emerald-rgb), 0.65);
+    font-weight: var(--font-weight-semibold);
+    padding-left: 26px; /* Offset to align numbers where there is no circle */
 }
 
 /* Completed Step Checkmark State */
 .story-nav-step.completed {
-    border-color: var(--color-gold-soft);
     color: var(--color-gold-soft);
-    background: rgba(var(--color-gold-rgb), 0.08);
 }
 
 .story-nav-step.completed .step-icon {
-    opacity: 0;
+    display: none;
 }
 
 .story-nav-step.completed::before {
     content: "✓";
-    position: absolute;
-    font-size: 11px;
+    display: inline-block;
+    width: 18px;
+    margin-right: 8px;
+    text-align: center;
     font-weight: bold;
     color: var(--color-gold);
-    animation: scaleIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation: scaleIn 0.3s ease-out forwards;
 }
 
 @keyframes scaleIn {
@@ -2556,8 +2548,8 @@ nav {
 .mobile-nav-line {
     position: absolute;
     top: 50%;
-    left: 10px;
-    right: 10px;
+    left: 20px;
+    right: 20px;
     height: 1px;
     background: rgba(var(--color-text-rgb), 0.15);
     transform: translateY(-50%);
@@ -2579,13 +2571,13 @@ nav {
 }
 
 .mobile-nav-step {
-    width: 24px;
-    height: 24px;
+    width: 38px;
+    height: 38px;
     border-radius: var(--radius-round);
     border: 1px solid rgba(var(--color-text-rgb), 0.2);
     background: #090909;
     color: var(--color-muted);
-    font-size: 10px;
+    font-size: var(--font-size-sm);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2598,6 +2590,7 @@ nav {
     color: var(--color-emerald);
     background: rgba(var(--color-emerald-rgb), 0.15);
     box-shadow: 0 0 10px rgba(var(--color-emerald-rgb), 0.5);
+    font-weight: var(--font-weight-bold);
 }
 
 .mobile-nav-step.completed {
@@ -2612,7 +2605,7 @@ nav {
 
 .mobile-nav-step.completed::before {
     content: "✓";
-    font-size: 10px;
+    font-size: var(--font-size-sm);
     font-weight: bold;
     color: var(--color-gold);
 }
