@@ -99,7 +99,7 @@ function revealPage() {
     if (hasGsap()) {
         gsap.to(loader, {
             opacity: 0,
-            duration: 0.8,
+            duration: 0.5,
             ease: "power2.inOut",
             onComplete: () => {
                 loader.classList.add("is-hidden");
@@ -112,65 +112,65 @@ function revealPage() {
                  
                  const greeting = document.querySelector(".personal-greeting");
                  if (greeting) {
-                     tl.to(greeting, { opacity: 1, y: 0, duration: 1.1 });
+                     tl.to(greeting, { opacity: 1, y: 0, duration: 0.7 });
                  }
  
                  // Elegant reveal of the luxury quotes and dividers
                  tl.from(".hero-quote", {
                      opacity: 0,
                      y: 20,
-                     duration: 1.2
-                 }, greeting ? "-=0.7" : "0");
+                     duration: 0.8
+                 }, greeting ? "-=0.4" : "0");
 
                  tl.from(".hero-support", {
                      opacity: 0,
                      y: 20,
-                     duration: 1.1
-                 }, "-=0.9");
+                     duration: 0.7
+                 }, "-=0.6");
 
                  tl.from(".hero-divider-gold", {
                      scaleX: 0,
                      opacity: 0,
-                     duration: 1.0
-                 }, "-=0.8");
+                     duration: 0.6
+                 }, "-=0.5");
 
                  tl.from(".hero-content .eyebrow", {
                      opacity: 0,
                      y: 15,
-                     duration: 0.9
-                 }, "-=0.8");
+                     duration: 0.6
+                 }, "-=0.5");
  
                  tl.to(".hero-content h1 .char-span", {
                      opacity: 1,
                      y: 0,
-                     duration: 1.1,
-                     stagger: 0.035
-                 }, "-=0.8");
+                     duration: 0.7,
+                     stagger: 0.02
+                 }, "-=0.5");
  
                  tl.from("#beginBtn", {
                      opacity: 0,
                      y: 20,
-                     duration: 0.8
-                 }, "-=0.7");
+                     duration: 0.5
+                 }, "-=0.4");
              }
-        });
-        return;
-    }
+         });
+         return;
+     }
 
     loader.classList.add("is-hidden");
 }
 
 window.addEventListener("load", () => {
     if (hasGsap()) {
-        gsap.to(".loader-logo-svg .logo-ring", { strokeDashoffset: 0, duration: 1.6, ease: "power2.inOut" });
-        gsap.to(".loader-logo-svg .logo-char", { strokeDashoffset: 0, duration: 1.4, ease: "power2.inOut", delay: 0.2 });
+        gsap.to(".loader-logo-svg .logo-ring", { strokeDashoffset: 0, duration: 1.0, ease: "power2.inOut" });
+        gsap.to(".loader-logo-svg .logo-char", { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut", delay: 0.1 });
         if (progress) {
-            gsap.fromTo(progress, { width: "0%" }, { width: "100%", duration: 1.6, ease: "power2.inOut" });
+            gsap.fromTo(progress, { width: "0%" }, { width: "100%", duration: 1.0, ease: "power2.inOut" });
         }
     }
 
     createFloatingParticles();
-    window.setTimeout(revealPage, 1800);
+    window.setTimeout(revealPage, 1000);
 });
 
 beginBtn?.addEventListener("click", () => {
@@ -493,7 +493,7 @@ function openModal(index) {
                 scaleX: 1,
                 scaleY: 1,
                 opacity: 1,
-                duration: 0.8,
+                duration: 0.55,
                 ease: "cubic-bezier(0.22, 1, 0.36, 1)",
                 clearProps: "transform"
             }
@@ -501,7 +501,7 @@ function openModal(index) {
     }
 
     setupFocusableElements();
-    setTimeout(() => closeBtn.focus(), 120);
+    setTimeout(() => closeBtn.focus(), 80);
 }
 
 function closeModal() {
@@ -517,14 +517,14 @@ function closeModal() {
             const endY = (rect.top + rect.height / 2) - window.innerHeight / 2;
             const endScaleX = rect.width / wrapperW;
             const endScaleY = rect.height / wrapperH;
-
+ 
             gsap.to(modalWrapper, {
                 x: endX,
                 y: endY,
                 scaleX: isNaN(endScaleX) || endScaleX === 0 ? 0.35 : endScaleX,
                 scaleY: isNaN(endScaleY) || endScaleY === 0 ? 0.35 : endScaleY,
                 opacity: 0,
-                duration: 0.7,
+                duration: 0.45,
                 ease: "cubic-bezier(0.22, 1, 0.36, 1)",
                 onComplete: () => {
                     modalOverlay.classList.remove("active");
@@ -923,20 +923,20 @@ function playFinalMomentTimeline() {
     const cta = document.getElementById("finalMomentCta");
 
     if (hasGsap()) {
-        const tl = gsap.timeline({ delay: 0.3 });
+        const tl = gsap.timeline({ delay: 0.2 });
         tl
-            .to(dividers, { opacity: 1, duration: 1.2, stagger: 0.4, ease: "power2.out" })
-            .to(line1, { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" }, "-=0.6")
-            .to(line2, { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, "-=0.4")
-            // 2.5-second cinematic pause
-            .to({}, { duration: 2.5 })
-            .to(cta, { opacity: 1, y: 0, duration: 1.2, ease: "cubic-bezier(0.22, 1, 0.36, 1)" });
+            .to(dividers, { opacity: 1, duration: 0.8, stagger: 0.2, ease: "power2.out" })
+            .to(line1, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.4")
+            .to(line2, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, "-=0.3")
+            // Adjusted cinematic pause for a snappier flow
+            .to({}, { duration: 1.2 })
+            .to(cta, { opacity: 1, y: 0, duration: 0.7, ease: "cubic-bezier(0.22, 1, 0.36, 1)" });
     } else {
         // Fallback: simple CSS transitions
         dividers.forEach(d => { d.style.opacity = "1"; });
         if (line1) line1.style.opacity = "1";
         if (line2) line2.style.opacity = "1";
-        setTimeout(() => { if (cta) cta.style.opacity = "1"; }, 3000);
+        setTimeout(() => { if (cta) cta.style.opacity = "1"; }, 1500);
     }
 }
 
@@ -968,28 +968,28 @@ storyCards.forEach(card => {
             const chNum = parseInt(card.id.replace("chapter", ""), 10);
             updateStoryProgress(chNum);
 
-            // Cinematic hero image clip-path reveal
+            // Cinematic hero image clip-path reveal - accelerated
             setTimeout(() => {
                 card.querySelectorAll(".layout-hero-side .story-img-wrap img").forEach((img, i) => {
                     img.style.clipPath = "inset(0 100% 0 0)";
                     img.style.transition = "none";
                     requestAnimationFrame(() => {
                         setTimeout(() => {
-                            img.style.transition = "clip-path 1.2s cubic-bezier(0.22, 1, 0.36, 1)";
+                            img.style.transition = "clip-path 0.8s cubic-bezier(0.22, 1, 0.36, 1)";
                             img.style.clipPath = "inset(0 0% 0 0)";
-                        }, i * 150);
+                        }, i * 100);
                     });
                 });
-            }, 80);
+            }, 50);
 
             // Enable tilt for newly-visible images in this card
             if (!window.matchMedia("(hover: none)").matches && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
                 setTimeout(() => {
                     card.querySelectorAll(".story-img-wrap").forEach(enablePhotoTilt);
-                }, 400);
+                }, 250);
             }
 
-            // Scroll card header into viewport smoothly
+            // Scroll card header into viewport smoothly - responsive timing
             setTimeout(() => {
                 const headerRect = header.getBoundingClientRect();
                 const targetY = window.scrollY + headerRect.top - 80;
@@ -997,20 +997,20 @@ storyCards.forEach(card => {
                 if (hasGsap()) {
                     gsap.to(obj, {
                         y: targetY,
-                        duration: 0.6,
+                        duration: 0.4,
                         ease: "power2.out",
                         onUpdate: () => window.scrollTo(0, obj.y)
-                    });
+					});
                 } else {
                     window.scrollTo({ top: targetY, behavior: "smooth" });
                 }
-            }, 300);
+            }, 200);
         }
 
         // Refresh ScrollTrigger parameters
         setTimeout(() => {
             if (window.ScrollTrigger) ScrollTrigger.refresh();
-        }, 800);
+        }, 450);
     };
 
     header.addEventListener("click", (e) => {
@@ -1062,40 +1062,40 @@ if (hasGsap() && window.ScrollTrigger) {
         ease: "none"
     });
 
-    // 2. Story Section Timeline
+    // 2. Story Section Timeline - optimized
     const storyTimeline = gsap.timeline({
         scrollTrigger: {
             trigger: "#story",
-            start: "top 80%"
+            start: "top 85%"
         }
     });
     storyTimeline
         .from("#story .section-heading > *", {
-            y: 40,
+            y: 30,
             opacity: 0,
-            duration: 0.8,
-            stagger: 0.15,
+            duration: 0.5,
+            stagger: 0.08,
             ease: "cubic-bezier(0.22, 1, 0.36, 1)"
         })
         .from("#story .story-copy", {
-            x: -50,
+            x: -30,
             opacity: 0,
-            duration: 0.9,
+            duration: 0.6,
             ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-        }, "-=0.4")
+        }, "-=0.3")
         .from("#story .story-copy p", {
-            y: 25,
+            y: 15,
             opacity: 0,
-            duration: 0.9,
-            stagger: 0.22,
+            duration: 0.6,
+            stagger: 0.12,
             ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-        }, "-=0.45")
+        }, "-=0.3")
         .from("#story .story-photo", {
-            scale: 0.94,
+            scale: 0.96,
             opacity: 0,
-            duration: 1.1,
+            duration: 0.7,
             ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-        }, "-=0.95");
+        }, "-=0.6");
 
     // Parallax zoom effect inside the Mihrab image frame
     gsap.fromTo("#story .story-photo img", 
@@ -1115,8 +1115,8 @@ if (hasGsap() && window.ScrollTrigger) {
     // Fade-in divider quote
     gsap.from(".story-divider", {
         opacity: 0,
-        y: 30,
-        duration: 1.2,
+        y: 20,
+        duration: 0.7,
         ease: "cubic-bezier(0.22, 1, 0.36, 1)",
         scrollTrigger: {
             trigger: ".story-divider",
@@ -1128,15 +1128,15 @@ if (hasGsap() && window.ScrollTrigger) {
     const galleryTimeline = gsap.timeline({
         scrollTrigger: {
             trigger: "#gallery",
-            start: "top 80%"
+            start: "top 85%"
         }
     });
     galleryTimeline
         .from(".gallery-intro-card > *", {
-            y: 35,
+            y: 25,
             opacity: 0,
-            duration: 0.9,
-            stagger: 0.18,
+            duration: 0.6,
+            stagger: 0.1,
             ease: "cubic-bezier(0.22, 1, 0.36, 1)"
         });
 
@@ -1175,54 +1175,54 @@ if (hasGsap() && window.ScrollTrigger) {
     const countdownTimeline = gsap.timeline({
         scrollTrigger: {
             trigger: "#countdown",
-            start: "top 80%"
+            start: "top 85%"
         }
     });
     countdownTimeline
         .from("#countdown .section-heading > *", {
-            y: 40,
+            y: 30,
             opacity: 0,
-            duration: 0.8,
-            stagger: 0.15,
+            duration: 0.5,
+            stagger: 0.08,
             ease: "cubic-bezier(0.22, 1, 0.36, 1)"
         })
         .from("#countdown .time-box", {
-            y: 30,
+            y: 20,
             opacity: 0,
-            duration: 0.9,
-            stagger: 0.12,
+            duration: 0.6,
+            stagger: 0.08,
             ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-        }, "-=0.4")
+        }, "-=0.3")
         .from("#countdown .countdown-divider", {
             scaleY: 0,
             opacity: 0,
-            duration: 0.8,
-            stagger: 0.1,
+            duration: 0.5,
+            stagger: 0.06,
             ease: "power2.out"
-        }, "-=0.8");
+        }, "-=0.5");
 
     // 5. Events Section Timeline
     const eventsTimeline = gsap.timeline({
         scrollTrigger: {
             trigger: "#events",
-            start: "top 80%"
+            start: "top 85%"
         }
     });
     eventsTimeline
         .from("#events .section-heading > *", {
-            y: 40,
+            y: 30,
             opacity: 0,
-            duration: 0.8,
-            stagger: 0.15,
+            duration: 0.5,
+            stagger: 0.08,
             ease: "cubic-bezier(0.22, 1, 0.36, 1)"
         })
         .from("#events .event-card", {
-            y: 45,
+            y: 30,
             opacity: 0,
-            duration: 1,
-            stagger: 0.2,
+            duration: 0.6,
+            stagger: 0.1,
             ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-        }, "-=0.4");
+        }, "-=0.3");
 
     // Timeline active thread progress drawing
     gsap.to(".timeline-thread-progress", {
@@ -1255,18 +1255,18 @@ if (hasGsap() && window.ScrollTrigger) {
             trigger: "#venue",
             start: "top 85%"
         },
-        y: 60,
+        y: 40,
         opacity: 0,
-        duration: 1.1,
+        duration: 0.7,
         ease: "cubic-bezier(0.22, 1, 0.36, 1)",
         onComplete: () => {
-            // Draw the route line on the map
+            // Draw the route line on the map - faster
             gsap.fromTo("#venue .route-line", 
                 { strokeDasharray: 100, strokeDashoffset: 100 },
-                { strokeDashoffset: 0, duration: 1.8, ease: "power2.out" }
+                { strokeDashoffset: 0, duration: 1.2, ease: "power2.out" }
             );
             // Pulse ring reveal
-            gsap.to("#venue .map-pulse-ring", { opacity: 0.9, duration: 0.6, delay: 1.2 });
+            gsap.to("#venue .map-pulse-ring", { opacity: 0.9, duration: 0.4, delay: 0.7 });
         }
     });
 
@@ -1274,23 +1274,23 @@ if (hasGsap() && window.ScrollTrigger) {
     const rsvpTimeline = gsap.timeline({
         scrollTrigger: {
             trigger: "#rsvp",
-            start: "top 80%"
+            start: "top 85%"
         }
     });
     rsvpTimeline
         .from("#rsvp .section-heading > *", {
-            y: 40,
+            y: 30,
             opacity: 0,
-            duration: 0.8,
-            stagger: 0.15,
+            duration: 0.5,
+            stagger: 0.08,
             ease: "power2.out"
         })
         .from("#rsvp .rsvp-form", {
-            y: 40,
+            y: 30,
             opacity: 0,
-            duration: 0.9,
+            duration: 0.6,
             ease: "power2.out"
-        }, "-=0.4");
+        }, "-=0.3");
 
     // 8. Footer Section Timeline
     gsap.from("#footer .footer-content > *", {
@@ -1298,16 +1298,16 @@ if (hasGsap() && window.ScrollTrigger) {
             trigger: "#footer",
             start: "top 90%"
         },
-        y: 35,
+        y: 25,
         opacity: 0,
-        duration: 0.8,
-        stagger: 0.15,
+        duration: 0.5,
+        stagger: 0.08,
         ease: "cubic-bezier(0.22, 1, 0.36, 1)",
         onComplete: () => {
-            // Draw cursive signatures paths
-            gsap.to("#footer .sig-rozar", { strokeDashoffset: 0, duration: 1.5, ease: "power1.inOut" });
-            gsap.to("#footer .sig-heart", { strokeDashoffset: 0, duration: 0.8, ease: "power1.inOut", delay: 1.1 });
-            gsap.to("#footer .sig-arifa", { strokeDashoffset: 0, duration: 1.5, ease: "power1.inOut", delay: 1.4 });
+            // Draw cursive signatures paths - faster and synchronized
+            gsap.to("#footer .sig-rozar", { strokeDashoffset: 0, duration: 1.1, ease: "power1.inOut" });
+            gsap.to("#footer .sig-heart", { strokeDashoffset: 0, duration: 0.6, ease: "power1.inOut", delay: 0.7 });
+            gsap.to("#footer .sig-arifa", { strokeDashoffset: 0, duration: 1.1, ease: "power1.inOut", delay: 0.9 });
         }
     });
 

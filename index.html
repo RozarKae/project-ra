@@ -113,17 +113,61 @@
     </header>
 
     <main>
+        <!-- SVG Definitions for Desktop Arch Clip -->
+        <svg class="clip-svg" width="0" height="0" style="position: absolute;" aria-hidden="true">
+            <defs>
+                <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#b89742" />
+                    <stop offset="50%" stop-color="#f3e7c4" />
+                    <stop offset="100%" stop-color="#b89742" />
+                </linearGradient>
+                <clipPath id="arch-clip" clipPathUnits="objectBoundingBox">
+                    <path d="M 0,1 L 0,0.38 C 0,0.22 0.15,0.12 0.35,0.07 C 0.45,0.05 0.48,0.01 0.5,0 C 0.52,0.01 0.55,0.05 0.65,0.07 C 0.85,0.12 1,0.22 1,0.38 L 1,1 Z" />
+                </clipPath>
+            </defs>
+        </svg>
+
         <section id="hero" class="hero-section">
-            <div class="hero-image" aria-hidden="true"></div>
+            <div class="hero-card-border" aria-hidden="true">
+                <div class="card-ornament top-ornament">
+                    <svg viewBox="0 0 100 30" width="80" height="24">
+                        <path d="M 10 20 C 30 10, 45 5, 50 15 C 55 5, 70 10, 90 20" fill="none" stroke="url(#gold-grad)" stroke-width="1.5" />
+                        <circle cx="50" cy="5" r="2.5" fill="url(#gold-grad)" />
+                    </svg>
+                </div>
+                <div class="card-ornament bottom-ornament">
+                    <svg viewBox="0 0 100 30" width="80" height="24">
+                        <path d="M 10 10 C 30 20, 45 25, 50 15 C 55 25, 70 20, 90 10" fill="none" stroke="url(#gold-grad)" stroke-width="1.5" />
+                        <circle cx="50" cy="25" r="2.5" fill="url(#gold-grad)" />
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="hero-image" aria-hidden="true">
+                <div class="hero-image-border" aria-hidden="true">
+                    <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="width:100%; height:100%; display:block;">
+                        <path d="M 0,100 L 0,38 C 0,22 15,12 35,7 C 45,5 48,1 50,0 C 52,1 55,5 65,7 C 85,12 100,22 100,38 L 100,100" 
+                              fill="none" stroke="url(#gold-grad)" stroke-width="1.0" />
+                        <line x1="0" y1="100" x2="100" y2="100" stroke="url(#gold-grad)" stroke-width="1.0" />
+                    </svg>
+                </div>
+            </div>
             <div class="hero-overlay" aria-hidden="true"></div>
+            
             <div class="hero-content">
+                <!-- Repeated Brand Logo for Desktop Invitation Layout -->
+                <div class="hero-brand" aria-hidden="true">
+                    R &amp; A
+                    <div class="brand-divider"></div>
+                </div>
+
                 <blockquote class="hero-quote">"Every journey begins with a single moment."</blockquote>
                 <p class="hero-support">Ours became a lifetime.</p>
                 <div class="hero-divider-gold" aria-hidden="true">
                     <span class="hero-star">✦</span>
                 </div>
                 <p class="eyebrow">30 August 2026</p>
-                <h1><span class="nobrk">Rozar</span> <span class="nobrk">&</span> <span class="nobrk">Arifa</span></h1>
+                <h1><span class="nobrk">Rozar</span> <span class="ampersand">&amp;</span> <span class="nobrk">Arifa</span></h1>
                 <button id="beginBtn" type="button" class="btn">
                     Join Our Journey
                     <svg class="btn-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="margin-left: 8px; display: inline-block; vertical-align: middle; transition: transform 0.3s ease;"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -175,9 +219,9 @@
             </div>
 
             <!-- Editorial Introduction -->
-            <div class="gallery-intro-card glass-card text-center" style="max-width: var(--container-max-copy); margin: 0 auto var(--space-4xl); padding: var(--space-xl) var(--space-lg);">
-                <h2 style="font-size: clamp(28px, 5vw, 46px); font-family: var(--font-heading); color: var(--color-gold); margin-bottom: var(--space-md);">Our Memories</h2>
-                <p style="color: var(--color-text); font-size: clamp(16px, 3.5vw, 22px); font-family: var(--font-display); line-height: 1.5; margin-bottom: var(--space-xl); max-width: 600px; margin-left: auto; margin-right: auto; text-transform: none; white-space: pre-line;">Every love story is written in moments.
+            <div class="gallery-intro-card glass-card">
+                <h2>Our Memories</h2>
+                <p>Every love story is written in moments.
 Here are a few pages from ours.</p>
                 <button type="button" id="openMemoryBookBtn" class="btn">Open Our Album</button>
             </div>
@@ -838,7 +882,7 @@ Here are a few pages from ours.</p>
 
                         <!-- WhatsApp support button -->
                         <div class="rsvp-whatsapp-wrapper">
-                            <a href="https://wa.me/918903333333?text=Hi%20Rozar%20and%20Arifa!%20Looking%20forward%20to%20your%20wedding!" target="_blank" class="btn whatsapp-btn">
+                            <a href="https://wa.me/917904943234?text=Hi%20Rozar%20and%20Arifa!%20Looking%20forward%20to%20your%20wedding!" target="_blank" class="btn whatsapp-btn">
                                 <span>💬 Chat on WhatsApp</span>
                             </a>
                         </div>

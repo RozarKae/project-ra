@@ -117,10 +117,10 @@
     --shadow-modal: 0 30px 100px rgba(var(--color-gold-rgb), 0.4), inset 0 1px 0 rgba(var(--color-gold-rgb), 0.2);
 
     /* Transition Standardizations */
-    --transition-duration-fast: 0.25s;
-    --transition-duration-medium: 0.35s;
-    --transition-duration-slow: 0.7s;
-    --transition-duration-loader: 2s;
+    --transition-duration-fast: 0.18s;
+    --transition-duration-medium: 0.26s;
+    --transition-duration-slow: 0.5s;
+    --transition-duration-loader: 1.2s;
 
     --ease-standard: ease;
     --ease-elastic: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -1376,6 +1376,68 @@ nav {
     margin-top: 4px;
 }
 
+/* Gallery Section Layout & Vertically Centered Content */
+.gallery-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+    box-sizing: border-box;
+}
+
+@media (min-width: 1025px) {
+    .gallery-section {
+        min-height: 60vh;
+    }
+}
+
+/* Editorial Gallery Introduction Card */
+.gallery-intro-card {
+    width: 100%;
+    max-width: var(--container-max-copy);
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-xl) var(--space-2xl) var(--space-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+@media (min-width: 1025px) {
+    .gallery-intro-card {
+        padding: var(--space-2xl) var(--space-2xl) var(--space-3xl) var(--space-2xl);
+    }
+}
+
+.gallery-intro-card h2 {
+    font-size: clamp(28px, 5vw, 46px);
+    font-family: var(--font-heading);
+    color: var(--color-gold);
+    margin-top: 0;
+    margin-bottom: var(--space-sm);
+}
+
+.gallery-intro-card p {
+    color: var(--color-text);
+    font-size: clamp(16px, 3.5vw, 22px);
+    font-family: var(--font-display);
+    line-height: 1.5;
+    margin-top: 0;
+    margin-bottom: var(--space-lg);
+    max-width: 600px;
+    margin-left: 0;
+    margin-right: 0;
+    text-transform: none;
+    white-space: pre-line;
+}
+
+.gallery-intro-card .btn {
+    align-self: flex-start;
+    margin-top: 0;
+}
+
 /* Pointed Mosque Window Mihrab Silhouette Profile */
 .story-photo {
     overflow: hidden;
@@ -2469,57 +2531,201 @@ nav {
     }
 }
 
+/* Decorative Hero Ornaments Default States (Hidden on Mobile) */
+.hero-brand,
+.hero-image-border,
+.hero-card-border {
+    display: none;
+}
+
 /* PC/Desktop Side-by-Side Split Viewport */
 @media (min-width: 1025px) {
     .hero-section {
         display: grid;
-        grid-template-columns: 1.25fr 0.75fr;
+        grid-template-columns: 1fr 1fr;
         width: 100vw;
         max-width: none;
         min-height: 100vh;
         align-items: center;
-        padding: 0 clamp(40px, 6vw, 100px);
-        gap: var(--space-4xl);
+        padding: clamp(60px, 8vw, 100px) clamp(80px, 10vw, 140px);
+        gap: clamp(40px, 6vw, 80px);
+        position: relative;
     }
 
+    /* Luxury Printed Invitation Gold Double Border */
+    .hero-card-border {
+        display: block;
+        position: absolute;
+        inset: clamp(24px, 3.5vw, 48px);
+        border: 1px solid rgba(var(--color-gold-rgb), 0.35);
+        border-radius: var(--radius-md);
+        pointer-events: none;
+        z-index: 10;
+    }
+    
+    .hero-card-border::before {
+        content: '';
+        position: absolute;
+        inset: 4px;
+        border: 1px solid rgba(var(--color-gold-rgb), 0.15);
+        border-radius: calc(var(--radius-md) - 4px);
+    }
+
+    .card-ornament {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 11;
+        display: flex;
+        justify-content: center;
+    }
+
+    .top-ornament {
+        top: -12px;
+    }
+
+    .bottom-ornament {
+        bottom: -12px;
+    }
+
+    /* Left Side: Ogee Arch Silhouette Portrait */
     .hero-image {
+        grid-column: 1;
         position: relative;
-        grid-column: 2;
-        inset: auto;
         width: 100%;
-        height: 65vh; /* Adjusted for better viewport proportions */
+        max-width: 440px;
+        height: 64vh;
+        margin: auto;
         display: block !important;
-        margin: auto 0; /* Vertically centered inside the grid cell */
-        border-radius: 260px 260px var(--radius-sm) var(--radius-sm); /* Mosque window frame shape */
-        border: 2px solid var(--color-gold-soft);
-        box-shadow: 0 20px 60px rgba(0,0,0,0.65), 0 0 30px rgba(var(--color-gold-rgb), 0.2);
-        animation: heroDrift 28s ease-in-out infinite alternate;
+        clip-path: url(#arch-clip);
+        background-size: cover;
+        background-position: center;
+        box-shadow: none; /* Shadow is handled by parent borders */
+        border: none;
+        border-radius: 0;
         z-index: 2;
+        overflow: visible;
+        animation: heroDrift 28s ease-in-out infinite alternate;
+    }
+
+    /* Arch Gold Outline Overlay */
+    .hero-image-border {
+        display: block;
+        position: absolute;
+        inset: -1px;
+        z-index: 3;
+        pointer-events: none;
     }
 
     .hero-overlay {
         display: none;
     }
 
+    /* Right Side: Centered Luxury Invitation Typography Layout */
     .hero-content {
-        grid-column: 1;
+        grid-column: 2;
         width: 100%;
-        max-width: none; /* Allow full column width for text */
-        padding-top: 0 !important; /* Force remove mobile top padding */
-        margin: auto 0; /* Vertically center aligned inside the grid cell */
-        text-align: left;
-        align-items: flex-start;
+        max-width: 480px;
+        padding-top: 0 !important;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        gap: var(--space-md);
     }
 
+    /* Repeated Brand Logo with divider scroll */
+    .hero-brand {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 6px;
+        color: var(--color-gold-soft);
+        font-family: var(--font-heading);
+        font-size: var(--font-size-md);
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: 5px;
+        opacity: 0.95;
+        order: 1;
+    }
+
+    .hero-brand .brand-divider {
+        width: 60px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--color-gold-soft), transparent);
+    }
+
+    /* Elements ordering & responsive spacing */
+    .hero-content .eyebrow {
+        order: 2;
+        margin-bottom: 0;
+        letter-spacing: 2px;
+        font-size: var(--font-size-xs);
+    }
+
+    .hero-content .hero-quote {
+        order: 3;
+        font-size: clamp(18px, 2.2vw, 24px);
+        line-height: 1.4;
+        max-width: 440px;
+        margin-bottom: 0;
+    }
+
+    .hero-content .hero-divider-gold {
+        order: 4;
+        margin: 0 auto;
+        display: flex;
+    }
+
+    /* Names stacked vertically with ampersand horizontal scroll flourishes */
     .hero-content h1 {
-        white-space: nowrap; /* Keep Rozar & Arifa on a single straight line */
-        margin-bottom: var(--space-md); /* Tighten spacing under names */
+        order: 5;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-2xs);
+        font-size: clamp(38px, 4.5vw, 58px);
+        line-height: 1.05;
+        margin-bottom: 0;
+        white-space: normal; /* Allow multiline names display */
     }
 
-    .hero-divider-gold {
-        margin: 0 0 var(--space-md) 0;
-        justify-content: flex-start;
+    .hero-content h1 .ampersand {
+        font-family: var(--font-display);
+        font-size: clamp(24px, 3.2vw, 36px);
+        color: var(--color-gold-soft);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        opacity: 0.9;
     }
+
+    .hero-content h1 .ampersand::before,
+    .hero-content h1 .ampersand::after {
+        content: '';
+        display: inline-block;
+        width: 32px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--color-gold-soft), transparent);
+        vertical-align: middle;
+        margin: 0 16px;
+    }
+
+    .hero-content .hero-support {
+        order: 6;
+        margin-bottom: 0;
+        font-size: var(--font-size-xs);
+        letter-spacing: 4px;
+    }
+
+    .hero-content #beginBtn {
+        order: 7;
+        margin-top: var(--space-md);
+    }
+}
 
     .section {
         width: calc(100vw - 28px);
