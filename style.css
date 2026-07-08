@@ -2796,6 +2796,7 @@ nav {
     .hero-content #beginBtn {
         order: 7;
         margin-top: var(--space-md);
+    }
 }
 
 /* Focus Indicator System for Keyboard Accessibility */
