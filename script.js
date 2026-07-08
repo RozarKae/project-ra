@@ -683,6 +683,33 @@ function setupProgressNavClickEvents() {
 if (openMemoryBookBtn && storyAccordion) {
     openMemoryBookBtn.addEventListener("click", () => {
         setupProgressNavClickEvents();
+
+        const revealComplete = () => {
+            document.getElementById("storyNavDesktop")?.classList.add("visible");
+            if (window.ScrollTrigger) ScrollTrigger.refresh();
+
+            // Activate all premium features
+            showReadingProgress(true);
+            setupAllTransitionCards();
+            setupCaptionDateFade();
+            setupGoldDividerDraw();
+
+            // Final moment plays as a scroll-triggered event below
+            // Set up intersection observer for the final moment panel
+            const finalPanel = document.getElementById("storyConclusion");
+            if (finalPanel) {
+                const finalObs = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            playFinalMomentTimeline();
+                            finalObs.disconnect();
+                        }
+                    });
+                }, { threshold: 0.2 });
+                finalObs.observe(finalPanel);
+            }
+        };
+
         if (hasGsap()) {
             gsap.timeline()
                 .to(".gallery-intro-card", {
@@ -696,18 +723,193 @@ if (openMemoryBookBtn && storyAccordion) {
                     }
                 })
                 .fromTo(storyAccordion, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" })
-                .fromTo(storyConclusion, { opacity: 0 }, { opacity: 1, duration: 0.6 }, "-=0.2")
-                .eventCallback("onComplete", () => {
-                    document.getElementById("storyNavDesktop")?.classList.add("visible");
-                    if (window.ScrollTrigger) ScrollTrigger.refresh();
-                });
+                .eventCallback("onComplete", revealComplete);
         } else {
             document.querySelector(".gallery-intro-card").style.display = "none";
             storyAccordion.style.display = "block";
             storyConclusion.style.display = "block";
-            document.getElementById("storyNavDesktop")?.classList.add("visible");
+            revealComplete();
         }
     });
+}
+
+
+// =============================================================================
+// MODULE 10: READING PROGRESS BAR
+// =============================================================================
+
+const progressBar = document.getElementById("storyReadingProgress");
+const progressFill = document.getElementById("storyReadingProgressFill");
+
+function updateReadingProgress() {
+    if (!progressBar || !storyAccordion) return;
+    const accordion = storyAccordion;
+    const accordionTop = accordion.getBoundingClientRect().top + window.scrollY;
+    const accordionHeight = accordion.scrollHeight;
+    const viewportHeight = window.innerHeight;
+    const scrolled = window.scrollY + viewportHeight - accordionTop;
+    const total = accordionHeight + viewportHeight;
+    const pct = Math.max(0, Math.min(100, (scrolled / total) * 100));
+    if (progressFill) progressFill.style.width = pct + "%";
+}
+
+function showReadingProgress(show) {
+    if (!progressBar) return;
+    if (show) {
+        progressBar.classList.add("active");
+        window.addEventListener("scroll", updateReadingProgress, { passive: true });
+    } else {
+        progressBar.classList.remove("active");
+        window.removeEventListener("scroll", updateReadingProgress);
+    }
+}
+
+// =============================================================================
+// MODULE 11: CHAPTER TRANSITION CARD — OBSERVER-BASED ANIMATIONS
+// =============================================================================
+
+function setupTransitionCard(card) {
+    const dividers = card.querySelectorAll(".transition-divider");
+    const quote = card.querySelector(".transition-quote");
+    const continueBtn = card.querySelector(".transition-continue-btn");
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // 1. Draw the top divider
+                if (dividers[0]) dividers[0].classList.add("drawn");
+                // 2. Fade quote in after 400ms
+                setTimeout(() => { if (quote) quote.classList.add("visible"); }, 400);
+                // 3. Draw the bottom divider after 700ms
+                setTimeout(() => { if (dividers[1]) dividers[1].classList.add("drawn"); }, 700);
+                // 4. Fade continue button in after 1000ms
+                setTimeout(() => { if (continueBtn) continueBtn.classList.add("visible"); }, 1000);
+                observer.disconnect();
+            }
+        });
+    }, { threshold: 0.3 });
+    observer.observe(card);
+}
+
+function setupAllTransitionCards() {
+    document.querySelectorAll(".chapter-transition-card").forEach(setupTransitionCard);
+
+    // Continue button handlers
+    document.querySelectorAll(".transition-continue-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const nextChNum = parseInt(btn.getAttribute("data-next-chapter"), 10);
+            const nextCard = document.getElementById(`chapter${nextChNum}`);
+            if (!nextCard) return;
+            // Trigger the header click to expand the next chapter
+            const nextHeader = nextCard.querySelector(".card-header");
+            if (nextHeader) nextHeader.click();
+        });
+    });
+}
+
+// =============================================================================
+// MODULE 13: PHOTO TILT MICRO-INTERACTION
+// =============================================================================
+
+const TILT_MAX = 6; // degrees
+
+function enablePhotoTilt(container) {
+    const imgEl = container.querySelector("img");
+    if (!imgEl) return;
+
+    container.addEventListener("mousemove", (e) => {
+        const rect = container.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = (e.clientX - cx) / (rect.width / 2);
+        const dy = (e.clientY - cy) / (rect.height / 2);
+        const rotateX = (-dy * TILT_MAX).toFixed(2);
+        const rotateY = (dx * TILT_MAX).toFixed(2);
+        imgEl.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+        imgEl.style.transition = "transform 0.1s linear";
+    });
+
+    container.addEventListener("mouseleave", () => {
+        imgEl.style.transform = "perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)";
+        imgEl.style.transition = "transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)";
+    });
+}
+
+function setupPhotoTilt() {
+    // Only on non-touch devices
+    if (window.matchMedia("(hover: none)").matches) return;
+    // Respect reduced motion
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    document.querySelectorAll(".story-img-wrap").forEach(enablePhotoTilt);
+}
+
+// =============================================================================
+// MODULE 13B: CAPTION DATE FADE & GOLD DIVIDER DRAW — INTERSECTION OBSERVERS
+// =============================================================================
+
+function setupCaptionDateFade() {
+    const dateEls = document.querySelectorAll(".caption-date");
+    if (!dateEls.length) return;
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    dateEls.forEach(el => obs.observe(el));
+}
+
+function setupGoldDividerDraw() {
+    const lines = document.querySelectorAll(".chapter-closing-line");
+    if (!lines.length) return;
+    lines.forEach(line => {
+        // Reset to 0 width for draw effect
+        line.style.width = "0";
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Animate width to 100% via style
+                    requestAnimationFrame(() => {
+                        line.style.width = "100%";
+                    });
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+        obs.observe(line);
+    });
+}
+
+// =============================================================================
+// MODULE 15: FINAL MOMENT — CINEMATIC REVEAL TIMELINE
+// =============================================================================
+
+function playFinalMomentTimeline() {
+    const panel = document.getElementById("storyConclusion");
+    if (!panel) return;
+
+    const dividers = panel.querySelectorAll(".final-moment-divider");
+    const line1 = panel.querySelector(".final-moment-line-1");
+    const line2 = panel.querySelector(".final-moment-line-2");
+    const cta = document.getElementById("finalMomentCta");
+
+    if (hasGsap()) {
+        const tl = gsap.timeline({ delay: 0.3 });
+        tl
+            .to(dividers, { opacity: 1, duration: 1.2, stagger: 0.4, ease: "power2.out" })
+            .to(line1, { opacity: 1, y: 0, duration: 1.2, ease: "power2.out" }, "-=0.6")
+            .to(line2, { opacity: 1, y: 0, duration: 1, ease: "power2.out" }, "-=0.4")
+            // 2.5-second cinematic pause
+            .to({}, { duration: 2.5 })
+            .to(cta, { opacity: 1, y: 0, duration: 1.2, ease: "cubic-bezier(0.22, 1, 0.36, 1)" });
+    } else {
+        // Fallback: simple CSS transitions
+        dividers.forEach(d => { d.style.opacity = "1"; });
+        if (line1) line1.style.opacity = "1";
+        if (line2) line2.style.opacity = "1";
+        setTimeout(() => { if (cta) cta.style.opacity = "1"; }, 3000);
+    }
 }
 
 // Accordion Expand/Collapse Logic
@@ -734,6 +936,27 @@ storyCards.forEach(card => {
 
             const chNum = parseInt(card.id.replace("chapter", ""), 10);
             updateStoryProgress(chNum);
+
+            // Cinematic hero image clip-path reveal
+            setTimeout(() => {
+                card.querySelectorAll(".layout-hero-side .story-img-wrap img").forEach((img, i) => {
+                    img.style.clipPath = "inset(0 100% 0 0)";
+                    img.style.transition = "none";
+                    requestAnimationFrame(() => {
+                        setTimeout(() => {
+                            img.style.transition = "clip-path 1.2s cubic-bezier(0.22, 1, 0.36, 1)";
+                            img.style.clipPath = "inset(0 0% 0 0)";
+                        }, i * 150);
+                    });
+                });
+            }, 80);
+
+            // Enable tilt for newly-visible images in this card
+            if (!window.matchMedia("(hover: none)").matches && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                setTimeout(() => {
+                    card.querySelectorAll(".story-img-wrap").forEach(enablePhotoTilt);
+                }, 400);
+            }
 
             // Scroll card header into viewport smoothly
             setTimeout(() => {
@@ -1589,3 +1812,204 @@ headerNavLinks.forEach(link => {
         }
     });
 });
+// =============================================================================
+// MODULE 16: CHAPTER HORIZONTAL PHOTO SLIDER — PEEK CAROUSEL + AUTO-PLAY
+// =============================================================================
+
+const SLIDER_AUTO_INTERVAL = 3500; // ms between auto-advances
+
+function initChapterSlider(container) {
+    const slides = Array.from(container.querySelectorAll('.slider-slide'));
+    const prevBtn = container.querySelector('.slider-prev');
+    const nextBtn = container.querySelector('.slider-next');
+    const dots = Array.from(container.querySelectorAll('.slider-dot'));
+    const counterCurrent = container.querySelector('.slider-current');
+    const progressFill = container.querySelector('.slider-progress-fill');
+    const total = slides.length;
+
+    if (total === 0) return;
+
+    let current = 0;
+    let startX = 0;
+    let isDragging = false;
+    let dragDelta = 0;
+    let autoTimer = null;
+    let resumeTimeout = null;
+    let lastWheelTime = 0;
+
+    function updateStates() {
+        slides.forEach((slide, i) => {
+            slide.classList.remove('is-active', 'is-prev', 'is-next', 'is-far-prev', 'is-far-next');
+
+            if (i === current) {
+                slide.classList.add('is-active');
+            } else if (i === (current - 1 + total) % total) {
+                slide.classList.add('is-prev');
+            } else if (i === (current + 1) % total) {
+                slide.classList.add('is-next');
+            } else if (i === (current - 2 + total) % total) {
+                slide.classList.add('is-far-prev');
+            } else if (i === (current + 2) % total) {
+                slide.classList.add('is-far-next');
+            }
+        });
+
+        // Update dots
+        dots.forEach((d, i) => d.classList.toggle('active', i === current));
+
+        // Update counter
+        if (counterCurrent) counterCurrent.textContent = current + 1;
+    }
+
+    function goTo(index, fromAuto = false) {
+        if (!fromAuto) {
+            stopAutoPlay();
+            clearTimeout(resumeTimeout);
+            resumeTimeout = setTimeout(startAutoPlay, 4000);
+        }
+
+        if (index < 0) {
+            current = total - 1;
+        } else if (index >= total) {
+            current = 0;
+        } else {
+            current = index;
+        }
+
+        updateStates();
+    }
+
+    /* Auto-play and progress fill */
+    function startAutoPlay() {
+        stopAutoPlay();
+
+        if (progressFill) {
+            progressFill.style.transition = 'none';
+            progressFill.style.width = '0%';
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    progressFill.style.transition = `width ${SLIDER_AUTO_INTERVAL}ms linear`;
+                    progressFill.style.width = '100%';
+                });
+            });
+        }
+
+        autoTimer = setTimeout(() => {
+            goTo(current + 1, true);
+            startAutoPlay();
+        }, SLIDER_AUTO_INTERVAL);
+    }
+
+    function stopAutoPlay() {
+        clearTimeout(autoTimer);
+        autoTimer = null;
+        if (progressFill) {
+            progressFill.style.transition = 'none';
+            progressFill.style.width = '0%';
+        }
+    }
+
+    // Pause on interaction
+    container.addEventListener('mouseenter', stopAutoPlay);
+    container.addEventListener('mouseleave', () => {
+        if (!resumeTimeout) startAutoPlay();
+    });
+
+    // Arrow buttons
+    if (prevBtn) prevBtn.addEventListener('click', () => goTo(current - 1));
+    if (nextBtn) nextBtn.addEventListener('click', () => goTo(current + 1));
+
+    // Dot navigation
+    dots.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
+
+    // Keyboard support
+    container.setAttribute('tabindex', '0');
+    container.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') goTo(current - 1);
+        if (e.key === 'ArrowRight') goTo(current + 1);
+    });
+
+    // Mouse wheel support (horizontal only inside the carousel)
+    container.addEventListener('wheel', (e) => {
+        const now = Date.now();
+        if (now - lastWheelTime < 800) return; // limit scroll frequency
+
+        if (Math.abs(e.deltaX) > 30) {
+            e.preventDefault();
+            if (e.deltaX > 0) {
+                goTo(current + 1);
+            } else {
+                goTo(current - 1);
+            }
+            lastWheelTime = now;
+        }
+    }, { passive: false });
+
+    // Touch Swipe support
+    container.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+        dragDelta = 0;
+        stopAutoPlay();
+        clearTimeout(resumeTimeout);
+    }, { passive: true });
+
+    container.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        dragDelta = e.touches[0].clientX - startX;
+    }, { passive: true });
+
+    container.addEventListener('touchend', () => {
+        if (!isDragging) return;
+        isDragging = false;
+        const threshold = 50;
+        if (dragDelta < -threshold) {
+            goTo(current + 1);
+        } else if (dragDelta > threshold) {
+            goTo(current - 1);
+        } else {
+            // snapped back
+            resumeTimeout = setTimeout(startAutoPlay, 2000);
+        }
+    });
+
+    // Mouse drag support
+    container.addEventListener('mousedown', (e) => {
+        if (e.target.closest('.slider-controls, .slider-progress-bar')) return;
+        startX = e.clientX;
+        isDragging = true;
+        dragDelta = 0;
+        stopAutoPlay();
+        clearTimeout(resumeTimeout);
+        container.style.cursor = 'grabbing';
+    });
+
+    const onMouseMove = (e) => {
+        if (!isDragging) return;
+        dragDelta = e.clientX - startX;
+    };
+
+    const onMouseUp = () => {
+        if (!isDragging) return;
+        isDragging = false;
+        container.style.cursor = '';
+        const threshold = 60;
+        if (dragDelta < -threshold) {
+            goTo(current + 1);
+        } else if (dragDelta > threshold) {
+            goTo(current - 1);
+        } else {
+            resumeTimeout = setTimeout(startAutoPlay, 2000);
+        }
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+
+    // Initial state
+    updateStates();
+    setTimeout(startAutoPlay, 1000);
+}
+
+// Initialize all sliders on page load
+document.querySelectorAll('[data-slider]').forEach(initChapterSlider);

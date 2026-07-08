@@ -1179,7 +1179,7 @@ nav {
 }
 
 #beginBtn::after {
-    content: "→";
+    content: "â†’";
     margin-left: var(--space-xs);
 }
 
@@ -2521,7 +2521,7 @@ nav {
 }
 
 .story-nav-step.completed::before {
-    content: "✓";
+    content: "âœ“";
     display: inline-block;
     width: 18px;
     margin-right: 8px;
@@ -2604,7 +2604,7 @@ nav {
 }
 
 .mobile-nav-step.completed::before {
-    content: "✓";
+    content: "âœ“";
     font-size: var(--font-size-sm);
     font-weight: bold;
     color: var(--color-gold);
@@ -2618,5 +2618,878 @@ nav {
     
     .story-nav-mobile {
         display: block;
+    }
+}
+
+/* ==========================================================================
+   MODULE 10: READING PROGRESS BAR
+   ========================================================================== */
+
+#storyReadingProgress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1.5px;
+    z-index: 9999;
+    background: rgba(var(--color-text-rgb), 0.06);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s var(--ease-standard);
+}
+
+#storyReadingProgress.active {
+    opacity: 1;
+}
+
+#storyReadingProgressFill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg,
+        var(--color-gold) 0%,
+        #f5d98b 40%,
+        var(--color-gold-soft) 70%,
+        rgba(var(--color-gold-rgb), 0.5) 100%
+    );
+    transition: width 0.12s linear;
+    box-shadow: 0 0 8px rgba(var(--color-gold-rgb), 0.6);
+}
+
+/* ==========================================================================
+   MODULE 11: CHAPTER TRANSITION CARDS
+   ========================================================================== */
+
+.chapter-transition-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+    margin-top: var(--space-4xl);
+    padding: var(--space-3xl) var(--space-xl);
+    text-align: center;
+}
+
+.transition-divider {
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-gold-soft), transparent);
+    transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    max-width: 240px;
+    align-self: center;
+}
+
+.transition-divider.drawn {
+    width: 100%;
+}
+
+.transition-chapter-end {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-sm);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin: 0;
+}
+
+.transition-quote {
+    font-family: var(--font-display);
+    font-size: clamp(15px, 2.4vw, 19px);
+    line-height: 1.7;
+    color: var(--color-gold-soft);
+    max-width: 520px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-style: italic;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.9s var(--ease-standard), transform 0.9s var(--ease-standard);
+}
+
+.transition-quote.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.transition-continue-btn {
+    background: transparent;
+    border: 1px solid rgba(var(--color-gold-soft-rgb), 0.35);
+    color: var(--color-gold-soft);
+    font-family: var(--font-heading);
+    font-size: var(--font-size-sm);
+    letter-spacing: 1.5px;
+    padding: 12px 28px;
+    cursor: pointer;
+    border-radius: var(--radius-pill);
+    transition: all var(--transition-medium) var(--ease-standard);
+    opacity: 0;
+    transform: translateY(8px);
+}
+
+.transition-continue-btn.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.9s var(--ease-standard) 0.3s, border-color var(--transition-fast), background var(--transition-fast), color var(--transition-fast);
+}
+
+.transition-continue-btn:hover {
+    background: rgba(var(--color-gold-rgb), 0.1);
+    border-color: var(--color-gold-soft);
+    color: var(--color-text);
+    box-shadow: 0 0 20px rgba(var(--color-gold-rgb), 0.2);
+}
+
+/* ==========================================================================
+   MODULE 12: UNIQUE PHOTO LAYOUT VARIANTS
+   ========================================================================== */
+
+/* Polaroid trio â€” Ch1: rotated borders with white frames */
+.layout-polaroid-trio {
+    gap: var(--space-xl);
+    background: rgba(0,0,0,0.1);
+    padding: var(--space-xl);
+    border-radius: var(--radius-sm);
+}
+
+.layout-polaroid-trio .story-img-wrap {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 10px 10px 30px;
+    border-radius: 2px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.3);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s var(--ease-standard);
+}
+
+.layout-polaroid-trio .story-img-wrap:nth-child(1) { transform: rotate(-1.5deg); }
+.layout-polaroid-trio .story-img-wrap:nth-child(2) { transform: rotate(1deg) translateY(-8px); }
+.layout-polaroid-trio .story-img-wrap:nth-child(3) { transform: rotate(-0.8deg); }
+
+.layout-polaroid-trio .story-img-wrap:hover {
+    transform: rotate(0deg) translateY(-4px) scale(1.02) !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 20px rgba(var(--color-gold-rgb), 0.15);
+    z-index: 5;
+}
+
+.layout-polaroid-trio .caption-card {
+    background: transparent;
+    border: none;
+    text-align: center;
+    padding: var(--space-xs) 4px 0;
+}
+
+.layout-polaroid-trio .caption-card strong {
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+/* Filmstrip â€” Ch2: horizontal strip with film frame styling */
+.layout-filmstrip {
+    padding: var(--space-md) 0;
+    position: relative;
+}
+
+.layout-filmstrip::before,
+.layout-filmstrip::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: repeating-linear-gradient(
+        90deg,
+        #111 0px, #111 14px,
+        rgba(var(--color-gold-rgb), 0.08) 14px, rgba(var(--color-gold-rgb), 0.08) 18px,
+        #111 18px, #111 32px
+    );
+    z-index: 1;
+}
+
+.layout-filmstrip::before { top: 0; }
+.layout-filmstrip::after { bottom: 0; }
+
+.layout-filmstrip .story-img-wrap {
+    border-radius: 0;
+    margin: 20px 0;
+    position: relative;
+    z-index: 2;
+}
+
+.layout-filmstrip .story-img-wrap img {
+    border-radius: 0;
+    filter: brightness(0.88) saturate(0.9);
+    transition: filter 0.6s var(--ease-standard);
+}
+
+.layout-filmstrip .story-img-wrap:hover img {
+    filter: brightness(1) saturate(1);
+}
+
+/* ==========================================================================
+   MODULE 13: HIDDEN DELIGHT MICRO-INTERACTIONS
+   ========================================================================== */
+
+/* Photo 3D tilt â€” perspective container */
+.story-img-wrap {
+    transform-style: preserve-3d;
+    perspective: 800px;
+}
+
+/* Gold divider line draw animation */
+.chapter-closing-line {
+    transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.chapter-closing-line.draw-active {
+    /* Width is animated by JS from 0 to initial value */
+}
+
+/* Caption date scroll-fade */
+.caption-date {
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.7s var(--ease-standard), transform 0.7s var(--ease-standard);
+}
+
+.caption-date.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Chapter title letter-spacing reveal */
+.card-chapter-title {
+    transition: letter-spacing 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    letter-spacing: -0.5px;
+}
+
+.story-card.expanded .card-chapter-title {
+    letter-spacing: 1px;
+}
+
+/* Luxury quotation mark before editorial quotes */
+.editorial-quote {
+    position: relative;
+}
+
+.editorial-quote::before {
+    content: "\201C";
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-display);
+    font-size: 80px;
+    line-height: 1;
+    color: rgba(var(--color-gold-rgb), 0.18);
+    pointer-events: none;
+}
+
+/* Hero image cinematic clip-path reveal â€” only clips when card is visible */
+.story-card.expanded .layout-hero-side .story-img-wrap img {
+    clip-path: inset(0 0% 0 0);
+}
+
+/* ==========================================================================
+   MODULE 14: FINAL MOMENT â€” CINEMATIC PAYOFF PANEL
+   ========================================================================== */
+
+.story-final-moment {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4xl);
+    margin-top: var(--space-4xl);
+    padding: var(--space-4xl) var(--space-xl);
+    text-align: center;
+    overflow: hidden;
+}
+
+.story-final-moment::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at center, rgba(var(--color-gold-rgb), 0.04) 0%, transparent 70%),
+        linear-gradient(180deg, rgba(var(--color-bg-rgb), 0.2) 0%, transparent 40%, rgba(var(--color-bg-rgb), 0.2) 100%);
+    pointer-events: none;
+}
+
+.final-moment-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xl);
+}
+
+.final-moment-divider {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-gold-soft), transparent);
+    opacity: 0;
+}
+
+.final-moment-line-1 {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 4.5vw, 36px);
+    line-height: 1.4;
+    color: var(--color-text);
+    margin: 0;
+    opacity: 0;
+    letter-spacing: 0.5px;
+}
+
+.final-moment-line-2 {
+    font-family: var(--font-display);
+    font-size: clamp(18px, 3vw, 26px);
+    border-radius: var(--radius-sm);
+}
+
+.layout-polaroid-trio .story-img-wrap {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 10px 10px 30px;
+    border-radius: 2px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5), 0 2px 6px rgba(0,0,0,0.3);
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.5s var(--ease-standard);
+}
+
+.layout-polaroid-trio .story-img-wrap:nth-child(1) { transform: rotate(-1.5deg); }
+.layout-polaroid-trio .story-img-wrap:nth-child(2) { transform: rotate(1deg) translateY(-8px); }
+.layout-polaroid-trio .story-img-wrap:nth-child(3) { transform: rotate(-0.8deg); }
+
+.layout-polaroid-trio .story-img-wrap:hover {
+    transform: rotate(0deg) translateY(-4px) scale(1.02) !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 20px rgba(var(--color-gold-rgb), 0.15);
+    z-index: 5;
+}
+
+.layout-polaroid-trio .caption-card {
+    background: transparent;
+    border: none;
+    text-align: center;
+    padding: var(--space-xs) 4px 0;
+}
+
+.layout-polaroid-trio .caption-card strong {
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+/* Filmstrip — Ch2: horizontal strip with film frame styling */
+.layout-filmstrip {
+    padding: var(--space-md) 0;
+    position: relative;
+}
+
+.layout-filmstrip::before,
+.layout-filmstrip::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: repeating-linear-gradient(
+        90deg,
+        #111 0px, #111 14px,
+        rgba(var(--color-gold-rgb), 0.08) 14px, rgba(var(--color-gold-rgb), 0.08) 18px,
+        #111 18px, #111 32px
+    );
+    z-index: 1;
+}
+
+.layout-filmstrip::before { top: 0; }
+.layout-filmstrip::after { bottom: 0; }
+
+.layout-filmstrip .story-img-wrap {
+    border-radius: 0;
+    margin: 20px 0;
+    position: relative;
+    z-index: 2;
+}
+
+.layout-filmstrip .story-img-wrap img {
+    border-radius: 0;
+    filter: brightness(0.88) saturate(0.9);
+    transition: filter 0.6s var(--ease-standard);
+}
+
+.layout-filmstrip .story-img-wrap:hover img {
+    filter: brightness(1) saturate(1);
+}
+
+/* ==========================================================================
+   MODULE 13: HIDDEN DELIGHT MICRO-INTERACTIONS
+   ========================================================================== */
+
+/* Photo 3D tilt â€” perspective container */
+.story-img-wrap {
+    transform-style: preserve-3d;
+    perspective: 800px;
+}
+
+/* Gold divider line draw animation */
+.chapter-closing-line {
+    transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.chapter-closing-line.draw-active {
+    /* Width is animated by JS from 0 to initial value */
+}
+
+/* Caption date scroll-fade */
+.caption-date {
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.7s var(--ease-standard), transform 0.7s var(--ease-standard);
+}
+
+.caption-date.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Chapter title letter-spacing reveal */
+.card-chapter-title {
+    transition: letter-spacing 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    letter-spacing: -0.5px;
+}
+
+.story-card.expanded .card-chapter-title {
+    letter-spacing: 1px;
+}
+
+/* Luxury quotation mark before editorial quotes */
+.editorial-quote {
+    position: relative;
+}
+
+.editorial-quote::before {
+    content: "\201C";
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-display);
+    font-size: 80px;
+    line-height: 1;
+    color: rgba(var(--color-gold-rgb), 0.18);
+    pointer-events: none;
+}
+
+/* Hero image cinematic clip-path reveal â€” only clips when card is visible */
+.story-card.expanded .layout-hero-side .story-img-wrap img {
+    clip-path: inset(0 0% 0 0);
+}
+
+/* ==========================================================================
+   MODULE 14: FINAL MOMENT â€” CINEMATIC PAYOFF PANEL
+   ========================================================================== */
+
+.story-final-moment {
+    position: relative;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4xl);
+    margin-top: var(--space-4xl);
+    padding: var(--space-4xl) var(--space-xl);
+    text-align: center;
+    overflow: hidden;
+}
+
+.story-final-moment::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at center, rgba(var(--color-gold-rgb), 0.04) 0%, transparent 70%),
+        linear-gradient(180deg, rgba(var(--color-bg-rgb), 0.2) 0%, transparent 40%, rgba(var(--color-bg-rgb), 0.2) 100%);
+    pointer-events: none;
+}
+
+.final-moment-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xl);
+}
+
+.final-moment-divider {
+    width: 120px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-gold-soft), transparent);
+    opacity: 0;
+}
+
+.final-moment-line-1 {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 4.5vw, 36px);
+    line-height: 1.4;
+    color: var(--color-text);
+    margin: 0;
+    opacity: 0;
+    letter-spacing: 0.5px;
+}
+
+.final-moment-line-2 {
+    font-family: var(--font-display);
+    font-size: clamp(18px, 3vw, 26px);
+    line-height: 1.4;
+    color: var(--color-gold-soft);
+    font-style: italic;
+    margin: 0;
+    opacity: 0;
+}
+
+.final-moment-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+    opacity: 0;
+}
+
+.final-moment-star {
+    font-size: 28px;
+    line-height: 1;
+    filter: drop-shadow(0 0 12px rgba(var(--color-gold-rgb), 0.5));
+}
+
+.final-moment-heading {
+    font-family: var(--font-heading);
+    font-size: clamp(20px, 3.5vw, 30px);
+    color: var(--color-text);
+    letter-spacing: 2px;
+    margin: 0;
+    font-weight: var(--font-weight-regular);
+}
+
+.btn-ghost {
+    background: transparent;
+    border: 1px solid rgba(var(--color-gold-soft-rgb), 0.35);
+    color: var(--color-gold-soft);
+}
+
+.btn-ghost:hover {
+    background: rgba(var(--color-gold-rgb), 0.08);
+    border-color: var(--color-gold-soft);
+    color: var(--color-text);
+}
+
+@media (max-width: 768px) {
+    .story-final-moment {
+        min-height: 60vh;
+        gap: var(--space-3xl);
+    }
+
+    .layout-polaroid-trio {
+        gap: var(--space-md);
+        padding: var(--space-md);
+    }
+
+    .layout-polaroid-trio .story-img-wrap:nth-child(1),
+    .layout-polaroid-trio .story-img-wrap:nth-child(2),
+    .layout-polaroid-trio .story-img-wrap:nth-child(3) {
+        transform: none;
+    }
+}
+
+/* ==========================================================================
+   MODULE 16: CHAPTER HORIZONTAL PHOTO SLIDER — PREMIUM ROTATING CAROUSEL
+   ========================================================================== */
+
+.chapter-photo-slider {
+    position: relative;
+    width: 100%;
+    height: 500px;   /* Room for portrait image (320px) + caption (approx 120px) */
+    overflow: hidden;
+    margin: var(--space-2xl) 0;
+    user-select: none;
+    touch-action: pan-y pinch-zoom;
+    border-radius: var(--radius-md);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+}
+
+.slider-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-style: preserve-3d;
+}
+
+.slider-slide {
+    position: absolute;
+    width: 280px; /* Consistent premium portrait width */
+    max-width: 70%;
+    box-sizing: border-box;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: rgba(var(--color-bg-rgb), 0.95);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate3d(0, 30px, -200px) scale(0.7);
+    filter: blur(8px);
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+                opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+                filter 0.8s cubic-bezier(0.25, 1, 0.5, 1),
+                box-shadow 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 1;
+}
+
+/* CENTER IMAGE - visual focus */
+.slider-slide.is-active {
+    transform: translate3d(0, 0, 0) scale(1.1);
+    opacity: 1;
+    filter: blur(0);
+    z-index: 10;
+    pointer-events: auto;
+    box-shadow: 0 20px 48px rgba(0,0,0,0.65), 0 0 0 1px rgba(var(--color-gold-rgb), 0.2);
+}
+
+/* LEFT IMAGE */
+.slider-slide.is-prev {
+    transform: translate3d(-200px, 20px, -100px) scale(0.85);
+    opacity: 0.5;
+    filter: blur(2px);
+    z-index: 5;
+    pointer-events: auto;
+}
+
+/* RIGHT IMAGE */
+.slider-slide.is-next {
+    transform: translate3d(200px, 20px, -100px) scale(0.85);
+    opacity: 0.5;
+    filter: blur(2px);
+    z-index: 5;
+    pointer-events: auto;
+}
+
+/* Far out slides for smooth continuous transition loop */
+.slider-slide.is-far-prev {
+    transform: translate3d(-380px, 30px, -150px) scale(0.75);
+    opacity: 0;
+    filter: blur(6px);
+    z-index: 2;
+}
+
+.slider-slide.is-far-next {
+    transform: translate3d(380px, 30px, -150px) scale(0.75);
+    opacity: 0;
+    filter: blur(6px);
+    z-index: 2;
+}
+
+.slider-slide .story-img-wrap {
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.slider-slide .story-img-wrap img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    border-radius: 0;
+    transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.slider-slide.is-active .story-img-wrap img {
+    animation: sliderKenBurns 8s ease-in-out infinite alternate;
+}
+
+@keyframes sliderKenBurns {
+    from { transform: scale(1); }
+    to   { transform: scale(1.05); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .slider-slide.is-active .story-img-wrap img {
+        animation: none;
+    }
+}
+
+/* Caption - elegant & readable below center image */
+.slider-slide .caption-card {
+    background: rgba(var(--color-bg-rgb), 0.98);
+    border: none;
+    border-top: 1px solid rgba(var(--color-gold-rgb), 0.12);
+    padding: var(--space-md) var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    opacity: 0;
+    transition: opacity 0.5s var(--ease-standard) 0.2s;
+}
+
+.slider-slide.is-active .caption-card {
+    opacity: 1;
+}
+
+.slider-slide .caption-card strong {
+    font-family: var(--font-heading);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--color-gold-soft);
+}
+
+.slider-slide .caption-date {
+    font-family: var(--font-body);
+    font-size: 10px;
+    color: var(--color-muted);
+}
+
+.slider-slide .caption-card p {
+    font-size: 11px;
+    color: rgba(var(--color-text-rgb), 0.7);
+    line-height: 1.5;
+    margin: 2px 0 0;
+}
+
+/* Controls underneath */
+.slider-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: var(--space-lg);
+    padding: 0 var(--space-md);
+}
+
+.slider-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(var(--color-bg-rgb), 0.85);
+    border: 1px solid rgba(var(--color-gold-soft-rgb), 0.25);
+    color: var(--color-gold-soft);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s var(--ease-standard);
+    flex-shrink: 0;
+}
+
+.slider-btn:hover {
+    background: rgba(var(--color-gold-rgb), 0.15);
+    border-color: var(--color-gold-soft);
+    box-shadow: 0 0 14px rgba(var(--color-gold-rgb), 0.3);
+}
+
+.slider-btn:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+}
+
+.slider-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.slider-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(var(--color-gold-soft-rgb), 0.3);
+    transition: all 0.4s var(--ease-standard);
+    cursor: pointer;
+}
+
+.slider-dot.active {
+    background: var(--color-gold-soft);
+    width: 18px;
+    border-radius: var(--radius-pill);
+}
+
+.slider-progress-bar {
+    height: 2px;
+    background: rgba(var(--color-gold-soft-rgb), 0.1);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    margin-top: var(--space-md);
+    width: calc(100% - var(--space-md) * 2);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.slider-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--color-gold), var(--color-gold-soft));
+    transition: width linear;
+}
+
+.slider-counter {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xs);
+    color: rgba(var(--color-muted), 0.8);
+    min-width: 40px;
+    text-align: center;
+}
+
+/* RESPONSIVENESS */
+@media (max-width: 768px) {
+    .chapter-photo-slider {
+        height: 420px;
+    }
+    .slider-slide {
+        width: 220px;
+    }
+    .slider-slide .story-img-wrap img {
+        height: auto;
+    }
+    .slider-slide.is-prev {
+        transform: translate3d(-130px, 15px, -80px) scale(0.85);
+    }
+    .slider-slide.is-next {
+        transform: translate3d(130px, 15px, -80px) scale(0.85);
+    }
+    .slider-slide.is-far-prev {
+        transform: translate3d(-240px, 20px, -120px) scale(0.75);
+    }
+    .slider-slide.is-far-next {
+        transform: translate3d(240px, 20px, -120px) scale(0.75);
+    }
+}
+
+@media (max-width: 480px) {
+    .chapter-photo-slider {
+        height: 380px;
+    }
+    .slider-slide {
+        width: 180px;
+    }
+    .slider-slide .story-img-wrap img {
+        height: auto;
+    }
+    .slider-slide.is-prev {
+        transform: translate3d(-95px, 10px, -60px) scale(0.85);
+    }
+    .slider-slide.is-next {
+        transform: translate3d(95px, 10px, -60px) scale(0.85);
+    }
+    .slider-slide.is-far-prev {
+        transform: translate3d(-180px, 15px, -100px) scale(0.75);
+    }
+    .slider-slide.is-far-next {
+        transform: translate3d(180px, 15px, -100px) scale(0.75);
     }
 }
