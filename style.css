@@ -561,6 +561,14 @@ nav a.active::after {
     position: relative;
 }
 
+.event-location a {
+    transition: color var(--transition-fast);
+}
+
+.event-location a:hover {
+    color: var(--color-gold-soft);
+}
+
 .timeline-dot {
     position: absolute;
     width: 16px;
