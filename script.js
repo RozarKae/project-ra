@@ -1270,6 +1270,19 @@ if (hasGsap() && window.ScrollTrigger) {
         }
     });
 
+    // 6b. Dress Code Section Timeline
+    gsap.from("#dress-code .dress-card", {
+        scrollTrigger: {
+            trigger: "#dress-code",
+            start: "top 85%"
+        },
+        y: 30,
+        opacity: 0,
+        duration: 0.6,
+        stagger: 0.1,
+        ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+    });
+
     // 7. RSVP Section Timeline
     const rsvpTimeline = gsap.timeline({
         scrollTrigger: {
@@ -1625,6 +1638,11 @@ async function executeRsvpSubmission() {
         });
 
         if (!response.ok) throw new Error("Server error");
+
+        // Dynamically log to admin guest management
+        if (typeof registerNewRSVPSubmission === "function") {
+            registerNewRSVPSubmission(name, attendance, formData.get("guests") || 1, formData.get("message") || "");
+        }
 
         localStorage.setItem("rsvpSubmitted", "true");
         localStorage.setItem("rsvpGuestName", name);
@@ -2408,3 +2426,606 @@ document.querySelectorAll('button:not(#floatingAudioToggle), .btn:not(.map-btn)'
 window.addEventListener('DOMContentLoaded', () => {
     AudioManager.init();
 });
+
+// =============================================================================
+// MODULE 15: ADMIN DASHBOARD & GUEST MANAGEMENT
+// =============================================================================
+
+const ADMIN_PASSCODE = "RA2026";
+
+// Default seed guest list to populate if empty
+const DEFAULT_GUEST_LIST = [
+    {
+        id: 1,
+        name: "Mohammed Yusuf",
+        family: "Yusuf Family",
+        guestsCount: 4,
+        attendanceStatus: "Accepted",
+        ceremonies: { haldi: true, sangeet: true, nikah: true, valima: true },
+        notes: "Can't wait to celebrate with you both!",
+        dateResponded: "2026-07-01",
+        reminderStatus: "Confirmed",
+        ageGroup: { adults: 3, children: 1 }
+    },
+    {
+        id: 2,
+        name: "Zainab Begum",
+        family: "Begum Family",
+        guestsCount: 2,
+        attendanceStatus: "Accepted",
+        ceremonies: { haldi: false, sangeet: true, nikah: true, valima: true },
+        notes: "Attending Sangeet onwards.",
+        dateResponded: "2026-07-02",
+        reminderStatus: "Confirmed",
+        ageGroup: { adults: 2, children: 0 }
+    },
+    {
+        id: 3,
+        name: "Fathima Riaz",
+        family: "Riaz Family",
+        guestsCount: 0,
+        attendanceStatus: "Declined",
+        ceremonies: { haldi: false, sangeet: false, nikah: false, valima: false },
+        notes: "Sending our heartfelt prayers from USA.",
+        dateResponded: "2026-07-03",
+        reminderStatus: "Confirmed",
+        ageGroup: { adults: 0, children: 0 }
+    },
+    {
+        id: 4,
+        name: "Abdul Rahman Khan",
+        family: "Khan Family",
+        guestsCount: 5,
+        attendanceStatus: "Pending",
+        ceremonies: { haldi: false, sangeet: false, nikah: false, valima: false },
+        notes: "",
+        dateResponded: "",
+        reminderStatus: "Needs Reminder",
+        ageGroup: { adults: 4, children: 1 }
+    },
+    {
+        id: 5,
+        name: "Imran Ali",
+        family: "Ali Family",
+        guestsCount: 3,
+        attendanceStatus: "Accepted",
+        ceremonies: { haldi: true, sangeet: false, nikah: true, valima: true },
+        notes: "Congratulations!",
+        dateResponded: "2026-07-04",
+        reminderStatus: "Confirmed",
+        ageGroup: { adults: 2, children: 1 }
+    },
+    {
+        id: 6,
+        name: "Syed Ibrahim",
+        family: "Syed Family",
+        guestsCount: 2,
+        attendanceStatus: "Accepted",
+        ceremonies: { haldi: true, sangeet: true, nikah: true, valima: true },
+        notes: "May Almighty bless your marriage.",
+        dateResponded: "2026-07-05",
+        reminderStatus: "Confirmed",
+        ageGroup: { adults: 2, children: 0 }
+    },
+    {
+        id: 7,
+        name: "Nisha & Family",
+        family: "Nisha Family",
+        guestsCount: 3,
+        attendanceStatus: "Pending",
+        ceremonies: { haldi: false, sangeet: false, nikah: false, valima: false },
+        notes: "",
+        dateResponded: "",
+        reminderStatus: "Reminder Sent",
+        ageGroup: { adults: 3, children: 0 }
+    },
+    {
+        id: 8,
+        name: "Sabeer Rahman",
+        family: "Rahman Family",
+        guestsCount: 1,
+        attendanceStatus: "Accepted",
+        ceremonies: { haldi: false, sangeet: true, nikah: true, valima: false },
+        notes: "Excited for the DJ night!",
+        dateResponded: "2026-07-06",
+        reminderStatus: "Confirmed",
+        ageGroup: { adults: 1, children: 0 }
+    },
+    {
+        id: 9,
+        name: "Farhana & Salim",
+        family: "Salim Family",
+        guestsCount: 2,
+        attendanceStatus: "Declined",
+        ceremonies: { haldi: false, sangeet: false, nikah: false, valima: false },
+        notes: "Sorry we cannot make it due to travel.",
+        dateResponded: "2026-07-06",
+        reminderStatus: "Confirmed",
+        ageGroup: { adults: 2, children: 0 }
+    },
+    {
+        id: 10,
+        name: "Hassan Basri",
+        family: "Basri Family",
+        guestsCount: 4,
+        attendanceStatus: "Pending",
+        ceremonies: { haldi: false, sangeet: false, nikah: false, valima: false },
+        notes: "",
+        dateResponded: "",
+        reminderStatus: "No Response",
+        ageGroup: { adults: 2, children: 2 }
+    }
+];
+
+function initGuestDatabase() {
+    if (!localStorage.getItem("wedding_guest_list")) {
+        localStorage.setItem("wedding_guest_list", JSON.stringify(DEFAULT_GUEST_LIST));
+    }
+}
+
+// Route checking for Admin URL hash
+function checkAdminRoute() {
+    if (window.location.hash === "#admin") {
+        document.getElementById("adminPanel").style.display = "block";
+        document.body.style.overflow = "auto";
+        
+        // Hide standard visitor invitation components
+        const main = document.querySelector("main");
+        const header = document.querySelector("header");
+        const footer = document.querySelector("footer");
+        const audioBtn = document.getElementById("floatingAudioToggle");
+        
+        if (main) main.style.setProperty("display", "none");
+        if (header) header.style.setProperty("display", "none");
+        if (footer) footer.style.setProperty("display", "none");
+        if (audioBtn) audioBtn.style.setProperty("display", "none");
+        
+        // Check if already authenticated
+        if (sessionStorage.getItem("admin_authenticated") === "true") {
+            showDashboard();
+        } else {
+            showGate();
+        }
+    } else {
+        document.getElementById("adminPanel").style.display = "none";
+        
+        // Restore standard components
+        const main = document.querySelector("main");
+        const header = document.querySelector("header");
+        const footer = document.querySelector("footer");
+        const audioBtn = document.getElementById("floatingAudioToggle");
+        
+        if (main) main.style.setProperty("display", "block");
+        if (header) header.style.setProperty("display", "flex");
+        if (footer) footer.style.setProperty("display", "block");
+        if (audioBtn) audioBtn.style.setProperty("display", "block");
+    }
+}
+
+function showGate() {
+    document.getElementById("adminGate").style.display = "flex";
+    document.getElementById("adminDashboard").style.display = "none";
+}
+
+function showDashboard() {
+    document.getElementById("adminGate").style.display = "none";
+    document.getElementById("adminDashboard").style.display = "block";
+    initGuestDatabase();
+    renderDashboard();
+}
+
+// Process login gate passcode
+document.getElementById("loginAdminBtn")?.addEventListener("click", () => {
+    const passcode = document.getElementById("adminPasscode").value;
+    if (passcode === ADMIN_PASSCODE) {
+        sessionStorage.setItem("admin_authenticated", "true");
+        document.getElementById("gateError").style.display = "none";
+        document.getElementById("adminPasscode").value = "";
+        showDashboard();
+    } else {
+        document.getElementById("gateError").style.display = "block";
+    }
+});
+
+// Allow Enter key to trigger passcode submission
+document.getElementById("adminPasscode")?.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        document.getElementById("loginAdminBtn").click();
+    }
+});
+
+document.getElementById("closeAdminBtn")?.addEventListener("click", () => {
+    window.location.hash = "";
+});
+
+document.getElementById("logoutAdminBtn")?.addEventListener("click", () => {
+    sessionStorage.removeItem("admin_authenticated");
+    showGate();
+});
+
+// Load guests from localStorage
+function getGuests() {
+    initGuestDatabase();
+    return JSON.parse(localStorage.getItem("wedding_guest_list") || "[]");
+}
+
+// Save guests to localStorage
+function saveGuests(guests) {
+    localStorage.setItem("wedding_guest_list", JSON.stringify(guests));
+}
+
+// Render all metrics, statistics, filters, and list table
+function renderDashboard() {
+    const guests = getGuests();
+    
+    // Overview variables
+    const totalSent = guests.length;
+    const totalResponses = guests.filter(g => g.attendanceStatus !== "Pending").length;
+    const acceptedCount = guests.filter(g => g.attendanceStatus === "Accepted").length;
+    const declinedCount = guests.filter(g => g.attendanceStatus === "Declined").length;
+    const pendingCount = guests.filter(g => g.attendanceStatus === "Pending").length;
+    const acceptanceRate = totalResponses > 0 ? Math.round((acceptedCount / totalResponses) * 100) : 0;
+    
+    // Metrics variables
+    let expectedHeadcount = 0;
+    let adultsAttending = 0;
+    let childrenAttending = 0;
+    let attendingHaldi = 0;
+    let attendingSangeet = 0;
+    let attendingNikah = 0;
+    let attendingValima = 0;
+    
+    const families = new Set();
+    const pendingFamilies = new Set();
+    const confirmedFamilies = new Set();
+    let remindersNeeded = 0;
+
+    guests.forEach(g => {
+        if (g.family) families.add(g.family);
+        if (g.attendanceStatus === "Pending") {
+            if (g.family) pendingFamilies.add(g.family);
+        } else if (g.attendanceStatus === "Accepted") {
+            if (g.family) confirmedFamilies.add(g.family);
+            expectedHeadcount += g.guestsCount;
+            adultsAttending += (g.ageGroup?.adults !== undefined ? g.ageGroup.adults : g.guestsCount);
+            childrenAttending += (g.ageGroup?.children || 0);
+            
+            if (g.ceremonies?.haldi) attendingHaldi += (g.ageGroup?.adults !== undefined ? g.ageGroup.adults : g.guestsCount);
+            if (g.ceremonies?.sangeet) attendingSangeet += (g.ageGroup?.adults !== undefined ? g.ageGroup.adults : g.guestsCount);
+            if (g.ceremonies?.nikah) attendingNikah += (g.ageGroup?.adults !== undefined ? g.ageGroup.adults : g.guestsCount);
+            if (g.ceremonies?.valima) attendingValima += (g.ageGroup?.adults !== undefined ? g.ageGroup.adults : g.guestsCount);
+        }
+        
+        if (g.reminderStatus === "Needs Reminder") {
+            remindersNeeded++;
+        }
+    });
+
+    // Populate Overview Stats
+    document.getElementById("statTotalSent").innerText = totalSent;
+    document.getElementById("statResponses").innerText = totalResponses;
+    document.getElementById("statAccepted").innerText = acceptedCount;
+    document.getElementById("statDeclined").innerText = declinedCount;
+    document.getElementById("statPending").innerText = pendingCount;
+    document.getElementById("statAcceptanceRate").innerText = acceptanceRate + "%";
+
+    // Populate Statistics Cards
+    document.getElementById("statExpectedHeadcount").innerText = expectedHeadcount;
+    document.getElementById("statAdultsAttending").innerText = adultsAttending;
+    document.getElementById("statChildrenAttending").innerText = childrenAttending;
+    
+    document.getElementById("statAttendingHaldi").innerText = attendingHaldi;
+    document.getElementById("statAttendingSangeet").innerText = attendingSangeet;
+    document.getElementById("statAttendingNikah").innerText = attendingNikah;
+    document.getElementById("statAttendingValima").innerText = attendingValima;
+
+    document.getElementById("statConfirmedFamilies").innerText = confirmedFamilies.size;
+    document.getElementById("statPendingFamilies").innerText = pendingFamilies.size;
+    document.getElementById("statRemindersNeeded").innerText = remindersNeeded;
+
+    // Populate Family Filter Dropdown dynamically
+    const familyFilter = document.getElementById("filterFamily");
+    const currentSelectedFamily = familyFilter.value;
+    familyFilter.innerHTML = '<option value="">All Families</option>';
+    Array.from(families).sort().forEach(fam => {
+        if (fam) {
+            const opt = document.createElement("option");
+            opt.value = fam;
+            opt.innerText = fam;
+            familyFilter.appendChild(opt);
+        }
+    });
+    familyFilter.value = currentSelectedFamily;
+
+    // Filter guest list
+    const searchQuery = document.getElementById("guestSearch").value.toLowerCase();
+    const selectedAttendance = document.getElementById("filterAttendance").value;
+    const selectedFamily = document.getElementById("filterFamily").value;
+    const selectedReminder = document.getElementById("filterReminder").value;
+
+    const filteredGuests = guests.filter(g => {
+        const matchesSearch = g.name.toLowerCase().includes(searchQuery);
+        const matchesAttendance = !selectedAttendance || g.attendanceStatus === selectedAttendance;
+        const matchesFamily = !selectedFamily || g.family === selectedFamily;
+        const matchesReminder = !selectedReminder || g.reminderStatus === selectedReminder;
+        return matchesSearch && matchesAttendance && matchesFamily && matchesReminder;
+    });
+
+    // Render Table Rows
+    const tbody = document.getElementById("guestTableBody");
+    tbody.innerHTML = "";
+
+    if (filteredGuests.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="padding: 24px; text-align: center; color: var(--color-muted);">No guest records found matching filters.</td></tr>`;
+        return;
+    }
+
+    filteredGuests.forEach(g => {
+        const tr = document.createElement("tr");
+        
+        // Status Badge class
+        let statusBadge = "badge badge-pending";
+        if (g.attendanceStatus === "Accepted") statusBadge = "badge badge-accepted";
+        if (g.attendanceStatus === "Declined") statusBadge = "badge badge-declined";
+
+        // Reminder Badge class
+        let reminderBadge = "badge badge-reminder-none";
+        if (g.reminderStatus === "Needs Reminder") reminderBadge = "badge badge-reminder-needs";
+        if (g.reminderStatus === "Reminder Sent") reminderBadge = "badge badge-reminder-sent";
+        if (g.reminderStatus === "Confirmed") reminderBadge = "badge badge-reminder-confirmed";
+
+        // Ceremonies display string
+        const activeCers = [];
+        if (g.ceremonies?.haldi) activeCers.push("🌿");
+        if (g.ceremonies?.sangeet) activeCers.push("🎶");
+        if (g.ceremonies?.nikah) activeCers.push("💍");
+        if (g.ceremonies?.valima) activeCers.push("🤍");
+        const cersString = activeCers.join(" ") || "-";
+
+        tr.innerHTML = `
+            <td style="padding: 12px 16px; font-weight: 500;">
+                <div>${g.name}</div>
+                <div style="font-size: 11px; color: var(--color-muted); font-weight: normal; margin-top: 2px;">${g.notes ? '💬 ' + g.notes : ''}</div>
+            </td>
+            <td style="padding: 12px 16px; color: var(--color-muted);">${g.family || '-'}</td>
+            <td style="padding: 12px 16px; text-align: center;">${g.attendanceStatus === 'Accepted' ? `${g.guestsCount} (${g.ageGroup?.adults !== undefined ? g.ageGroup.adults : g.guestsCount}A / ${g.ageGroup?.children || 0}C)` : '-'}</td>
+            <td style="padding: 12px 16px; text-align: center;"><span class="${statusBadge}">${g.attendanceStatus}</span></td>
+            <td style="padding: 12px 16px; text-align: center; font-size: 14px;">${cersString}</td>
+            <td style="padding: 12px 16px;">
+                <span class="${reminderBadge}">${g.reminderStatus}</span>
+            </td>
+            <td style="padding: 12px 16px; font-size: var(--font-size-xs); color: var(--color-muted);">${g.dateResponded || '-'}</td>
+            <td style="padding: 12px 16px; text-align: center;">
+                <button type="button" class="action-icon-btn edit-btn-trigger" data-id="${g.id}">✏️</button>
+                <button type="button" class="action-icon-btn delete-btn delete-btn-trigger" data-id="${g.id}">❌</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    // Bind edit/delete click triggers
+    tbody.querySelectorAll(".edit-btn-trigger").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const id = parseInt(btn.getAttribute("data-id"));
+            openEditorModal(id);
+        });
+    });
+
+    tbody.querySelectorAll(".delete-btn-trigger").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const id = parseInt(btn.getAttribute("data-id"));
+            if (confirm("Are you sure you want to delete this guest?")) {
+                deleteGuest(id);
+            }
+        });
+    });
+}
+
+// Bind Filter controls
+document.getElementById("guestSearch")?.addEventListener("input", renderDashboard);
+document.getElementById("filterAttendance")?.addEventListener("change", renderDashboard);
+document.getElementById("filterFamily")?.addEventListener("change", renderDashboard);
+document.getElementById("filterReminder")?.addEventListener("change", renderDashboard);
+
+// Add Guest modal trigger
+document.getElementById("addGuestBtn")?.addEventListener("click", () => {
+    openEditorModal(null);
+});
+
+// Modal close button
+document.getElementById("cancelEditorBtn")?.addEventListener("click", () => {
+    document.getElementById("guestModal").style.display = "none";
+});
+
+// Modal guest save submission
+document.getElementById("guestEditorForm")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    saveGuestEditorData();
+});
+
+function openEditorModal(id) {
+    const modal = document.getElementById("guestModal");
+    const title = document.getElementById("modalTitle");
+    const form = document.getElementById("guestEditorForm");
+    
+    form.reset();
+    
+    if (id === null) {
+        title.innerText = "Add New Guest";
+        document.getElementById("editorGuestId").value = "";
+        document.getElementById("editorName").value = "";
+        document.getElementById("editorFamily").value = "";
+        document.getElementById("editorAdults").value = 1;
+        document.getElementById("editorChildren").value = 0;
+        document.getElementById("editorAttendance").value = "Accepted";
+        document.getElementById("editorReminder").value = "Confirmed";
+        document.getElementById("editorNotes").value = "";
+        
+        document.getElementById("editorHaldi").checked = true;
+        document.getElementById("editorSangeet").checked = true;
+        document.getElementById("editorNikah").checked = true;
+        document.getElementById("editorValima").checked = true;
+    } else {
+        title.innerText = "Edit Guest Details";
+        const guests = getGuests();
+        const g = guests.find(item => item.id === id);
+        
+        if (g) {
+            document.getElementById("editorGuestId").value = g.id;
+            document.getElementById("editorName").value = g.name;
+            document.getElementById("editorFamily").value = g.family || "";
+            document.getElementById("editorAdults").value = g.ageGroup?.adults !== undefined ? g.ageGroup.adults : g.guestsCount;
+            document.getElementById("editorChildren").value = g.ageGroup?.children !== undefined ? g.ageGroup.children : 0;
+            document.getElementById("editorAttendance").value = g.attendanceStatus;
+            document.getElementById("editorReminder").value = g.reminderStatus;
+            document.getElementById("editorNotes").value = g.notes || "";
+            
+            document.getElementById("editorHaldi").checked = !!g.ceremonies?.haldi;
+            document.getElementById("editorSangeet").checked = !!g.ceremonies?.sangeet;
+            document.getElementById("editorNikah").checked = !!g.ceremonies?.nikah;
+            document.getElementById("editorValima").checked = !!g.ceremonies?.valima;
+        }
+    }
+    
+    modal.style.display = "flex";
+}
+
+function saveGuestEditorData() {
+    const id = document.getElementById("editorGuestId").value;
+    const name = document.getElementById("editorName").value.trim();
+    const family = document.getElementById("editorFamily").value.trim() || "General";
+    const adults = parseInt(document.getElementById("editorAdults").value) || 0;
+    const children = parseInt(document.getElementById("editorChildren").value) || 0;
+    const attendance = document.getElementById("editorAttendance").value;
+    const reminder = document.getElementById("editorReminder").value;
+    const notes = document.getElementById("editorNotes").value.trim();
+    
+    const haldi = document.getElementById("editorHaldi").checked;
+    const sangeet = document.getElementById("editorSangeet").checked;
+    const nikah = document.getElementById("editorNikah").checked;
+    const valima = document.getElementById("editorValima").checked;
+    
+    const guests = getGuests();
+    const isNew = !id;
+    
+    const guestObj = {
+        id: isNew ? Date.now() : parseInt(id),
+        name: name,
+        family: family,
+        guestsCount: attendance === "Accepted" ? (adults + children) : 0,
+        attendanceStatus: attendance,
+        ceremonies: {
+            haldi: attendance === "Accepted" ? haldi : false,
+            sangeet: attendance === "Accepted" ? sangeet : false,
+            nikah: attendance === "Accepted" ? nikah : false,
+            valima: attendance === "Accepted" ? valima : false
+        },
+        notes: notes,
+        dateResponded: isNew ? new Date().toLocaleDateString() : (guests.find(item => item.id === parseInt(id))?.dateResponded || new Date().toLocaleDateString()),
+        reminderStatus: reminder,
+        ageGroup: {
+            adults: attendance === "Accepted" ? adults : 0,
+            children: attendance === "Accepted" ? children : 0
+        }
+    };
+    
+    if (isNew) {
+        guests.push(guestObj);
+    } else {
+        const idx = guests.findIndex(item => item.id === parseInt(id));
+        if (idx >= 0) guests[idx] = guestObj;
+    }
+    
+    saveGuests(guests);
+    document.getElementById("guestModal").style.display = "none";
+    renderDashboard();
+}
+
+// Dynamic addition to localStorage on guest-submitted RSVP
+function registerNewRSVPSubmission(name, attendance, guestsCount, message) {
+    const guests = getGuests();
+    const existingIndex = guests.findIndex(g => g.name.toLowerCase() === name.toLowerCase());
+    
+    const newGuest = {
+        id: existingIndex >= 0 ? guests[existingIndex].id : Date.now(),
+        name: name,
+        family: "General",
+        guestsCount: attendance.includes("Yes") ? (parseInt(guestsCount) || 1) : 0,
+        attendanceStatus: attendance.includes("Yes") ? "Accepted" : "Declined",
+        ceremonies: {
+            haldi: attendance.includes("Yes"),
+            sangeet: attendance.includes("Yes"),
+            nikah: attendance.includes("Yes"),
+            valima: attendance.includes("Yes")
+        },
+        notes: message || "",
+        dateResponded: new Date().toLocaleDateString(),
+        reminderStatus: "Confirmed",
+        ageGroup: {
+            adults: attendance.includes("Yes") ? (parseInt(guestsCount) || 1) : 0,
+            children: 0
+        }
+    };
+    
+    if (existingIndex >= 0) {
+        guests[existingIndex] = { ...guests[existingIndex], ...newGuest };
+    } else {
+        guests.push(newGuest);
+    }
+    
+    saveGuests(guests);
+}
+
+function deleteGuest(id) {
+    let guests = getGuests();
+    guests = guests.filter(item => item.id !== id);
+    saveGuests(guests);
+    renderDashboard();
+}
+
+// Export functions
+document.getElementById("exportCsvBtn")?.addEventListener("click", () => {
+    const guests = getGuests();
+    let csv = "Guest Name,Family,Status,Adults,Children,Total Count,Haldi,Sangeet,Nikah,Valima,Reminder,Date Responded,Notes\n";
+    
+    guests.forEach(g => {
+        csv += `"${g.name}","${g.family}","${g.attendanceStatus}",${g.ageGroup?.adults || 0},${g.ageGroup?.children || 0},${g.attendanceStatus === 'Accepted' ? g.guestsCount : 0},${g.ceremonies?.haldi ? 'Yes' : 'No'},${g.ceremonies?.sangeet ? 'Yes' : 'No'},${g.ceremonies?.nikah ? 'Yes' : 'No'},${g.ceremonies?.valima ? 'Yes' : 'No'},"${g.reminderStatus}","${g.dateResponded}","${(g.notes || '').replace(/"/g, '""')}"\n`;
+    });
+    
+    downloadFile(csv, "guests_rsvp_export.csv", "text/csv");
+});
+
+document.getElementById("exportExcelBtn")?.addEventListener("click", () => {
+    const guests = getGuests();
+    // Excel XML format
+    let xml = `<?xml version="1.0"?>\n<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"\n xmlns:o="urn:schemas-microsoft-com:office:office"\n xmlns:x="urn:schemas-microsoft-com:office:excel"\n xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">\n <Worksheet ss:Name="RSVP Guest List">\n  <Table>\n`;
+    xml += `   <Row>\n    <Cell><Data ss:Type="String">Guest Name</Data></Cell>\n    <Cell><Data ss:Type="String">Family</Data></Cell>\n    <Cell><Data ss:Type="String">Status</Data></Cell>\n    <Cell><Data ss:Type="String">Adults</Data></Cell>\n    <Cell><Data ss:Type="String">Children</Data></Cell>\n    <Cell><Data ss:Type="String">Total Count</Data></Cell>\n    <Cell><Data ss:Type="String">Haldi</Data></Cell>\n    <Cell><Data ss:Type="String">Sangeet</Data></Cell>\n    <Cell><Data ss:Type="String">Nikah</Data></Cell>\n    <Cell><Data ss:Type="String">Valima</Data></Cell>\n    <Cell><Data ss:Type="String">Reminder</Data></Cell>\n    <Cell><Data ss:Type="String">Date</Data></Cell>\n    <Cell><Data ss:Type="String">Notes</Data></Cell>\n   </Row>\n`;
+    
+    guests.forEach(g => {
+        xml += `   <Row>\n    <Cell><Data ss:Type="String">${g.name}</Data></Cell>\n    <Cell><Data ss:Type="String">${g.family}</Data></Cell>\n    <Cell><Data ss:Type="String">${g.attendanceStatus}</Data></Cell>\n    <Cell><Data ss:Type="Number">${g.ageGroup?.adults || 0}</Data></Cell>\n    <Cell><Data ss:Type="Number">${g.ageGroup?.children || 0}</Data></Cell>\n    <Cell><Data ss:Type="Number">${g.attendanceStatus === 'Accepted' ? g.guestsCount : 0}</Data></Cell>\n    <Cell><Data ss:Type="String">${g.ceremonies?.haldi ? 'Yes' : 'No'}</Data></Cell>\n    <Cell><Data ss:Type="String">${g.ceremonies?.sangeet ? 'Yes' : 'No'}</Data></Cell>\n    <Cell><Data ss:Type="String">${g.ceremonies?.nikah ? 'Yes' : 'No'}</Data></Cell>\n    <Cell><Data ss:Type="String">${g.ceremonies?.valima ? 'Yes' : 'No'}</Data></Cell>\n    <Cell><Data ss:Type="String">${g.reminderStatus}</Data></Cell>\n    <Cell><Data ss:Type="String">${g.dateResponded}</Data></Cell>\n    <Cell><Data ss:Type="String">${g.notes || ''}</Data></Cell>\n   </Row>\n`;
+    });
+    
+    xml += `  </Table>\n </Worksheet>\n</Workbook>`;
+    
+    downloadFile(xml, "guests_rsvp_export.xls", "application/vnd.ms-excel");
+});
+
+document.getElementById("printListBtn")?.addEventListener("click", () => {
+    window.print();
+});
+
+function downloadFile(content, fileName, mimeType) {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// Listen for URL changes
+window.addEventListener("hashchange", checkAdminRoute);
+window.addEventListener("load", checkAdminRoute);

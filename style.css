@@ -569,6 +569,16 @@ nav a.active::after {
     color: var(--color-gold-soft);
 }
 
+.event-description {
+    font-size: var(--font-size-sm);
+    color: var(--color-muted);
+    line-height: 1.5;
+    margin-top: var(--space-xs);
+    border-top: 1px solid var(--color-line);
+    padding-top: var(--space-xs);
+    width: 100%;
+}
+
 .timeline-dot {
     position: absolute;
     width: 16px;
@@ -655,6 +665,60 @@ nav a.active::after {
     100% {
         r: 16px;
         opacity: 0;
+    }
+}
+
+/* Dress Code Section */
+.dress-code-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-xl);
+    max-width: var(--container-max-standard);
+    margin: 0 auto;
+}
+
+.dress-card {
+    padding: var(--space-2xl) var(--space-xl);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+}
+
+.dress-icon {
+    font-size: 2.2rem;
+    margin-bottom: var(--space-sm);
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+}
+
+.dress-card h3 {
+    font-family: var(--font-heading);
+    color: var(--color-gold);
+    margin-top: 0;
+    margin-bottom: var(--space-xs);
+    font-size: var(--font-size-xl);
+}
+
+.dress-card .attire-type {
+    color: var(--color-text);
+    font-family: var(--font-display);
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+    margin: 0 0 var(--space-2xs) 0;
+}
+
+.dress-card .attire-desc {
+    color: var(--color-muted);
+    font-size: var(--font-size-sm);
+    margin: 0;
+    line-height: 1.4;
+}
+
+@media (min-width: 821px) {
+    .dress-code-grid {
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 
@@ -4102,5 +4166,124 @@ nav {
         left: 16px;
         width: 42px;
         height: 42px;
+    }
+}
+
+/* ==========================================================================
+   MODULE 16: ADMIN DASHBOARD & GUEST MANAGEMENT
+   ========================================================================== */
+#adminPanel th, #adminPanel td {
+    border-bottom: 1px solid var(--color-line);
+    vertical-align: middle;
+}
+#adminPanel tr:hover td {
+    background: rgba(var(--color-gold-rgb), 0.03);
+}
+#adminPanel select, #adminPanel input[type="text"], #adminPanel input[type="password"], #adminPanel input[type="number"], #adminPanel textarea {
+    outline: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+#adminPanel select:focus, #adminPanel input[type="text"]:focus, #adminPanel input[type="password"]:focus, #adminPanel input[type="number"]:focus, #adminPanel textarea:focus {
+    border-color: var(--color-gold) !important;
+    box-shadow: 0 0 8px rgba(var(--color-gold-rgb), 0.3) !important;
+}
+
+/* Badge classes for statuses */
+.badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: var(--radius-pill);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+.badge-accepted {
+    background: rgba(14, 107, 86, 0.2);
+    color: #4ade80;
+    border: 1px solid rgba(14, 107, 86, 0.5);
+}
+.badge-declined {
+    background: rgba(157, 79, 93, 0.2);
+    color: #fca5a5;
+    border: 1px solid rgba(157, 79, 93, 0.5);
+}
+.badge-pending {
+    background: rgba(216, 202, 177, 0.15);
+    color: #d8cab1;
+    border: 1px solid rgba(216, 202, 177, 0.3);
+}
+
+.badge-reminder-needs {
+    background: rgba(157, 79, 93, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(157, 79, 93, 0.3);
+}
+.badge-reminder-sent {
+    background: rgba(212, 175, 55, 0.15);
+    color: var(--color-gold-soft);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+.badge-reminder-confirmed {
+    background: rgba(14, 107, 86, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(14, 107, 86, 0.3);
+}
+.badge-reminder-none {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-muted);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Action button icons in table */
+.action-icon-btn {
+    background: none;
+    border: none;
+    color: var(--color-muted);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    transition: color var(--transition-fast), transform var(--transition-fast);
+}
+.action-icon-btn:hover {
+    color: var(--color-gold);
+    transform: scale(1.15);
+}
+.action-icon-btn.delete-btn:hover {
+    color: var(--color-rose);
+}
+
+/* Print Styles */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #adminPanel, #adminPanel * {
+        visibility: visible;
+    }
+    #adminPanel {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        color: black !important;
+    }
+    #adminPanel .glass-card {
+        background: none !important;
+        border: 1px solid #ccc !important;
+        box-shadow: none !important;
+        color: black !important;
+    }
+    #adminPanel table {
+        color: black !important;
+    }
+    #adminPanel th, #adminPanel td {
+        border-bottom: 1px solid #ccc !important;
+        color: black !important;
+    }
+    #adminPanel select, #adminPanel input, #adminPanel button {
+        display: none !important;
     }
 }

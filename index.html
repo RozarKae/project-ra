@@ -739,7 +739,7 @@ Here are a few pages from ours.</p>
             <div class="section-heading">
                 <span class="chapter-number">Chapter III</span>
                 <p class="eyebrow">Celebrations</p>
-                <h2>Celebrate With Us</h2>
+                <h2>Our Wedding Celebrations</h2>
             </div>
             
             <div class="timeline-container">
@@ -752,28 +752,38 @@ Here are a few pages from ours.</p>
                     <!-- Haldi Ceremony -->
                     <article class="event-card glass-card timeline-left">
                         <div class="timeline-dot" aria-hidden="true"></div>
-                        <p class="event-date">Saturday, 29 August 2026</p>
+                        <p class="event-date">Saturday • 29 August 2026</p>
                         <h3>🌿 Haldi Ceremony</h3>
-                        <p class="event-time">11:00 AM</p>
+                        <p class="event-time">6:00 PM onwards</p>
                         <p class="event-location"><a href="https://maps.app.goo.gl/5Z7sW3SojqCc7gPV9" target="_blank" rel="noopener">Bride's Residence</a></p>
                     </article>
 
-                    <!-- Sangeet -->
+                    <!-- Sangeet Night -->
                     <article class="event-card glass-card timeline-right">
                         <div class="timeline-dot" aria-hidden="true"></div>
                         <p class="event-date">29 August 2026</p>
-                        <h3>Sangeet</h3>
+                        <h3>🎶 Sangeet Night</h3>
                         <p class="event-time">7:00 PM</p>
                         <p class="event-location"><a href="https://maps.app.goo.gl/nHmxp5HqnWTBi1R56" target="_blank" rel="noopener">NSK & NKR A/C Mahal</a></p>
                     </article>
                     
-                    <!-- Nikah -->
+                    <!-- Nikah Ceremony -->
                     <article class="event-card glass-card timeline-left">
                         <div class="timeline-dot" aria-hidden="true"></div>
                         <p class="event-date">30 August 2026</p>
-                        <h3>Nikah</h3>
+                        <h3>💍 Nikah Ceremony</h3>
                         <p class="event-time">9:00 AM</p>
                         <p class="event-location"><a href="https://maps.app.goo.gl/nHmxp5HqnWTBi1R56" target="_blank" rel="noopener">NSK & NKR A/C Mahal and Residency</a></p>
+                    </article>
+
+                    <!-- Valima -->
+                    <article class="event-card glass-card timeline-right">
+                        <div class="timeline-dot" aria-hidden="true"></div>
+                        <p class="event-date">To Be Announced</p>
+                        <h3>🤍 Valima</h3>
+                        <p class="event-time">Details coming soon</p>
+                        <p class="event-location">To Be Announced</p>
+                        <p class="event-description">We look forward to celebrating with you once again. The Valima details will be shared soon.</p>
                     </article>
                 </div>
             </div>
@@ -797,6 +807,50 @@ Here are a few pages from ours.</p>
                         <circle class="map-pulse-ring" cx="68" cy="68" r="8" fill="none" stroke="var(--color-gold)" stroke-width="1" />
                         <circle cx="68" cy="68" r="3.5" fill="var(--color-gold-soft)" />
                     </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dress Code Section -->
+        <section id="dress-code" class="section dress-code-section container">
+            <div class="section-heading">
+                <span class="chapter-number">Guest Info</span>
+                <p class="eyebrow">Dress Code</p>
+                <h2>Wedding Style Guide</h2>
+                <p>To help us capture beautiful memories, we invite you to follow our style guide.</p>
+            </div>
+            
+            <div class="dress-code-grid">
+                <!-- Haldi -->
+                <div class="dress-card glass-card">
+                    <div class="dress-icon">🌿</div>
+                    <h3>Haldi</h3>
+                    <p class="attire-type">Yellow Attire</p>
+                    <p class="attire-desc">Traditional or Festive</p>
+                </div>
+                
+                <!-- Sangeet -->
+                <div class="dress-card glass-card">
+                    <div class="dress-icon">🎶</div>
+                    <h3>Sangeet</h3>
+                    <p class="attire-type">Party Wear</p>
+                    <p class="attire-desc">Anything suitable for a DJ Night</p>
+                </div>
+                
+                <!-- Nikah -->
+                <div class="dress-card glass-card">
+                    <div class="dress-icon">💍</div>
+                    <h3>Nikah</h3>
+                    <p class="attire-type">Elegant Traditional Attire</p>
+                    <p class="attire-desc">Luxurious traditional outfits</p>
+                </div>
+                
+                <!-- Valima -->
+                <div class="dress-card glass-card">
+                    <div class="dress-icon">🤍</div>
+                    <h3>Valima</h3>
+                    <p class="attire-type">Formal / Elegant</p>
+                    <p class="attire-desc">(Date to be announced)</p>
                 </div>
             </div>
         </section>
@@ -943,6 +997,259 @@ Here are a few pages from ours.</p>
             <p class="footer-date">See you on our biggest day</p>
         </div>
     </footer>
+
+    <!-- Floating Audio Toggle -->
+    <button id="floatingAudioToggle" class="floating-audio-btn" aria-label="Enable sound" title="Sound controls">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="audio-icon audio-muted">
+            <path d="M11 5L6 9H2v6h4l5 4V5z M23 9l-6 6 M17 9l6 6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+    <!-- Private Admin Dashboard Container -->
+    <div id="adminPanel" style="display: none; position: fixed; inset: 0; z-index: 10000; background: var(--color-bg); overflow-y: auto; padding: 20px; font-family: var(--font-body);">
+        
+        <!-- Passcode Gate Screen -->
+        <div id="adminGate" class="glass-card" style="max-width: 420px; margin: 10vh auto; padding: var(--modal-padding); text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--space-md);">
+            <div style="font-size: 2.5rem; filter: drop-shadow(0 0 10px rgba(212,175,55,0.4));">🔑</div>
+            <h2 style="font-family: var(--font-heading); color: var(--color-gold); margin: 0;">Admin Portal</h2>
+            <p style="color: var(--color-muted); font-size: var(--font-size-sm); margin: 0;">Enter passcode to access guest management dashboard.</p>
+            <div class="floating-field" style="width: 100%; margin-top: var(--space-md);">
+                <input type="password" id="adminPasscode" placeholder=" " required style="width: 100%; text-align: center; letter-spacing: 4px;">
+                <label for="adminPasscode" style="width: 100%; text-align: center; left: 0;">Passcode</label>
+            </div>
+            <span id="gateError" style="color: var(--color-rose); font-size: var(--font-size-xs); display: none;">Invalid passcode. Try again.</span>
+            <div style="display: flex; gap: var(--space-md); width: 100%; margin-top: var(--space-sm);">
+                <button type="button" id="closeAdminBtn" class="btn btn-secondary" style="flex: 1;">Exit</button>
+                <button type="button" id="loginAdminBtn" class="btn" style="flex: 1;">Enter</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Workspace (Revealed after successful login) -->
+        <div id="adminDashboard" style="display: none; max-width: 1200px; margin: 0 auto; padding-bottom: 60px;">
+            <header style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-line); padding-bottom: var(--space-md); margin-bottom: var(--space-xl); flex-wrap: wrap; gap: var(--space-md);">
+                <div>
+                    <h1 style="font-family: var(--font-heading); color: var(--color-gold-soft); margin: 0; font-size: 28px; letter-spacing: 2px;">Guest Management</h1>
+                    <p style="color: var(--color-muted); margin: 4px 0 0 0; font-size: var(--font-size-sm);">Project RA RSVP Dashboard</p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button type="button" id="addGuestBtn" class="btn btn-sm">➕ Add Guest</button>
+                    <button type="button" id="logoutAdminBtn" class="btn btn-sm btn-secondary">🚪 Logout</button>
+                </div>
+            </header>
+
+            <!-- Dashboard Stats Summary Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-xl);">
+                <div class="glass-card" style="padding: 16px; text-align: center;">
+                    <p style="margin: 0; color: var(--color-muted); font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 1px;">Total Invitations</p>
+                    <h3 id="statTotalSent" style="margin: 8px 0 0 0; font-size: 28px; color: var(--color-gold); font-family: var(--font-heading);">0</h3>
+                </div>
+                <div class="glass-card" style="padding: 16px; text-align: center;">
+                    <p style="margin: 0; color: var(--color-muted); font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 1px;">Total Responses</p>
+                    <h3 id="statResponses" style="margin: 8px 0 0 0; font-size: 28px; color: var(--color-text); font-family: var(--font-heading);">0</h3>
+                </div>
+                <div class="glass-card" style="padding: 16px; text-align: center;">
+                    <p style="margin: 0; color: var(--color-emerald); font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 1px;">Accepted</p>
+                    <h3 id="statAccepted" style="margin: 8px 0 0 0; font-size: 28px; color: var(--color-emerald); font-family: var(--font-heading);">0</h3>
+                </div>
+                <div class="glass-card" style="padding: 16px; text-align: center;">
+                    <p style="margin: 0; color: var(--color-rose); font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 1px;">Declined</p>
+                    <h3 id="statDeclined" style="margin: 8px 0 0 0; font-size: 28px; color: var(--color-rose); font-family: var(--font-heading);">0</h3>
+                </div>
+                <div class="glass-card" style="padding: 16px; text-align: center;">
+                    <p style="margin: 0; color: #d8cab1; font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 1px;">Pending Response</p>
+                    <h3 id="statPending" style="margin: 8px 0 0 0; font-size: 28px; color: #d8cab1; font-family: var(--font-heading);">0</h3>
+                </div>
+                <div class="glass-card" style="padding: 16px; text-align: center;">
+                    <p style="margin: 0; color: var(--color-gold-soft); font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 1px;">Acceptance %</p>
+                    <h3 id="statAcceptanceRate" style="margin: 8px 0 0 0; font-size: 28px; color: var(--color-gold-soft); font-family: var(--font-heading);">0%</h3>
+                </div>
+            </div>
+
+            <!-- Complex Stats breakdown -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-xl);">
+                <div class="glass-card" style="padding: 20px;">
+                    <h3 style="margin: 0 0 var(--space-sm) 0; font-family: var(--font-heading); color: var(--color-gold); font-size: var(--font-size-md); text-transform: uppercase; letter-spacing: 1px;">Headcount Statistics</h3>
+                    <div style="display: flex; flex-direction: column; gap: var(--space-xs);">
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); border-bottom: 1px solid var(--color-line); padding-bottom: 4px;">
+                            <span>Expected Headcount (Accepted):</span>
+                            <strong id="statExpectedHeadcount">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); border-bottom: 1px solid var(--color-line); padding-bottom: 4px;">
+                            <span>Adults attending:</span>
+                            <strong id="statAdultsAttending">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); padding-bottom: 4px;">
+                            <span>Children attending:</span>
+                            <strong id="statChildrenAttending">0</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card" style="padding: 20px;">
+                    <h3 style="margin: 0 0 var(--space-sm) 0; font-family: var(--font-heading); color: var(--color-gold); font-size: var(--font-size-md); text-transform: uppercase; letter-spacing: 1px;">Ceremony Expected Attendance</h3>
+                    <div style="display: flex; flex-direction: column; gap: var(--space-xs);">
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); border-bottom: 1px solid var(--color-line); padding-bottom: 4px;">
+                            <span>🌿 Haldi:</span>
+                            <strong id="statAttendingHaldi">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); border-bottom: 1px solid var(--color-line); padding-bottom: 4px;">
+                            <span>🎶 Sangeet:</span>
+                            <strong id="statAttendingSangeet">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); border-bottom: 1px solid var(--color-line); padding-bottom: 4px;">
+                            <span>💍 Nikah:</span>
+                            <strong id="statAttendingNikah">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); padding-bottom: 4px;">
+                            <span>🤍 Valima:</span>
+                            <strong id="statAttendingValima">0</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card" style="padding: 20px;">
+                    <h3 style="margin: 0 0 var(--space-sm) 0; font-family: var(--font-heading); color: var(--color-gold); font-size: var(--font-size-md); text-transform: uppercase; letter-spacing: 1px;">Families & Reminders</h3>
+                    <div style="display: flex; flex-direction: column; gap: var(--space-xs);">
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); border-bottom: 1px solid var(--color-line); padding-bottom: 4px;">
+                            <span>Families Confirmed:</span>
+                            <strong id="statConfirmedFamilies">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); border-bottom: 1px solid var(--color-line); padding-bottom: 4px;">
+                            <span>Families Pending:</span>
+                            <strong id="statPendingFamilies">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); padding-bottom: 4px;">
+                            <span>Reminders Needed:</span>
+                            <strong id="statRemindersNeeded">0</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters, Search and Export toolbar -->
+            <div class="glass-card" style="padding: var(--space-md); margin-bottom: var(--space-lg); display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between; width: 100%;">
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap; flex: 1; min-width: 280px;">
+                        <input type="text" id="guestSearch" placeholder="🔍 Search Guest Name..." style="flex: 2; min-width: 180px; padding: 8px 12px; border-radius: var(--radius-xs); border: 1px solid var(--color-line); background: rgba(0,0,0,0.2); color: var(--color-text);">
+                        <select id="filterAttendance" style="flex: 1; min-width: 120px; padding: 8px 12px; border-radius: var(--radius-xs); border: 1px solid var(--color-line); background: var(--color-bg); color: var(--color-text);">
+                            <option value="">All Attendance</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Declined">Declined</option>
+                            <option value="Pending">Pending</option>
+                        </select>
+                        <select id="filterFamily" style="flex: 1; min-width: 120px; padding: 8px 12px; border-radius: var(--radius-xs); border: 1px solid var(--color-line); background: var(--color-bg); color: var(--color-text);">
+                            <option value="">All Families</option>
+                        </select>
+                        <select id="filterReminder" style="flex: 1; min-width: 120px; padding: 8px 12px; border-radius: var(--radius-xs); border: 1px solid var(--color-line); background: var(--color-bg); color: var(--color-text);">
+                            <option value="">All Reminders</option>
+                            <option value="Needs Reminder">Needs Reminder</option>
+                            <option value="Reminder Sent">Reminder Sent</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="No Response">No Response</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" id="exportCsvBtn" class="btn btn-sm btn-secondary">💾 Export CSV</button>
+                        <button type="button" id="exportExcelBtn" class="btn btn-sm btn-secondary">📊 Export Excel</button>
+                        <button type="button" id="printListBtn" class="btn btn-sm btn-secondary">🖨️ Print List</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guest List Table Container -->
+            <div class="glass-card" style="overflow-x: auto; border-radius: var(--radius-sm);">
+                <table id="guestTable" style="width: 100%; border-collapse: collapse; text-align: left; min-width: 900px; font-size: var(--font-size-base);">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--color-line); background: rgba(var(--color-gold-rgb), 0.05); color: var(--color-gold-soft);">
+                            <th style="padding: 12px 16px;">Guest Name</th>
+                            <th style="padding: 12px 16px;">Family</th>
+                            <th style="padding: 12px 16px; text-align: center;">Headcount</th>
+                            <th style="padding: 12px 16px; text-align: center;">Status</th>
+                            <th style="padding: 12px 16px; text-align: center;">Ceremonies</th>
+                            <th style="padding: 12px 16px;">Reminder</th>
+                            <th style="padding: 12px 16px;">Date</th>
+                            <th style="padding: 12px 16px; text-align: center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guestTableBody" style="color: var(--color-text);">
+                        <!-- Guest rows populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit/Add Guest Modal -->
+    <div id="guestModal" style="display: none; position: fixed; inset: 0; z-index: 11000; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; padding: 20px;">
+        <div class="glass-card" style="max-width: 500px; width: 100%; padding: var(--modal-padding); display: flex; flex-direction: column; gap: var(--space-md); max-height: 90vh; overflow-y: auto;">
+            <h3 id="modalTitle" style="font-family: var(--font-heading); color: var(--color-gold); margin: 0;">Add New Guest</h3>
+            <form id="guestEditorForm" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+                <input type="hidden" id="editorGuestId">
+                <div class="floating-field">
+                    <input type="text" id="editorName" required placeholder=" ">
+                    <label for="editorName">Guest Name</label>
+                </div>
+                <div class="floating-field">
+                    <input type="text" id="editorFamily" placeholder=" ">
+                    <label for="editorFamily">Family Name</label>
+                </div>
+                <div style="display: flex; gap: var(--space-sm);">
+                    <div class="floating-field" style="flex: 1;">
+                        <input type="number" id="editorAdults" min="0" required placeholder=" ">
+                        <label for="editorAdults">Adults</label>
+                    </div>
+                    <div class="floating-field" style="flex: 1;">
+                        <input type="number" id="editorChildren" min="0" required placeholder=" ">
+                        <label for="editorChildren">Children</label>
+                    </div>
+                </div>
+                <div class="floating-field">
+                    <select id="editorAttendance" required>
+                        <option value="Accepted">Accepted</option>
+                        <option value="Declined">Declined</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                    <label for="editorAttendance">Attendance Status</label>
+                </div>
+                <div class="floating-field">
+                    <select id="editorReminder">
+                        <option value="Needs Reminder">Needs Reminder</option>
+                        <option value="Reminder Sent">Reminder Sent</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="No Response">No Response</option>
+                    </select>
+                    <label for="editorReminder">Reminder Status</label>
+                </div>
+                
+                <!-- Ceremony Selections -->
+                <div style="border: 1px solid var(--color-line); border-radius: var(--radius-xs); padding: 12px; background: rgba(0,0,0,0.2);">
+                    <p style="margin: 0 0 8px 0; color: var(--color-gold-soft); font-size: var(--font-size-sm); font-weight: var(--font-weight-medium);">Celebration Attendance</p>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: var(--font-size-sm);">
+                        <label style="display: flex; align-items: center; gap: 8px; text-transform: none; color: var(--color-text); cursor: pointer;">
+                            <input type="checkbox" id="editorHaldi"> 🌿 Haldi
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; text-transform: none; color: var(--color-text); cursor: pointer;">
+                            <input type="checkbox" id="editorSangeet"> 🎶 Sangeet
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; text-transform: none; color: var(--color-text); cursor: pointer;">
+                            <input type="checkbox" id="editorNikah"> 💍 Nikah
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; text-transform: none; color: var(--color-text); cursor: pointer;">
+                            <input type="checkbox" id="editorValima"> 🤍 Valima
+                        </label>
+                    </div>
+                </div>
+
+                <div class="floating-field">
+                    <textarea id="editorNotes" rows="2" placeholder=" "></textarea>
+                    <label for="editorNotes">Notes / Message</label>
+                </div>
+
+                <div style="display: flex; gap: var(--space-md); margin-top: var(--space-sm);">
+                    <button type="button" id="cancelEditorBtn" class="btn btn-secondary" style="flex: 1;">Cancel</button>
+                    <button type="submit" id="saveEditorBtn" class="btn" style="flex: 1;">Save Guest</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Floating Audio Toggle -->
     <button id="floatingAudioToggle" class="floating-audio-btn" aria-label="Enable sound" title="Sound controls">
