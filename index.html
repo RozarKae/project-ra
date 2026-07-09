@@ -83,10 +83,48 @@
         <div class="loader-content">
             <div class="loader-logo-svg" aria-hidden="true" style="margin-bottom: 24px;">
                 <svg viewBox="0 0 100 100" width="120" height="120">
+                    <defs>
+                        <!-- Glow for energy points -->
+                        <radialGradient id="energy-glow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="var(--color-gold)" stop-opacity="1" />
+                            <stop offset="40%" stop-color="var(--color-gold)" stop-opacity="0.5" />
+                            <stop offset="100%" stop-color="var(--color-gold)" stop-opacity="0" />
+                        </radialGradient>
+                    </defs>
+                    <!-- Background Track Ring -->
+                    <circle class="logo-ring-bg" cx="50" cy="50" r="42" fill="none" stroke="rgba(var(--color-gold-soft-rgb), 0.12)" stroke-width="1.5" />
+                    
+                    <!-- Main completion Ring (drawn on window load) -->
                     <circle class="logo-ring" cx="50" cy="50" r="42" fill="none" stroke="var(--color-gold-soft)" stroke-width="1.5" stroke-dasharray="270" stroke-dashoffset="270" />
-                    <!-- Subtle Batman & Hello Kitty loader accents -->
-                    <path class="logo-char" d="M48,8 L49.2,6.5 L50,7.2 L50.8,6.5 L52,8 C51,9 49,9 48,8" fill="none" stroke="var(--color-gold-soft)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="20" stroke-dashoffset="20" />
-                    <path class="logo-char" d="M47,92 C46,90.5 46.5,89.5 48.5,91 C49,91.5 49.5,92 50,92 C50.5,92 51,91.5 51.5,91 C53.5,89.5 54,90.5 53,92 M49,91.5 A1,1 0 1,1 51,91.5 A1,1 0 1,1 49,91.5" fill="none" stroke="var(--color-gold-soft)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="25" stroke-dashoffset="25" />
+                    
+                    <!-- Light Rays (animated loop) -->
+                    <!-- Ray 1 Right (Top to Bottom, Clockwise) -->
+                    <path class="loader-ray ray-1-r" d="M 50,8 A 42,42 0 0,1 50,92" fill="none" stroke="var(--color-gold)" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="30, 132" stroke-dashoffset="30" />
+                    <!-- Ray 1 Left (Top to Bottom, Counter-Clockwise) -->
+                    <path class="loader-ray ray-1-l" d="M 50,8 A 42,42 0 0,0 50,92" fill="none" stroke="var(--color-gold)" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="30, 132" stroke-dashoffset="30" />
+                    <!-- Ray 2 Right (Bottom to Top, Clockwise) -->
+                    <path class="loader-ray ray-2-r" d="M 50,92 A 42,42 0 0,0 50,8" fill="none" stroke="var(--color-gold)" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="30, 132" stroke-dashoffset="30" />
+                    <!-- Ray 2 Left (Bottom to Top, Counter-Clockwise) -->
+                    <path class="loader-ray ray-2-l" d="M 50,92 A 42,42 0 0,1 50,8" fill="none" stroke="var(--color-gold)" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="30, 132" stroke-dashoffset="30" />
+
+                    <!-- Sparkles Container -->
+                    <g class="sparkles-container"></g>
+
+                    <!-- Enlarged Batman & Hello Kitty loader accents -->
+                    <!-- Guardian Ears at Top (Enlarged by ~25%, seamless integration) -->
+                    <path class="logo-char logo-accent-ears" d="M47.5,8 L49.0,6.1 L50,7.0 L51.0,6.1 L52.5,8 C51.3,9.2 48.7,9.2 47.5,8" fill="none" stroke="var(--color-gold-soft)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="25" stroke-dashoffset="25" />
+                    <!-- Cat Bow at Bottom (Enlarged by ~25%, seamless integration) -->
+                    <path class="logo-char logo-accent-bow" d="M46.25,92 C45.0,90.1 45.6,88.9 48.0,90.8 C48.7,91.2 49.3,92 50,92 C50.7,92 51.3,91.2 52.0,90.8 C54.4,88.9 55.0,90.1 53.75,92 M48.75,91.5 A1.25,1.25 0 1,1 51.25,91.5 A1.25,1.25 0 1,1 48.75,91.5" fill="none" stroke="var(--color-gold-soft)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="35" stroke-dashoffset="35" />
+
+                    <!-- Energy Sources (Point A and Point B) -->
+                    <!-- Point A (Top/Guardian Side) -->
+                    <circle class="energy-glow-ring point-a-glow" cx="50" cy="11.5" r="4.5" fill="url(#energy-glow)" opacity="0.6" style="transform-origin: 50px 11.5px;" />
+                    <circle class="energy-point point-a" cx="50" cy="11.5" r="1.3" fill="#FFF" />
+                    <!-- Point B (Bottom/Cat Side) -->
+                    <circle class="energy-glow-ring point-b-glow" cx="50" cy="88.5" r="4.5" fill="url(#energy-glow)" opacity="0.6" style="transform-origin: 50px 88.5px;" />
+                    <circle class="energy-point point-b" cx="50" cy="88.5" r="1.3" fill="#FFF" />
+
+                    <!-- Characters inside the ring: R and A -->
                     <path class="logo-char char-r" d="M38,62 V38 H48 C53,38 56,41 56,45 C56,49 53,51 48,51 L56,62 M38,51 H48" fill="none" stroke="var(--color-gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="120" stroke-dashoffset="120" />
                     <path class="logo-char char-a" d="M62,62 L55,38 L48,62 M50,55 H60" fill="none" stroke="var(--color-gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="100" stroke-dashoffset="100" />
                 </svg>
@@ -196,14 +234,30 @@
                 <h2>Where It All Began</h2>
             </div>
             <div class="story-layout">
-                <div class="story-copy">
-                    <p>It started with a simple promise—a photoshoot to capture a moment. We were two different worlds: Rozar, with his calm and logical architecture, and Arifa, with her vibrant and emotional colors. We didn't expect the camera to capture a connection that would slowly redraw our lives.</p>
-                    <p>From the misty heights of Kodaikanal to quiet beach walks at sunset, we found a comfortable silence. It wasn't loud, and it wasn't rushed. We shared conversations that felt like returning home, and realized that our different paths were mapping the exact same destination.</p>
-                    <p>With the blessing of our families, we now stand ready. We have waited for this day, through patience and prayer. We invite you to be there as we exchange our vows and begin the journey of a lifetime under the grace of the Almighty.</p>
+                <!-- Mobile/Tablet version Part 1 (shown on mobile, hidden on desktop) -->
+                <div class="story-copy story-copy-mobile story-copy-mobile-1">
+                    <p>It began with a single frame—a simple photoshoot meant only to freeze a moment in time. We came from two distinct worlds: Rozar, who speaks in the quiet, structured lines of architecture, and Arifa, who lives in a canvas of vibrant, emotional colors. Yet, behind the lens, an unplanned canvas began to form, tracing a connection that would slowly and beautifully redraw our lives.</p>
                 </div>
+                <!-- The picture (common for both desktop and mobile layouts) -->
                 <div class="story-photo glass-card">
-                    <img src="assets/images/story1.jpg" alt="Rozar and Arifa wedding story photograph" loading="lazy"
+                    <img id="storyImage" src="assets/images/story1.jpg" alt="Rozar and Arifa wedding story photograph" loading="lazy"
                         decoding="async">
+                </div>
+                <!-- Mobile/Tablet version Part 2 (shown on mobile, hidden on desktop) -->
+                <div class="story-copy story-copy-mobile story-copy-mobile-2">
+                    <p>Our journeys found their rhythm in the quietest spaces: wandering through the misty, pine-scented hills of Kodaikanal and watching the gold sun melt into quiet seas. We found a comfortable, sacred silence between us. It wasn't loud; it wasn't rushed. In our late-night conversations and shared laughter, we discovered a sense of peace that felt like returning home—realizing our paths were mapping the exact same destination.</p>
+                    <p>Now, guided by the prayers of our hearts and the warm blessings of our families, we stand on the threshold of our forever. After seasons of patience, hope, and faith, we invite you to stand beside us under the grace of the Almighty, as we write our vows and step into the most beautiful chapter of our lives.</p>
+                </div>
+                <!-- Desktop version (hidden on mobile, shown on desktop) -->
+                <div class="story-copy story-copy-desktop">
+                    <div class="memory-container">
+                        <div class="memory-item">📸 It began with a single frame—an unplanned connection.</div>
+                        <div class="memory-item">✨ Two distinct worlds: his structured lines, her vibrant colors.</div>
+                        <div class="memory-item">🌲 From the misty peaks of Kodaikanal to golden ocean shores...</div>
+                        <div class="memory-item">🌙 Simple conversations slowly turned into our favorite routine.</div>
+                        <div class="memory-item">🤍 In a quiet, comfortable silence, we found our way home.</div>
+                        <div class="memory-item">💍 Guided by prayer, our greatest chapter is about to begin.</div>
+                    </div>
                 </div>
             </div>
             <!-- Transitional divider -->

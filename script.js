@@ -12,11 +12,121 @@ const countdownEls = {
     seconds: document.getElementById("seconds")
 };
 
+let loaderTimeline = null;
+
 const hasGsap = () => {
     if (!window.gsap) return false;
     const prefersReduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     return !prefersReduce;
 };
+
+// Enhanced Loader Ring Animation Loop
+function initLoaderLoop() {
+    if (!hasGsap()) return;
+    
+    const rays = document.querySelectorAll(".loader-logo-svg .loader-ray");
+    const ring = document.querySelector(".loader-logo-svg .logo-ring");
+    const container = document.querySelector(".loader-logo-svg svg");
+    if (rays.length === 0 || !ring || !container) return;
+
+    // Create a group for sparkles if it doesn't exist
+    let sparklesGroup = container.querySelector(".sparkles-container");
+    if (!sparklesGroup) {
+        sparklesGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        sparklesGroup.setAttribute("class", "sparkles-container");
+        container.appendChild(sparklesGroup);
+    }
+
+    const triggerSparkles = () => {
+        const points = [
+            { x: 92, y: 50 }, // 3 o'clock
+            { x: 8, y: 50 }   // 9 o'clock
+        ];
+        
+        points.forEach(pt => {
+            for (let i = 0; i < 8; i++) {
+                const sparkle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 4 + Math.random() * 10;
+                const radius = 0.4 + Math.random() * 0.8;
+                
+                sparkle.setAttribute("cx", pt.x);
+                sparkle.setAttribute("cy", pt.y);
+                sparkle.setAttribute("r", radius);
+                sparkle.setAttribute("fill", "#D4AF37");
+                sparkle.setAttribute("opacity", "1");
+                sparklesGroup.appendChild(sparkle);
+                
+                gsap.to(sparkle, {
+                    cx: pt.x + Math.cos(angle) * speed,
+                    cy: pt.y + Math.sin(angle) * speed,
+                    opacity: 0,
+                    duration: 0.6 + Math.random() * 0.4,
+                    ease: "power2.out",
+                    onComplete: () => sparkle.remove()
+                });
+            }
+        });
+    };
+
+    // Create repeating GSAP timeline for rays and pulsing
+    const cycleDuration = 2.4;
+    const meetTime = cycleDuration / 2; // 1.2s
+    loaderTimeline = gsap.timeline({ repeat: -1 });
+
+    // Initial state: hide rays
+    gsap.set(rays, { opacity: 0 });
+
+    // Flow path dashoffset animation: 30 -> -132
+    loaderTimeline.fromTo(rays,
+        { strokeDashoffset: 30 },
+        { strokeDashoffset: -132, duration: cycleDuration, ease: "power1.inOut" },
+        0
+    );
+
+    // Fade in rays at start, fade out at end
+    loaderTimeline.fromTo(rays,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.3, ease: "power1.out" },
+        0
+    );
+    loaderTimeline.to(rays,
+        { opacity: 0, duration: 0.3, ease: "power1.in" },
+        cycleDuration - 0.3
+    );
+
+    // Midpoint: Rays meet at 3 o'clock and 9 o'clock
+    loaderTimeline.add(() => {
+        // Trigger sparkle particles
+        triggerSparkles();
+
+        // Ring pulse: briefly brighten and widen
+        gsap.fromTo(".logo-ring-bg",
+            { stroke: "#FFF", strokeWidth: 2.2, opacity: 0.8 },
+            { stroke: "rgba(var(--color-gold-soft-rgb), 0.12)", strokeWidth: 1.5, opacity: 0.8, duration: 0.8, ease: "power2.out" }
+        );
+
+        gsap.fromTo(ring,
+            { stroke: "#FFF", strokeWidth: 2.5 },
+            { stroke: "var(--color-gold-soft)", strokeWidth: 1.5, duration: 0.8, ease: "power2.out" }
+        );
+
+        // Pulse energy points glow
+        gsap.fromTo(".energy-glow-ring",
+            { scale: 1.6, opacity: 1 },
+            { scale: 1, opacity: 0.6, duration: 0.8, ease: "power2.out" }
+        );
+
+        // Pulse features slightly
+        gsap.fromTo(".logo-char",
+            { filter: "drop-shadow(0 0 2px var(--color-gold))" },
+            { filter: "none", duration: 0.8, ease: "power2.out" }
+        );
+    }, meetTime);
+}
+
+// Call loop immediately to play during page loading
+initLoaderLoop();
 
 function splitTextIntoSpans(selector) {
     if (!hasGsap()) return;
@@ -91,6 +201,10 @@ function initFloatingLabels() {
 
 function revealPage() {
     document.body.classList.remove("is-loading");
+
+    if (loaderTimeline) {
+        loaderTimeline.kill();
+    }
 
     if (!loader) {
         return;
@@ -1062,55 +1176,171 @@ if (hasGsap() && window.ScrollTrigger) {
         ease: "none"
     });
 
-    // 2. Story Section Timeline - optimized
-    const storyTimeline = gsap.timeline({
-        scrollTrigger: {
-            trigger: "#story",
-            start: "top 85%"
-        }
-    });
-    storyTimeline
-        .from("#story .section-heading > *", {
-            y: 30,
-            opacity: 0,
-            duration: 0.5,
-            stagger: 0.08,
-            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-        })
-        .from("#story .story-copy", {
-            x: -30,
-            opacity: 0,
-            duration: 0.6,
-            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-        }, "-=0.3")
-        .from("#story .story-copy p", {
-            y: 15,
-            opacity: 0,
-            duration: 0.6,
-            stagger: 0.12,
-            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-        }, "-=0.3")
-        .from("#story .story-photo", {
-            scale: 0.96,
-            opacity: 0,
-            duration: 0.7,
-            ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-        }, "-=0.6");
+    // 2. Story Section responsive animations
+    const mm = gsap.matchMedia();
 
-    // Parallax zoom effect inside the Mihrab image frame
-    gsap.fromTo("#story .story-photo img", 
-        { scale: 1.3 },
-        {
-            scale: 1.02,
+    // Mobile/Tablet version (max-width: 820px)
+    mm.add("(max-width: 820px)", () => {
+        const storyTimeline = gsap.timeline({
             scrollTrigger: {
                 trigger: "#story",
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true
-            },
-            ease: "none"
+                start: "top 85%"
+            }
+        });
+        storyTimeline
+            .from("#story .section-heading > *", {
+                y: 30,
+                opacity: 0,
+                duration: 0.5,
+                stagger: 0.08,
+                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+            })
+            .from("#story .story-copy-mobile", {
+                x: -30,
+                opacity: 0,
+                duration: 0.6,
+                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+            }, "-=0.3")
+            .from("#story .story-copy-mobile p", {
+                y: 15,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.12,
+                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+            }, "-=0.3")
+            .from("#story .story-photo", {
+                scale: 0.96,
+                opacity: 0,
+                duration: 0.7,
+                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+            }, "-=0.6");
+
+        // Mobile-only parallax zoom on scroll
+        gsap.fromTo("#story .story-photo img", 
+            { scale: 1.3 },
+            {
+                scale: 1.02,
+                scrollTrigger: {
+                    trigger: "#story",
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                },
+                ease: "none"
+            }
+        );
+    });
+
+    // Desktop version (min-width: 821px)
+    mm.add("(min-width: 821px)", () => {
+        let currentMemoryIndex = -1;
+        let memoryTimer = null;
+        const memories = gsap.utils.toArray("#story .memory-item");
+        const totalMemories = memories.length;
+
+        function showMemory(index) {
+            const currentItem = currentMemoryIndex >= 0 ? memories[currentMemoryIndex] : null;
+            const nextItem = memories[index];
+            
+            const tl = gsap.timeline();
+            
+            if (currentItem) {
+                // Fade out current item while drifting up
+                tl.to(currentItem, {
+                    opacity: 0,
+                    y: -25,
+                    duration: 1.0,
+                    ease: "power2.inOut"
+                }, 0);
+                
+                // Fade in next item while drifting up (starts 0.7s before previous fade out ends, i.e., 0.3s after start)
+                tl.fromTo(nextItem,
+                    { opacity: 0, y: 25 },
+                    { opacity: 1, y: 0, duration: 0.8, ease: "power2.inOut" },
+                    0.3
+                );
+            } else {
+                // First run: just fade in the first item
+                tl.fromTo(nextItem,
+                    { opacity: 0, y: 25 },
+                    { opacity: 1, y: 0, duration: 0.8, ease: "power2.inOut" },
+                    0
+                );
+            }
+            
+            // Ken Burns effect on the image: slow zoom/unzoom over 4.6 seconds
+            const zoomIn = (index % 2 === 0);
+            const startScale = zoomIn ? 1.02 : 1.05;
+            const endScale = zoomIn ? 1.05 : 1.02;
+            
+            gsap.fromTo("#storyImage",
+                { scale: startScale },
+                { scale: endScale, duration: 4.6, ease: "sine.inOut" }
+            );
+            
+            currentMemoryIndex = index;
+            
+            // Schedule next transition after 4.6 seconds
+            memoryTimer = gsap.delayedCall(4.6, () => {
+                const nextIndex = (index + 1) % totalMemories;
+                showMemory(nextIndex);
+            });
         }
-    );
+
+        const storyTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#story",
+                start: "top 85%"
+            },
+            onComplete: () => {
+                if (currentMemoryIndex === -1) {
+                    showMemory(0);
+                }
+            }
+        });
+
+        storyTimeline
+            .from("#story .section-heading > *", {
+                y: 30,
+                opacity: 0,
+                duration: 0.5,
+                stagger: 0.08,
+                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+            })
+            .from("#story .story-copy-desktop", {
+                x: -30,
+                opacity: 0,
+                duration: 0.6,
+                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+            }, "-=0.3")
+            .from("#story .story-photo", {
+                scale: 0.96,
+                opacity: 0,
+                duration: 0.7,
+                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+            }, "-=0.6");
+
+        // ScrollTrigger to pause/resume loop depending on viewport active status
+        ScrollTrigger.create({
+            trigger: "#story",
+            start: "top bottom",
+            end: "bottom top",
+            onToggle: (self) => {
+                if (self.isActive) {
+                    if (memoryTimer) memoryTimer.resume();
+                } else {
+                    if (memoryTimer) memoryTimer.pause();
+                }
+            }
+        });
+
+        // Clean up on matchMedia break
+        return () => {
+            if (memoryTimer) memoryTimer.kill();
+            gsap.set("#storyImage", { clearProps: "all" });
+            memories.forEach(item => gsap.set(item, { clearProps: "all" }));
+        };
+    });
 
     // Fade-in divider quote
     gsap.from(".story-divider", {
