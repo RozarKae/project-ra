@@ -11,6 +11,10 @@ export const AdminLayout: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
 
+  React.useEffect(() => {
+    document.title = "Nikahs & Weddings | Admin Portal";
+  }, []);
+
   if (loading) {
     return <CrescentLoader />;
   }

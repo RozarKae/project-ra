@@ -1,6 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useWeddingSettings } from '../hooks/useWeddingSettings';
 
 export const PublicWedding: React.FC = () => {
+  const { settings } = useWeddingSettings();
+
+  useEffect(() => {
+    // Construct dynamic tab title based on centralized settings (Sprint S.4 logic)
+    const groomName = settings?.groom?.name || 'Rozar';
+    const brideName = settings?.bride?.name || 'Arifa';
+    document.title = `${groomName} & ${brideName} Wedding Invitation`;
+  }, [settings]);
+
   return (
     <div className="w-screen h-screen overflow-hidden bg-[#090909]">
       <iframe
