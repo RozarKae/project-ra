@@ -7,14 +7,11 @@ export interface Guest {
   isVip: boolean;
   familyName?: string;
   notes?: string;
+  village?: string;           // Added for search filters
+  invitationStatus?: string;  // Added for search filters (e.g. Sent, Opened)
   createdAt: string;
-  isDeleted: boolean; // Soft delete
-}
-
-export interface ActivityLog {
-  id: string;
-  timestamp: string;
-  action: string;
-  details: string;
-  operator: string;
+  updatedAt?: string;
+  isDeleted: boolean;        // Soft delete indicator
+  deletedAt?: string;        // Soft delete metadata
+  deletedBy?: string;        // Soft delete metadata
 }

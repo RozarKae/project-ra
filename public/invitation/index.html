@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Wedding invitation for Rozar and Arifa on 30 August 2026 in Madurai.">
+    <meta name="theme-color" content="#090909">
+    <title>Rozar & Arifa | Wedding Invitation</title>
+
+    <!-- Preloads & Preconnects -->
+    <link rel="preload" href="style.css" as="style">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Inline SVG Favicon representing wedding rings -->
+    <link rel="icon" type="image/svg+xml"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E💍%3C/text%3E%3C/svg%3E">
+
+    <!-- Open Graph / Facebook Metadata -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Rozar & Arifa | Wedding Invitation">
+    <meta property="og:description"
+        content="You are cordially invited to celebrate the Nikah and wedding ceremony of Rozar & Arifa on 30 August 2026 in Madurai.">
+    <meta property="og:url" content="http://localhost:3000/">
+    <meta property="og:image" content="assets/images/story1.jpg">
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Rozar & Arifa | Wedding Invitation">
+    <meta name="twitter:description"
+        content="You are cordially invited to celebrate the Nikah and wedding ceremony of Rozar & Arifa on 30 August 2026 in Madurai.">
+    <meta name="twitter:image" content="assets/images/story1.jpg">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Structured Data (JSON-LD) for Wedding Event -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": "Rozar & Arifa's Wedding (Nikah)",
+      "startDate": "2026-08-30T09:00:00+05:30",
+      "endDate": "2026-08-30T15:00:00+05:30",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": "NSK & NKR A/C Mahal and Residency",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "GST Main Rd, Lion City, Thiru Nagar, Thanakkankulam",
+          "addressLocality": "Madurai",
+          "addressRegion": "Tamil Nadu",
+          "addressCountry": "IN"
+        }
+      },
+      "description": "Wedding celebration and Nikah of Rozar and Arifa on 30 August 2026 in Madurai.",
+      "organizer": {
+        "@type": "Person",
+        "name": "Rozar & Arifa"
+      }
+    }
+    </script>
+
+    <!-- Core Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" defer></script>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="background" aria-hidden="true">
+        <div class="moon"></div>
+        <div class="stars"></div>
+    </div>
+
+    <div id="loader" aria-label="Loading invitation">
+        <div class="loader-content">
+            <div class="loader-logo-svg" aria-hidden="true" style="margin-bottom: 24px;">
+                <svg viewBox="0 0 100 100" width="120" height="120">
+                    <defs>
+                        <!-- Glow for energy points -->
+                        <radialGradient id="energy-glow" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="var(--color-gold)" stop-opacity="1" />
+                            <stop offset="40%" stop-color="var(--color-gold)" stop-opacity="0.5" />
+                            <stop offset="100%" stop-color="var(--color-gold)" stop-opacity="0" />
+                        </radialGradient>
+                    </defs>
+                    <!-- Background Track Ring -->
+                    <circle class="logo-ring-bg" cx="50" cy="50" r="42" fill="none" stroke="rgba(var(--color-gold-soft-rgb), 0.12)" stroke-width="1.5" />
+                    
+                    <!-- Main completion Ring (drawn on window load) -->
+                    <circle class="logo-ring" cx="50" cy="50" r="42" fill="none" stroke="var(--color-gold-soft)" stroke-width="1.5" stroke-dasharray="270" stroke-dashoffset="270" />
+                    
+                    <!-- Light Rays (animated loop) -->
+                    <!-- Ray 1 Right (Top to Bottom, Clockwise) -->
+                    <path class="loader-ray ray-1-r" d="M 50,8 A 42,42 0 0,1 50,92" fill="none" stroke="var(--color-gold)" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="30, 132" stroke-dashoffset="30" />
+                    <!-- Ray 1 Left (Top to Bottom, Counter-Clockwise) -->
+                    <path class="loader-ray ray-1-l" d="M 50,8 A 42,42 0 0,0 50,92" fill="none" stroke="var(--color-gold)" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="30, 132" stroke-dashoffset="30" />
+                    <!-- Ray 2 Right (Bottom to Top, Clockwise) -->
+                    <path class="loader-ray ray-2-r" d="M 50,92 A 42,42 0 0,0 50,8" fill="none" stroke="var(--color-gold)" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="30, 132" stroke-dashoffset="30" />
+                    <!-- Ray 2 Left (Bottom to Top, Counter-Clockwise) -->
+                    <path class="loader-ray ray-2-l" d="M 50,92 A 42,42 0 0,1 50,8" fill="none" stroke="var(--color-gold)" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="30, 132" stroke-dashoffset="30" />
+
+                    <!-- Sparkles Container -->
+                    <g class="sparkles-container"></g>
+
+                    <!-- Enlarged Batman & Hello Kitty loader accents -->
+                    <!-- Guardian Ears at Top (Enlarged by ~25%, seamless integration) -->
+                    <path class="logo-char logo-accent-ears" d="M47.5,8 L49.0,6.1 L50,7.0 L51.0,6.1 L52.5,8 C51.3,9.2 48.7,9.2 47.5,8" fill="none" stroke="var(--color-gold-soft)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="25" stroke-dashoffset="25" />
+                    <!-- Cat Bow at Bottom (Enlarged by ~25%, seamless integration) -->
+                    <path class="logo-char logo-accent-bow" d="M46.25,92 C45.0,90.1 45.6,88.9 48.0,90.8 C48.7,91.2 49.3,92 50,92 C50.7,92 51.3,91.2 52.0,90.8 C54.4,88.9 55.0,90.1 53.75,92 M48.75,91.5 A1.25,1.25 0 1,1 51.25,91.5 A1.25,1.25 0 1,1 48.75,91.5" fill="none" stroke="var(--color-gold-soft)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="35" stroke-dashoffset="35" />
+
+                    <!-- Energy Sources (Point A and Point B) -->
+                    <!-- Point A (Top/Guardian Side) -->
+                    <circle class="energy-glow-ring point-a-glow" cx="50" cy="11.5" r="4.5" fill="url(#energy-glow)" opacity="0.6" style="transform-origin: 50px 11.5px;" />
+                    <circle class="energy-point point-a" cx="50" cy="11.5" r="1.3" fill="#FFF" />
+                    <!-- Point B (Bottom/Cat Side) -->
+                    <circle class="energy-glow-ring point-b-glow" cx="50" cy="88.5" r="4.5" fill="url(#energy-glow)" opacity="0.6" style="transform-origin: 50px 88.5px;" />
+                    <circle class="energy-point point-b" cx="50" cy="88.5" r="1.3" fill="#FFF" />
+
+                    <!-- Characters inside the ring: R and A -->
+                    <path class="logo-char char-r" d="M38,62 V38 H48 C53,38 56,41 56,45 C56,49 53,51 48,51 L56,62 M38,51 H48" fill="none" stroke="var(--color-gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="120" stroke-dashoffset="120" />
+                    <path class="logo-char char-a" d="M62,62 L55,38 L48,62 M50,55 H60" fill="none" stroke="var(--color-gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="100" stroke-dashoffset="100" />
+                </svg>
+            </div>
+            <p style="margin-top: 16px;">Preparing your journey</p>
+            <div class="loader-line">
+                <div class="loader-progress"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="readingProgress" class="reading-progress-bar" aria-hidden="true"></div>
+
+    <header class="site-header">
+        <a href="#hero" class="brand">R & A</a>
+        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="primary-nav">
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+            <span class="hamburger-bar"></span>
+        </button>
+        <nav id="primary-nav" aria-label="Wedding sections">
+            <a href="#story">Story</a>
+            <a href="#events">Events</a>
+            <a href="#venue">Venue</a>
+            <a href="#rsvp">RSVP</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- SVG Definitions for Desktop Arch Clip -->
+        <svg class="clip-svg" width="0" height="0" style="position: absolute;" aria-hidden="true">
+            <defs>
+                <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#b89742" />
+                    <stop offset="50%" stop-color="#f3e7c4" />
+                    <stop offset="100%" stop-color="#b89742" />
+                </linearGradient>
+                <clipPath id="arch-clip" clipPathUnits="objectBoundingBox">
+                    <path d="M 0,1 L 0,0.38 C 0,0.22 0.15,0.12 0.35,0.07 C 0.45,0.05 0.48,0.01 0.5,0 C 0.52,0.01 0.55,0.05 0.65,0.07 C 0.85,0.12 1,0.22 1,0.38 L 1,1 Z" />
+                </clipPath>
+            </defs>
+        </svg>
+
+        <section id="hero" class="hero-section">
+            <div class="hero-card-border" aria-hidden="true">
+                <div class="card-ornament top-ornament">
+                    <svg viewBox="0 0 100 30" width="80" height="24">
+                        <path d="M 10 20 C 30 10, 45 5, 50 15 C 55 5, 70 10, 90 20" fill="none" stroke="url(#gold-grad)" stroke-width="1.5" />
+                        <circle cx="50" cy="5" r="2.5" fill="url(#gold-grad)" />
+                    </svg>
+                </div>
+                <div class="card-ornament bottom-ornament">
+                    <svg viewBox="0 0 100 30" width="80" height="24">
+                        <path d="M 10 10 C 30 20, 45 25, 50 15 C 55 25, 70 20, 90 10" fill="none" stroke="url(#gold-grad)" stroke-width="1.5" />
+                        <circle cx="50" cy="25" r="2.5" fill="url(#gold-grad)" />
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="hero-image" aria-hidden="true">
+                <div class="hero-image-border" aria-hidden="true">
+                    <svg viewBox="0 0 100 100" preserveAspectRatio="none" style="width:100%; height:100%; display:block;">
+                        <path d="M 0,100 L 0,38 C 0,22 15,12 35,7 C 45,5 48,1 50,0 C 52,1 55,5 65,7 C 85,12 100,22 100,38 L 100,100" 
+                              fill="none" stroke="url(#gold-grad)" stroke-width="1.0" />
+                        <line x1="0" y1="100" x2="100" y2="100" stroke="url(#gold-grad)" stroke-width="1.0" />
+                    </svg>
+                </div>
+            </div>
+            <div class="hero-overlay" aria-hidden="true"></div>
+            
+            <div class="hero-content">
+                <!-- Repeated Brand Logo for Desktop Invitation Layout -->
+                <div class="hero-brand" aria-hidden="true">
+                    R &amp; A
+                    <div class="brand-divider"></div>
+                </div>
+
+                <blockquote class="hero-quote">"Every journey begins with a single moment."</blockquote>
+                <p class="hero-support">Ours became a lifetime.</p>
+                <div class="hero-divider-gold" aria-hidden="true">
+                    <svg viewBox="0 0 100 10" width="120" height="12" style="display: block; margin: 0 auto; fill: none; stroke: var(--color-gold-soft); stroke-width: 0.75;">
+                        <!-- Left line -->
+                        <line x1="0" y1="5" x2="36" y2="5" />
+                        <!-- Left Bat shape (subtle) -->
+                        <path d="M 40,5 C 41,3 42.5,3 43.5,5 C 44,4 44.5,4 45,5 C 46,3 47.5,3 48.5,5 C 46.5,6 42,6 40,5 Z" fill="var(--color-gold-soft)" />
+                        <!-- Center star -->
+                        <path d="M 50,2 L 51,4 L 53,5 L 51,6 L 50,8 L 49,6 L 47,5 L 49,4 Z" fill="var(--color-gold)" />
+                        <!-- Right Bow shape (subtle) -->
+                        <path d="M 57,5 C 55,3 55,7 57,5 Z M 57,5 C 59,3 59,7 57,5 Z M 56.5,4.5 A 0.5,0.5 0 1,1 57.5,4.5 A 0.5,0.5 0 1,1 56.5,4.5 M 56.5,5 C 55.5,6.5 55,7.5 54.5,7 M 57.5,5 C 58.5,6.5 59,7.5 59.5,7" fill="var(--color-gold-soft)" />
+                        <!-- Right line -->
+                        <line x1="64" y1="5" x2="100" y2="5" />
+                    </svg>
+                </div>
+                <p class="eyebrow">30 August 2026</p>
+                <h1><span class="nobrk">Rozar</span> <span class="ampersand">&amp;</span> <span class="nobrk">Arifa</span></h1>
+                <button id="beginBtn" type="button" class="btn">
+                    Join Our Journey
+                    <svg class="btn-arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="margin-left: 8px; display: inline-block; vertical-align: middle; transition: transform 0.3s ease;"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
+        </section>
+
+        <section id="story" class="section story-section container">
+            <div class="section-heading">
+                <span class="chapter-number">Chapter I</span>
+                <p class="eyebrow">Our Story</p>
+                <h2>Where It All Began</h2>
+            </div>
+            <div class="story-layout">
+                <!-- Mobile/Tablet version Part 1 (shown on mobile, hidden on desktop) -->
+                <div class="story-copy story-copy-mobile story-copy-mobile-1">
+                    <p>It began with a single frame—a simple photoshoot meant only to freeze a moment in time. We came from two distinct worlds: Rozar, who speaks in the quiet, structured lines of architecture, and Arifa, who lives in a canvas of vibrant, emotional colors. Yet, behind the lens, an unplanned canvas began to form, tracing a connection that would slowly and beautifully redraw our lives.</p>
+                </div>
+                <!-- The picture (common for both desktop and mobile layouts) -->
+                <div class="story-photo glass-card">
+                    <img id="storyImage" src="assets/images/story1.jpg" alt="Rozar and Arifa wedding story photograph" loading="lazy"
+                        decoding="async">
+                </div>
+                <!-- Mobile/Tablet version Part 2 (shown on mobile, hidden on desktop) -->
+                <div class="story-copy story-copy-mobile story-copy-mobile-2">
+                    <p>Our journeys found their rhythm in the quietest spaces: wandering through the misty, pine-scented hills of Kodaikanal and watching the gold sun melt into quiet seas. We found a comfortable, sacred silence between us. It wasn't loud; it wasn't rushed. In our late-night conversations and shared laughter, we discovered a sense of peace that felt like returning home—realizing our paths were mapping the exact same destination.</p>
+                    <p>Now, guided by the prayers of our hearts and the warm blessings of our families, we stand on the threshold of our forever. After seasons of patience, hope, and faith, we invite you to stand beside us under the grace of the Almighty, as we write our vows and step into the most beautiful chapter of our lives.</p>
+                </div>
+                <!-- Desktop version (hidden on mobile, shown on desktop) -->
+                <div class="story-copy story-copy-desktop">
+                    <div class="memory-container">
+                        <div class="memory-item">📸 It began with a single frame—an unplanned connection.</div>
+                        <div class="memory-item">✨ Two distinct worlds: his structured lines, her vibrant colors.</div>
+                        <div class="memory-item">🌲 From the misty peaks of Kodaikanal to golden ocean shores...</div>
+                        <div class="memory-item">🌙 Simple conversations slowly turned into our favorite routine.</div>
+                        <div class="memory-item">🤍 In a quiet, comfortable silence, we found our way home.</div>
+                        <div class="memory-item">💍 Guided by prayer, our greatest chapter is about to begin.</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Transitional divider -->
+            <div class="story-divider" aria-hidden="true">
+                <div class="divider-line"></div>
+                <div class="divider-quote">
+                    "And We created you in pairs."
+                    <small>Surah An-Naba 78:8</small>
+                </div>
+                <div class="divider-line"></div>
+            </div>
+        </section>
+
+        <!-- Reading Progress Bar (Story Gallery) -->
+        <div id="storyReadingProgress" aria-hidden="true"><div id="storyReadingProgressFill"></div></div>
+
+        <section id="gallery" class="section gallery-section container">
+            <!-- Floating Desktop Story progress navigator -->
+            <div class="story-nav-desktop" id="storyNavDesktop" aria-label="Story Progress">
+                <div class="story-nav-line">
+                    <div class="story-nav-line-progress"></div>
+                </div>
+                <button type="button" class="story-nav-step active" data-chapter="1" aria-label="Navigate to Chapter 1"><span class="step-icon">○</span><span class="step-num">01</span></button>
+                <button type="button" class="story-nav-step" data-chapter="2" aria-label="Navigate to Chapter 2"><span class="step-icon">○</span><span class="step-num">02</span></button>
+                <button type="button" class="story-nav-step" data-chapter="3" aria-label="Navigate to Chapter 3"><span class="step-icon">○</span><span class="step-num">03</span></button>
+                <button type="button" class="story-nav-step" data-chapter="4" aria-label="Navigate to Chapter 4"><span class="step-icon">○</span><span class="step-num">04</span></button>
+            </div>
+
+            <!-- Editorial Introduction -->
+            <div class="gallery-intro-card glass-card">
+                <h2>Our Memories</h2>
+                <p>Every love story is written in moments.
+Here are a few pages from ours.</p>
+                <button type="button" id="openMemoryBookBtn" class="btn">Open Our Album</button>
+            </div>
+
+            <!-- The Accordion Story Album (Initially Hidden) -->
+            <div class="story-accordion" id="storyAccordion" style="display: none; max-width: 1000px; margin: 0 auto;">
+                
+                <!-- Mobile Story progress indicator -->
+                <div class="story-nav-mobile" id="storyNavMobile" aria-label="Story Progress Mobile">
+                    <div class="mobile-nav-line">
+                        <div class="mobile-nav-line-progress"></div>
+                    </div>
+                    <div class="mobile-nav-steps">
+                        <button type="button" class="mobile-nav-step active" data-chapter="1"><span>01</span></button>
+                        <button type="button" class="mobile-nav-step" data-chapter="2"><span>02</span></button>
+                        <button type="button" class="mobile-nav-step" data-chapter="3"><span>03</span></button>
+                        <button type="button" class="mobile-nav-step" data-chapter="4"><span>04</span></button>
+                    </div>
+                </div>
+                
+                <!-- CHAPTER 01 -->
+                <div class="story-card collapsed" id="chapter1" tabindex="0">
+                    <div class="card-header">
+                        <div class="card-header-bg" style="background-image: url('assets/images/gallery1.jpg');"></div>
+                        <div class="card-header-overlay"></div>
+                        <div class="card-header-content">
+                            <span class="card-chapter-num">Chapter I</span>
+                            <h3 class="card-chapter-title">🌱 The Beginning</h3>
+                            <p class="card-chapter-subtitle">Where Forever Quietly Began</p>
+                            <p class="card-chapter-preview">Every beautiful love story begins with a moment that seems ordinary at first...</p>
+                        </div>
+                        <div class="card-header-chevron">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-body-inner">
+                            <p class="chapter-summary">Every beautiful love story begins with a moment that seems ordinary at first. A simple conversation, a shared smile, and a photograph taken without a second thought slowly became the first page of a story neither of us knew we were writing. Looking back now, we realize that forever often begins in the quietest moments.</p>
+                            
+                            <!-- Chapter 1 Photo Slider -->
+                            <div class="chapter-photo-slider" id="slider-ch1" data-slider>
+                                <div class="slider-track">
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery1.jpg" alt="Our First Selfie" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Our First Selfie</strong>
+                                                <span class="caption-date">21 February 2024</span>
+                                                <p>Where it all quietly began. A simple prompt, an ordinary smile, and the first page of a story we didn't know we were writing.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery2.jpg" alt="A Promise We Forgot" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>A Promise We Forgot</strong>
+                                                <span class="caption-date">14 March 2024</span>
+                                                <p>We took a quick snapshot and promised to do a proper photoshoot. It became a sweet reminder.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery3.jpg" alt="Laughs &amp; Love" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Laughs &amp; Love</strong>
+                                                <span class="caption-date">02 April 2024</span>
+                                                <p>You made me laugh until my sides hurt. Genuine moments we treasure most.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery4.jpg" alt="Forever Smiling" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Forever Smiling</strong>
+                                                <span class="caption-date">18 April 2024</span>
+                                                <p>Every time I see you, my heart finds its smile. One of those perfect days.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                </div>
+                                <div class="slider-controls">
+                                    <button class="slider-btn slider-prev" aria-label="Previous photo">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                    </button>
+                                    <div class="slider-dots" aria-hidden="true">
+                                        <span class="slider-dot active"></span>
+                                        <span class="slider-dot"></span>
+                                        <span class="slider-dot"></span>
+                                        <span class="slider-dot"></span>
+                                    </div>
+                                    <div class="slider-counter" aria-live="polite"><span class="slider-current">1</span> / <span class="slider-total">4</span></div>
+                                    <button class="slider-btn slider-next" aria-label="Next photo">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    </button>
+                                </div>
+                                <div class="slider-progress-bar"><div class="slider-progress-fill"></div></div>
+                            </div>
+
+                            <blockquote class="editorial-quote">
+                                "In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine."
+                                <cite>— Maya Angelou</cite>
+                            </blockquote>
+
+                            <div class="chapter-closing">
+                                <div class="chapter-closing-line"></div>
+                                <p>Sometimes the smallest moments become the biggest memories.</p>
+                                <div class="chapter-closing-line"></div>
+                            </div>
+
+                            <!-- Chapter 1 Transition Card -->
+                            <div class="chapter-transition-card" data-chapter="1">
+                                <div class="transition-divider"></div>
+                                <p class="transition-chapter-end">End of Chapter One</p>
+                                <blockquote class="transition-quote">&#x201C;The smallest moments often become our greatest memories.&#x201D;</blockquote>
+                                <div class="transition-divider"></div>
+                                <button type="button" class="transition-continue-btn" data-next-chapter="2">Continue Our Journey <span aria-hidden="true">→</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHAPTER 02 -->
+                <div class="story-card collapsed" id="chapter2" tabindex="0">
+                    <div class="card-header">
+                        <div class="card-header-bg" style="background-image: url('assets/images/gallery5.jpg');"></div>
+                        <div class="card-header-overlay"></div>
+                        <div class="card-header-content">
+                            <span class="card-chapter-num">Chapter II</span>
+                            <h3 class="card-chapter-title">❤️ Becoming Us</h3>
+                            <p class="card-chapter-subtitle">A Thousand Little Moments</p>
+                            <p class="card-chapter-preview">What started as friendship slowly blossomed into something far more beautiful...</p>
+                        </div>
+                        <div class="card-header-chevron">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-body-inner">
+                            <p class="chapter-summary">What started as friendship slowly blossomed into something far more beautiful. Every conversation became longer, every laugh more meaningful, and every memory more precious. Through countless ordinary days, we unknowingly built a love filled with trust, comfort, and endless happiness.</p>
+                            
+                            <!-- Chapter 2 Photo Slider -->
+                            <div class="chapter-photo-slider" id="slider-ch2" data-slider>
+                                <div class="slider-track">
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery5.jpg" alt="Whispered Promises" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Whispered Promises</strong>
+                                                <span class="caption-date">05 May 2024</span>
+                                                <p>Words we only meant for each other. Dreams we shared under the stars.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery6.jpg" alt="Golden Hour Bliss" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Golden Hour Bliss</strong>
+                                                <span class="caption-date">23 May 2024</span>
+                                                <p>When the sun painted everything gold, we felt like the richest people in the world.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery7.jpg" alt="Hand in Hand" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Hand in Hand</strong>
+                                                <span class="caption-date">12 June 2024</span>
+                                                <p>Your hand fit perfectly in mine. No words needed, just the feeling of being home.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery8.jpg" alt="Our Favorite Place" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Our Favorite Place</strong>
+                                                <span class="caption-date">29 June 2024</span>
+                                                <p>The spot where we always escape from the world. Where time stops.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery9.jpg" alt="Under the Sunset" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Under the Sunset</strong>
+                                                <span class="caption-date">17 July 2024</span>
+                                                <p>Standing side by side as the day faded, grateful for every shared moment.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery10.jpg" alt="A Thousand Laughs" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>A Thousand Laughs</strong>
+                                                <span class="caption-date">04 August 2024</span>
+                                                <p>We built our connection on shared jokes and comforting silences.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                </div>
+                                <div class="slider-controls">
+                                    <button class="slider-btn slider-prev" aria-label="Previous photo">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                    </button>
+                                    <div class="slider-dots" aria-hidden="true">
+                                        <span class="slider-dot active"></span>
+                                        <span class="slider-dot"></span>
+                                        <span class="slider-dot"></span>
+                                        <span class="slider-dot"></span>
+                                        <span class="slider-dot"></span>
+                                        <span class="slider-dot"></span>
+                                    </div>
+                                    <div class="slider-counter" aria-live="polite"><span class="slider-current">1</span> / <span class="slider-total">6</span></div>
+                                    <button class="slider-btn slider-next" aria-label="Next photo">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    </button>
+                                </div>
+                                <div class="slider-progress-bar"><div class="slider-progress-fill"></div></div>
+                            </div>
+
+                            <div class="chapter-closing">
+                                <div class="chapter-closing-line"></div>
+                                <p>Love wasn't built in one day—it grew beautifully through countless little moments.</p>
+                                <div class="chapter-closing-line"></div>
+                            </div>
+
+                            <!-- Chapter 2 Transition Card -->
+                            <div class="chapter-transition-card" data-chapter="2">
+                                <div class="transition-divider"></div>
+                                <p class="transition-chapter-end">End of Chapter Two</p>
+                                <blockquote class="transition-quote">&#x201C;Love is not something you find. Love is something that finds you.&#x201D;</blockquote>
+                                <div class="transition-divider"></div>
+                                <button type="button" class="transition-continue-btn" data-next-chapter="3">Continue Our Journey <span aria-hidden="true">→</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHAPTER 03 -->
+                <div class="story-card collapsed" id="chapter3" tabindex="0">
+                    <div class="card-header">
+                        <div class="card-header-bg" style="background-image: url('assets/images/gallery11.jpg');"></div>
+                        <div class="card-header-overlay"></div>
+                        <div class="card-header-content">
+                            <span class="card-chapter-num">Chapter III</span>
+                            <h3 class="card-chapter-title">⛵ Adventures Together</h3>
+                            <p class="card-chapter-subtitle">Together Through Every Season</p>
+                            <p class="card-chapter-preview">Every journey has its trials, and ours was no different. We faced waiting...</p>
+                        </div>
+                        <div class="card-header-chevron">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-body-inner">
+                            <p class="chapter-summary">Every journey has its trials, and ours was no different. We faced moments of uncertainty, distance, misunderstandings, and waiting. Yet every challenge taught us patience, strengthened our trust, and reminded us that true love isn't measured by perfect days, but by the courage to hold on through imperfect ones.</p>
+                            
+                            <!-- Chapter 3 Photo Slider -->
+                            <div class="chapter-photo-slider" id="slider-ch3" data-slider>
+                                <div class="slider-track">
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery11.jpg" alt="Holding On" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Holding On</strong>
+                                                <span class="caption-date">10 September 2024</span>
+                                                <p>In moments of uncertainty, finding patience and quiet support made all the difference.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery12.jpg" alt="Through the Distance" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Through the Distance</strong>
+                                                <span class="caption-date">28 October 2024</span>
+                                                <p>Distance only makes the heart grow fonder, proving that love knows no boundaries.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery13.jpg" alt="Waiting &amp; Hope" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Waiting &amp; Hope</strong>
+                                                <span class="caption-date">14 November 2024</span>
+                                                <p>Patience in prayers. Waiting for the day we wouldn't have to say goodbye.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery14.jpg" alt="Endless Summer" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Endless Summer</strong>
+                                                <span class="caption-date">11 December 2024</span>
+                                                <p>Emerging from difficult seasons, we found ourselves closer, stronger, and more sure.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                </div>
+                                <div class="slider-controls">
+                                    <button class="slider-btn slider-prev" aria-label="Previous photo">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                    </button>
+                                    <div class="slider-dots" aria-hidden="true">
+                                        <span class="slider-dot active"></span>
+                                        <span class="slider-dot"></span>
+                                        <span class="slider-dot"></span>
+                                        <span class="slider-dot"></span>
+                                    </div>
+                                    <div class="slider-counter" aria-live="polite"><span class="slider-current">1</span> / <span class="slider-total">4</span></div>
+                                    <button class="slider-btn slider-next" aria-label="Next photo">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    </button>
+                                </div>
+                                <div class="slider-progress-bar"><div class="slider-progress-fill"></div></div>
+                            </div>
+
+                            <div class="chapter-closing">
+                                <div class="chapter-closing-line"></div>
+                                <p>Every challenge became another reason to choose each other.</p>
+                                <div class="chapter-closing-line"></div>
+                            </div>
+
+                            <!-- Chapter 3 Transition Card -->
+                            <div class="chapter-transition-card" data-chapter="3">
+                                <div class="transition-divider"></div>
+                                <p class="transition-chapter-end">End of Chapter Three</p>
+                                <blockquote class="transition-quote">&#x201C;The strongest hearts have the most scars—and the deepest love.&#x201D;</blockquote>
+                                <div class="transition-divider"></div>
+                                <button type="button" class="transition-continue-btn" data-next-chapter="4">Continue Our Journey <span aria-hidden="true">→</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHAPTER 04 -->
+                <div class="story-card collapsed" id="chapter4" tabindex="0">
+                    <div class="card-header">
+                        <div class="card-header-bg" style="background-image: url('assets/images/gallery15.jpg');"></div>
+                        <div class="card-header-overlay"></div>
+                        <div class="card-header-content">
+                            <span class="card-chapter-num">Chapter IV</span>
+                            <h3 class="card-chapter-title">💍 Forever Starts Here</h3>
+                            <p class="card-chapter-subtitle">The Beginning of Forever</p>
+                            <p class="card-chapter-preview">Every chapter of our journey led us to this unforgettable moment...</p>
+                        </div>
+                        <div class="card-header-chevron">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-body-inner">
+                            <p class="chapter-summary">Every chapter of our journey led us to this unforgettable moment. Surrounded by the love and blessings of our families, we chose forever. Our engagement wasn't the end of our story—it was the beginning of a new chapter, one that now brings us here, inviting you to celebrate the greatest day of our lives together.</p>
+                            
+                            <!-- Chapter 4 Photo Slider -->
+                            <div class="chapter-photo-slider" id="slider-ch4" data-slider>
+                                <div class="slider-track">
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery15.jpg" alt="Forever Begins" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Forever Begins</strong>
+                                                <span class="caption-date">08 January 2025</span>
+                                                <p>The moment we chose forever. With rings exchanged and hearts united, our true journey starts.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery16.jpg" alt="Our Journey Home" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Our Journey Home</strong>
+                                                <span class="caption-date">20 January 2025</span>
+                                                <p>Wherever you are is home. No more distances, just our shared lifetime.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery17.jpg" alt="With Every Heartbeat" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>With Every Heartbeat</strong>
+                                                <span class="caption-date">10 February 2025</span>
+                                                <p>I felt your love in every beat of my heart. A beautiful rhythm.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery18.jpg" alt="The Love We Found" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>The Love We Found</strong>
+                                                <span class="caption-date">28 February 2025</span>
+                                                <p>What started as a chance meeting became the greatest discovery of our lives.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery19.jpg" alt="Till the End" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Till the End</strong>
+                                                <span class="caption-date">15 March 2025</span>
+                                                <p>A promise to stand by each other till the end of time. A lifetime of yes.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                    <div class="slider-slide">
+                                        <figure class="story-img-wrap gallery-item" tabindex="0" role="button" aria-haspopup="dialog" aria-label="Open image">
+                                            <img src="assets/images/gallery20.jpg" alt="Last Pic as BF GF" loading="lazy" decoding="async" class="glass-card">
+                                            <figcaption class="caption-card">
+                                                <strong>Last Pic as BF GF</strong>
+                                                <span class="caption-date">30 March 2025</span>
+                                                <p>Our last picture before taking the vows. The countdown is finally on.</p>
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                </div>
+                                <div class="slider-controls">
+                                    <button class="slider-btn slider-prev" aria-label="Previous photo">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                                    </button>
+                                    <div class="slider-dots" aria-hidden="true">
+                                        <span class="slider-dot active"></span>
+                                        <span class="slider-dot"></span>
+                                        <span class="slider-dot"></span>
+                                        <span class="slider-dot"></span>
+                                        <span class="slider-dot"></span>
+                                        <span class="slider-dot"></span>
+                                    </div>
+                                    <div class="slider-counter" aria-live="polite"><span class="slider-current">1</span> / <span class="slider-total">6</span></div>
+                                    <button class="slider-btn slider-next" aria-label="Next photo">
+                                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                                    </button>
+                                </div>
+                                <div class="slider-progress-bar"><div class="slider-progress-fill"></div></div>
+                            </div>
+
+                            <div class="chapter-closing">
+                                <div class="chapter-closing-line"></div>
+                                <p>And now, our greatest adventure is about to begin.</p>
+                                <div class="chapter-closing-line"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Final Moment — Emotional Payoff (Initially Hidden) -->
+                <div class="story-final-moment" id="storyConclusion" style="display: none;">
+                    <div class="final-moment-inner">
+                        <div class="final-moment-divider"></div>
+                        <p class="final-moment-line-1">Every story begins with a single moment.</p>
+                        <p class="final-moment-line-2">Ours led us here.</p>
+                        <div class="final-moment-divider"></div>
+                    </div>
+                    <div class="final-moment-cta" id="finalMomentCta">
+                        <span class="final-moment-star" aria-hidden="true">✨</span>
+                        <h3 class="final-moment-heading">Join Us As We Begin Forever</h3>
+                        <button type="button" id="joinSayIDoBtn" class="btn btn-ghost">See Our Invitation</button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="countdown" class="section countdown-section container">
+            <div class="section-heading">
+                <span class="chapter-number">The Countdown</span>
+                <p class="eyebrow">Counting Down</p>
+                <h2>Until Forever Begins</h2>
+            </div>
+            <div class="countdown-wrap">
+                <!-- SVG Islamic Star Background -->
+                <svg class="countdown-bg-star" viewBox="0 0 100 100" width="300" height="300" aria-hidden="true">
+                    <path d="M50 5 L63 37 L95 50 L63 63 L50 95 L37 63 L5 50 L37 37 Z" fill="none" stroke="rgba(212, 175, 55, 0.05)" stroke-width="0.75" />
+                    <path d="M50 15 L59 41 L85 50 L59 59 L50 85 L41 59 L15 50 L41 41 Z" fill="none" stroke="rgba(212, 175, 55, 0.03)" stroke-width="0.5" />
+                    <circle cx="50" cy="50" r="10" fill="none" stroke="rgba(212, 175, 55, 0.04)" stroke-width="0.5" />
+                </svg>
+                <div class="countdown-grid" aria-live="polite">
+                    <div class="time-box"><span id="days">00</span><p>Days</p></div>
+                    <div class="countdown-divider" aria-hidden="true"></div>
+                    <div class="time-box"><span id="hours">00</span><p>Hours</p></div>
+                    <div class="countdown-divider" aria-hidden="true"></div>
+                    <div class="time-box"><span id="minutes">00</span><p>Minutes</p></div>
+                    <div class="countdown-divider" aria-hidden="true"></div>
+                    <div class="time-box"><span id="seconds">00</span><p>Seconds</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="events" class="section events-section container">
+            <div class="section-heading">
+                <span class="chapter-number">Chapter III</span>
+                <p class="eyebrow">Celebrations</p>
+                <h2>Our Wedding Celebrations</h2>
+            </div>
+            
+            <div class="timeline-container">
+                <!-- Golden active line thread -->
+                <div class="timeline-thread" aria-hidden="true">
+                    <div class="timeline-thread-progress"></div>
+                </div>
+                
+                <div class="timeline-events">
+                    <!-- Haldi Ceremony -->
+                    <article class="event-card glass-card timeline-left">
+                        <div class="timeline-dot" aria-hidden="true"></div>
+                        <p class="event-date">Saturday • 29 August 2026</p>
+                        <h3>🌿 Haldi Ceremony</h3>
+                        <p class="event-time">6:00 PM onwards</p>
+                        <p class="event-location"><a href="https://maps.app.goo.gl/5Z7sW3SojqCc7gPV9" target="_blank" rel="noopener">Bride's Residence</a></p>
+                    </article>
+
+                    <!-- Sangeet Night -->
+                    <article class="event-card glass-card timeline-right">
+                        <div class="timeline-dot" aria-hidden="true"></div>
+                        <p class="event-date">29 August 2026</p>
+                        <h3>🎶 Sangeet Night</h3>
+                        <p class="event-time">7:00 PM</p>
+                        <p class="event-location"><a href="https://maps.app.goo.gl/nHmxp5HqnWTBi1R56" target="_blank" rel="noopener">NSK & NKR A/C Mahal</a></p>
+                    </article>
+                    
+                    <!-- Nikah Ceremony -->
+                    <article class="event-card glass-card timeline-left">
+                        <div class="timeline-dot" aria-hidden="true"></div>
+                        <p class="event-date">30 August 2026</p>
+                        <h3>💍 Nikah Ceremony</h3>
+                        <p class="event-time">9:00 AM</p>
+                        <p class="event-location"><a href="https://maps.app.goo.gl/nHmxp5HqnWTBi1R56" target="_blank" rel="noopener">NSK & NKR A/C Mahal and Residency</a></p>
+                    </article>
+
+                    <!-- Valima -->
+                    <article class="event-card glass-card timeline-right">
+                        <div class="timeline-dot" aria-hidden="true"></div>
+                        <p class="event-date">To Be Announced</p>
+                        <h3>🤍 Valima</h3>
+                        <p class="event-time">Details coming soon</p>
+                        <p class="event-location">To Be Announced</p>
+                        <p class="event-description">We look forward to celebrating with you once again. The Valima details will be shared soon.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="venue" class="section venue-section container">
+            <div class="venue-panel glass-card">
+                <div class="venue-info">
+                    <span class="chapter-number">Chapter IV</span>
+                    <p class="eyebrow">Venue</p>
+                    <h2>Find Your Way</h2>
+                    <p class="venue-name">NSK & NKR A/C Mahal and Residency</p>
+                    <p class="venue-address">GST Main Rd, Lion City,<br>Thiru Nagar, Thanakkankulam,<br>Madurai, Tamil Nadu</p>
+                    <a class="btn map-btn" href="https://maps.app.goo.gl/nHmxp5HqnWTBi1R56" target="_blank" rel="noopener" style="margin-top: 24px;">Open in Google Maps</a>
+                </div>
+                <div class="venue-map-illustration" aria-hidden="true">
+                    <svg viewBox="0 0 100 100" width="100%" height="100%">
+                        <path d="M10,20 Q40,30 90,10 M0,50 L100,50 M30,100 C40,70 60,30 70,0 M20,0 L80,100" stroke="rgba(255,255,255,0.06)" stroke-width="1.5" fill="none" />
+                        <path d="M50,10 Q60,40 50,90 M10,80 L90,80" stroke="rgba(255,255,255,0.04)" stroke-width="1" fill="none" />
+                        <path class="route-line" d="M15,20 L40,28 L50,50 L68,68" stroke="var(--color-gold)" stroke-width="2" fill="none" stroke-linecap="round" />
+                        <circle class="map-pulse-ring" cx="68" cy="68" r="8" fill="none" stroke="var(--color-gold)" stroke-width="1" />
+                        <circle cx="68" cy="68" r="3.5" fill="var(--color-gold-soft)" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dress Code Section -->
+        <section id="dress-code" class="section dress-code-section container">
+            <div class="section-heading">
+                <span class="chapter-number">Guest Info</span>
+                <p class="eyebrow">Dress Code</p>
+                <h2>Wedding Style Guide</h2>
+                <p>To help us capture beautiful memories, we invite you to follow our style guide.</p>
+            </div>
+            
+            <div class="dress-code-grid">
+                <!-- Haldi -->
+                <div class="dress-card glass-card">
+                    <div class="dress-icon">🌿</div>
+                    <h3>Haldi</h3>
+                    <p class="attire-type">Yellow Attire</p>
+                    <p class="attire-desc">Traditional or Festive</p>
+                </div>
+                
+                <!-- Sangeet -->
+                <div class="dress-card glass-card">
+                    <div class="dress-icon">🎶</div>
+                    <h3>Sangeet</h3>
+                    <p class="attire-type">Party Wear</p>
+                    <p class="attire-desc">Anything suitable for a DJ Night</p>
+                </div>
+                
+                <!-- Nikah -->
+                <div class="dress-card glass-card">
+                    <div class="dress-icon">💍</div>
+                    <h3>Nikah</h3>
+                    <p class="attire-type">Elegant Traditional Attire</p>
+                    <p class="attire-desc">Luxurious traditional outfits</p>
+                </div>
+                
+                <!-- Valima -->
+                <div class="dress-card glass-card">
+                    <div class="dress-icon">🤍</div>
+                    <h3>Valima</h3>
+                    <p class="attire-type">Formal / Elegant</p>
+                    <p class="attire-desc">(Date to be announced)</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="rsvp" class="section rsvp-section container">
+            <div class="section-heading">
+                <span class="chapter-number">Chapter V</span>
+                <p class="eyebrow">RSVP</p>
+                <h2>Will You Celebrate With Us?</h2>
+                <p>Please let us know if you will be joining us.</p>
+            </div>
+            <form id="rsvpForm" class="rsvp-form glass-card" novalidate>
+                <!-- Wizard Progress Tracker -->
+                <div class="rsvp-progress-tracker" aria-hidden="true">
+                    <div class="rsvp-progress-line">
+                        <div class="rsvp-progress-fill"></div>
+                    </div>
+                    <div class="rsvp-progress-steps">
+                        <div class="rsvp-progress-dot active" data-step="1"><span>1</span></div>
+                        <div class="rsvp-progress-dot" data-step="2"><span>2</span></div>
+                        <div class="rsvp-progress-dot" data-step="3"><span>3</span></div>
+                    </div>
+                </div>
+
+                <!-- Step 1: Attendance Details -->
+                <div class="rsvp-step active" data-step="1">
+                    <div class="floating-field">
+                        <input id="rsvpName" name="name" type="text" autocomplete="name" required placeholder=" ">
+                        <label for="rsvpName">Your Name</label>
+                        <span class="error-feedback" id="nameError" role="alert"></span>
+                    </div>
+                    <div class="floating-field">
+                        <select id="rsvpAttendance" name="attendance" required>
+                            <option value="" disabled selected hidden></option>
+                            <option value="Yes, I'll be there">Yes, I'll be there</option>
+                            <option value="Sorry, I can't make it">Sorry, I can't make it</option>
+                        </select>
+                        <label for="rsvpAttendance">Will you attend?</label>
+                        <span class="error-feedback" id="attendanceError" role="alert"></span>
+                    </div>
+                    <div class="rsvp-actions">
+                        <button type="button" class="btn next-step-btn">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Guest Details & Message -->
+                <div class="rsvp-step" data-step="2">
+                    <div class="floating-field" id="guestFieldLabel">
+                        <input id="rsvpGuests" name="guests" type="number" min="1" max="20" placeholder=" ">
+                        <label for="rsvpGuests">Number of Guests</label>
+                        <span class="error-feedback" id="guestsError" role="alert"></span>
+                    </div>
+                    <div class="floating-field full-field">
+                        <textarea id="rsvpMessage" name="message" rows="4" placeholder=" "></textarea>
+                        <label for="rsvpMessage">Leave a message (Optional)</label>
+                    </div>
+                    <div class="rsvp-actions">
+                        <button type="button" class="btn prev-step-btn btn-secondary">Back</button>
+                        <button type="button" class="btn next-step-btn">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Confirmation Review -->
+                <div class="rsvp-step" data-step="3">
+                    <div class="rsvp-summary">
+                        <h3>Review Your RSVP Details</h3>
+                        <ul class="summary-list">
+                            <li><strong>Name:</strong> <span id="summaryName">-</span></li>
+                            <li><strong>Attendance:</strong> <span id="summaryAttendance">-</span></li>
+                            <li id="summaryGuestsRow"><strong>Guests:</strong> <span id="summaryGuests">-</span></li>
+                            <li><strong>Message:</strong> <span id="summaryMessage">-</span></li>
+                        </ul>
+                    </div>
+                    <div class="rsvp-actions">
+                        <button type="button" class="btn prev-step-btn btn-secondary">Back</button>
+                        <button type="submit" class="btn submit-rsvp-btn">Confirm & Send</button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Loading, Success & Failure Statuses -->
+                <div class="rsvp-step rsvp-status-step" data-step="4">
+                    <!-- Loading sub-state -->
+                    <div class="rsvp-status-content rsvp-loading-state" style="display: none;">
+                        <div class="rsvp-loader-spinner"></div>
+                        <p>Sending your response...</p>
+                    </div>
+                    
+                    <!-- Success sub-state -->
+                    <div class="rsvp-status-content rsvp-success-state" style="display: none;">
+                        <div class="rsvp-wax-seal" aria-hidden="true">
+                            <svg class="wax-seal-svg" viewBox="0 0 100 100" width="80" height="80">
+                                <path class="wax-base" d="M50,10 C65,8 88,14 88,38 C88,60 76,88 50,88 C24,88 12,65 12,45 C12,25 32,12 50,10 Z" fill="rgba(212, 175, 55, 0.95)" />
+                                <circle class="wax-ring" cx="50" cy="50" r="28" fill="none" stroke="#fff6cf" stroke-width="1.5" opacity="0.8" />
+                                <path class="wax-monogram" d="M42,60 V40 H48 C51,40 53,42 53,45 C53,48 51,49 48,50 L53,60 M42,50 H48 M58,60 L52,40 L46,60 M49,54 H55" fill="none" stroke="#fff6cf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <h3>RSVP Confirmed!</h3>
+                        <p id="successPersonalMessage"></p>
+                        
+                        <!-- Calendar integrations -->
+                        <div class="rsvp-calendar-wrapper">
+                            <p class="calendar-heading">Add this celebration to your calendar:</p>
+                            <div class="calendar-buttons">
+                                <a id="googleCalendarLink" href="" target="_blank" class="btn btn-sm calendar-btn">Google Calendar</a>
+                                <button type="button" id="downloadIcsBtn" class="btn btn-sm calendar-btn">Download .ICS</button>
+                            </div>
+                        </div>
+
+                        <!-- WhatsApp support button -->
+                        <div class="rsvp-whatsapp-wrapper">
+                            <a href="https://wa.me/917904943234?text=Hi%20Rozar%20and%20Arifa!%20Looking%20forward%20to%20your%20wedding!" target="_blank" class="btn whatsapp-btn">
+                                <span>💬 Chat on WhatsApp</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Failure sub-state -->
+                    <div class="rsvp-status-content rsvp-failure-state" style="display: none;">
+                        <div class="rsvp-failure-icon">&#9888;</div>
+                        <h3>Submission Failed</h3>
+                        <p>We couldn't submit your RSVP due to a network connection issue.</p>
+                        <div class="rsvp-actions">
+                            <button type="button" id="retrySubmitBtn" class="btn">Retry Submission</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer id="footer">
+        <div class="footer-content container">
+            <span class="chapter-number">Epilogue</span>
+            <p class="eyebrow">With Love</p>
+            <h2>Thank You</h2>
+            <p>Thank you for becoming part of our journey.</p>
+            <div class="footer-signatures" aria-label="Rozar & Arifa Signatures">
+                <svg class="signatures-svg" viewBox="0 0 200 80" width="240" height="96">
+                    <path class="sig-path sig-rozar" d="M 15,45 C 22,55 28,50 32,45 C 36,36 40,34 44,40 C 45,45 46,45 48,35 L 50,38 L 52,35 C 54,45 55,45 56,40 C 60,34 64,36 68,45 C 72,50 78,55 90,45" fill="none" stroke="var(--color-gold-soft)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="250" stroke-dashoffset="250" />
+                    <path class="sig-path sig-heart" d="M96,42 C92,36 86,38 88,46 C90,52 98,58 100,60 C102,58 110,52 112,46 C114,38 108,36 104,42 Z" fill="none" stroke="var(--color-rose)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="100" stroke-dashoffset="100" />
+                    <path class="sig-path sig-arifa" d="M 110,48 C 118,35 126,35 134,45 C 131,38 134,32 140,38 C 143,41 145,43 146,45 C 145,47 147,49 148,49 C 150,49 152,47 151,45 C 152,43 154,41 157,38 C 163,32 166,38 163,45 C 161,48 156,52 144,52 C 143,52 144,50 146,48 C 148,50 152,52 158,52 C 160,52 158,50 156,48 C 166,35 174,35 185,42" fill="none" stroke="var(--color-gold-soft)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="250" stroke-dashoffset="250" />
+                </svg>
+            </div>
+            <p class="footer-date">See you on our biggest day</p>
+        </div>
+    </footer>
+
+    <!-- Floating Audio Toggle -->
+    <button id="floatingAudioToggle" class="floating-audio-btn" aria-label="Enable sound" title="Sound controls">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="audio-icon audio-muted">
+            <path d="M11 5L6 9H2v6h4l5 4V5z M23 9l-6 6 M17 9l6 6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+    <!-- Private Admin Dashboard Container -->
+    <div id="adminPanel" style="display: none; position: fixed; inset: 0; z-index: 10000; background: var(--color-bg); overflow-y: auto; padding: 20px; font-family: var(--font-body);">
+        
+        <!-- Passcode Gate Screen -->
+        <div id="adminGate" class="glass-card" style="max-width: 420px; margin: 10vh auto; padding: var(--modal-padding); text-align: center; display: flex; flex-direction: column; align-items: center; gap: var(--space-md);">
+            <div style="font-size: 2.5rem; filter: drop-shadow(0 0 10px rgba(212,175,55,0.4));">🔑</div>
+            <h2 style="font-family: var(--font-heading); color: var(--color-gold); margin: 0;">Admin Portal</h2>
+            <p style="color: var(--color-muted); font-size: var(--font-size-sm); margin: 0;">Enter passcode to access guest management dashboard.</p>
+            <div class="floating-field" style="width: 100%; margin-top: var(--space-md);">
+                <input type="password" id="adminPasscode" placeholder=" " required style="width: 100%; text-align: center; letter-spacing: 4px;">
+                <label for="adminPasscode" style="width: 100%; text-align: center; left: 0;">Passcode</label>
+            </div>
+            <span id="gateError" style="color: var(--color-rose); font-size: var(--font-size-xs); display: none;">Invalid passcode. Try again.</span>
+            <div style="display: flex; gap: var(--space-md); width: 100%; margin-top: var(--space-sm);">
+                <button type="button" id="closeAdminBtn" class="btn btn-secondary" style="flex: 1;">Exit</button>
+                <button type="button" id="loginAdminBtn" class="btn" style="flex: 1;">Enter</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Workspace (Revealed after successful login) -->
+        <div id="adminDashboard" style="display: none; max-width: 1200px; margin: 0 auto; padding-bottom: 60px;">
+            <header style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-line); padding-bottom: var(--space-md); margin-bottom: var(--space-xl); flex-wrap: wrap; gap: var(--space-md);">
+                <div>
+                    <h1 style="font-family: var(--font-heading); color: var(--color-gold-soft); margin: 0; font-size: 28px; letter-spacing: 2px;">Guest Management</h1>
+                    <p style="color: var(--color-muted); margin: 4px 0 0 0; font-size: var(--font-size-sm);">Project RA RSVP Dashboard</p>
+                </div>
+                <div style="display: flex; gap: 12px;">
+                    <button type="button" id="addGuestBtn" class="btn btn-sm">➕ Add Guest</button>
+                    <button type="button" id="logoutAdminBtn" class="btn btn-sm btn-secondary">🚪 Logout</button>
+                </div>
+            </header>
+
+            <!-- Dashboard Stats Summary Grid -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-xl);">
+                <div class="glass-card" style="padding: 16px; text-align: center;">
+                    <p style="margin: 0; color: var(--color-muted); font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 1px;">Total Invitations</p>
+                    <h3 id="statTotalSent" style="margin: 8px 0 0 0; font-size: 28px; color: var(--color-gold); font-family: var(--font-heading);">0</h3>
+                </div>
+                <div class="glass-card" style="padding: 16px; text-align: center;">
+                    <p style="margin: 0; color: var(--color-muted); font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 1px;">Total Responses</p>
+                    <h3 id="statResponses" style="margin: 8px 0 0 0; font-size: 28px; color: var(--color-text); font-family: var(--font-heading);">0</h3>
+                </div>
+                <div class="glass-card" style="padding: 16px; text-align: center;">
+                    <p style="margin: 0; color: var(--color-emerald); font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 1px;">Accepted</p>
+                    <h3 id="statAccepted" style="margin: 8px 0 0 0; font-size: 28px; color: var(--color-emerald); font-family: var(--font-heading);">0</h3>
+                </div>
+                <div class="glass-card" style="padding: 16px; text-align: center;">
+                    <p style="margin: 0; color: var(--color-rose); font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 1px;">Declined</p>
+                    <h3 id="statDeclined" style="margin: 8px 0 0 0; font-size: 28px; color: var(--color-rose); font-family: var(--font-heading);">0</h3>
+                </div>
+                <div class="glass-card" style="padding: 16px; text-align: center;">
+                    <p style="margin: 0; color: #d8cab1; font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 1px;">Pending Response</p>
+                    <h3 id="statPending" style="margin: 8px 0 0 0; font-size: 28px; color: #d8cab1; font-family: var(--font-heading);">0</h3>
+                </div>
+                <div class="glass-card" style="padding: 16px; text-align: center;">
+                    <p style="margin: 0; color: var(--color-gold-soft); font-size: var(--font-size-xs); text-transform: uppercase; letter-spacing: 1px;">Acceptance %</p>
+                    <h3 id="statAcceptanceRate" style="margin: 8px 0 0 0; font-size: 28px; color: var(--color-gold-soft); font-family: var(--font-heading);">0%</h3>
+                </div>
+            </div>
+
+            <!-- Complex Stats breakdown -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-xl);">
+                <div class="glass-card" style="padding: 20px;">
+                    <h3 style="margin: 0 0 var(--space-sm) 0; font-family: var(--font-heading); color: var(--color-gold); font-size: var(--font-size-md); text-transform: uppercase; letter-spacing: 1px;">Headcount Statistics</h3>
+                    <div style="display: flex; flex-direction: column; gap: var(--space-xs);">
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); border-bottom: 1px solid var(--color-line); padding-bottom: 4px;">
+                            <span>Expected Headcount (Accepted):</span>
+                            <strong id="statExpectedHeadcount">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); border-bottom: 1px solid var(--color-line); padding-bottom: 4px;">
+                            <span>Adults attending:</span>
+                            <strong id="statAdultsAttending">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); padding-bottom: 4px;">
+                            <span>Children attending:</span>
+                            <strong id="statChildrenAttending">0</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card" style="padding: 20px;">
+                    <h3 style="margin: 0 0 var(--space-sm) 0; font-family: var(--font-heading); color: var(--color-gold); font-size: var(--font-size-md); text-transform: uppercase; letter-spacing: 1px;">Ceremony Expected Attendance</h3>
+                    <div style="display: flex; flex-direction: column; gap: var(--space-xs);">
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); border-bottom: 1px solid var(--color-line); padding-bottom: 4px;">
+                            <span>🌿 Haldi:</span>
+                            <strong id="statAttendingHaldi">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); border-bottom: 1px solid var(--color-line); padding-bottom: 4px;">
+                            <span>🎶 Sangeet:</span>
+                            <strong id="statAttendingSangeet">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); border-bottom: 1px solid var(--color-line); padding-bottom: 4px;">
+                            <span>💍 Nikah:</span>
+                            <strong id="statAttendingNikah">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); padding-bottom: 4px;">
+                            <span>🤍 Valima:</span>
+                            <strong id="statAttendingValima">0</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card" style="padding: 20px;">
+                    <h3 style="margin: 0 0 var(--space-sm) 0; font-family: var(--font-heading); color: var(--color-gold); font-size: var(--font-size-md); text-transform: uppercase; letter-spacing: 1px;">Families & Reminders</h3>
+                    <div style="display: flex; flex-direction: column; gap: var(--space-xs);">
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); border-bottom: 1px solid var(--color-line); padding-bottom: 4px;">
+                            <span>Families Confirmed:</span>
+                            <strong id="statConfirmedFamilies">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); border-bottom: 1px solid var(--color-line); padding-bottom: 4px;">
+                            <span>Families Pending:</span>
+                            <strong id="statPendingFamilies">0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: var(--font-size-sm); padding-bottom: 4px;">
+                            <span>Reminders Needed:</span>
+                            <strong id="statRemindersNeeded">0</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters, Search and Export toolbar -->
+            <div class="glass-card" style="padding: var(--space-md); margin-bottom: var(--space-lg); display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between; width: 100%;">
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap; flex: 1; min-width: 280px;">
+                        <input type="text" id="guestSearch" placeholder="🔍 Search Guest Name..." style="flex: 2; min-width: 180px; padding: 8px 12px; border-radius: var(--radius-xs); border: 1px solid var(--color-line); background: rgba(0,0,0,0.2); color: var(--color-text);">
+                        <select id="filterAttendance" style="flex: 1; min-width: 120px; padding: 8px 12px; border-radius: var(--radius-xs); border: 1px solid var(--color-line); background: var(--color-bg); color: var(--color-text);">
+                            <option value="">All Attendance</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Declined">Declined</option>
+                            <option value="Pending">Pending</option>
+                        </select>
+                        <select id="filterFamily" style="flex: 1; min-width: 120px; padding: 8px 12px; border-radius: var(--radius-xs); border: 1px solid var(--color-line); background: var(--color-bg); color: var(--color-text);">
+                            <option value="">All Families</option>
+                        </select>
+                        <select id="filterReminder" style="flex: 1; min-width: 120px; padding: 8px 12px; border-radius: var(--radius-xs); border: 1px solid var(--color-line); background: var(--color-bg); color: var(--color-text);">
+                            <option value="">All Reminders</option>
+                            <option value="Needs Reminder">Needs Reminder</option>
+                            <option value="Reminder Sent">Reminder Sent</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="No Response">No Response</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" id="exportCsvBtn" class="btn btn-sm btn-secondary">💾 Export CSV</button>
+                        <button type="button" id="exportExcelBtn" class="btn btn-sm btn-secondary">📊 Export Excel</button>
+                        <button type="button" id="printListBtn" class="btn btn-sm btn-secondary">🖨️ Print List</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Guest List Table Container -->
+            <div class="glass-card" style="overflow-x: auto; border-radius: var(--radius-sm);">
+                <table id="guestTable" style="width: 100%; border-collapse: collapse; text-align: left; min-width: 900px; font-size: var(--font-size-base);">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--color-line); background: rgba(var(--color-gold-rgb), 0.05); color: var(--color-gold-soft);">
+                            <th style="padding: 12px 16px;">Guest Name</th>
+                            <th style="padding: 12px 16px;">Family</th>
+                            <th style="padding: 12px 16px; text-align: center;">Headcount</th>
+                            <th style="padding: 12px 16px; text-align: center;">Status</th>
+                            <th style="padding: 12px 16px; text-align: center;">Ceremonies</th>
+                            <th style="padding: 12px 16px;">Reminder</th>
+                            <th style="padding: 12px 16px;">Date</th>
+                            <th style="padding: 12px 16px; text-align: center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guestTableBody" style="color: var(--color-text);">
+                        <!-- Guest rows populated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit/Add Guest Modal -->
+    <div id="guestModal" style="display: none; position: fixed; inset: 0; z-index: 11000; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; padding: 20px;">
+        <div class="glass-card" style="max-width: 500px; width: 100%; padding: var(--modal-padding); display: flex; flex-direction: column; gap: var(--space-md); max-height: 90vh; overflow-y: auto;">
+            <h3 id="modalTitle" style="font-family: var(--font-heading); color: var(--color-gold); margin: 0;">Add New Guest</h3>
+            <form id="guestEditorForm" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+                <input type="hidden" id="editorGuestId">
+                <div class="floating-field">
+                    <input type="text" id="editorName" required placeholder=" ">
+                    <label for="editorName">Guest Name</label>
+                </div>
+                <div class="floating-field">
+                    <input type="text" id="editorFamily" placeholder=" ">
+                    <label for="editorFamily">Family Name</label>
+                </div>
+                <div style="display: flex; gap: var(--space-sm);">
+                    <div class="floating-field" style="flex: 1;">
+                        <input type="number" id="editorAdults" min="0" required placeholder=" ">
+                        <label for="editorAdults">Adults</label>
+                    </div>
+                    <div class="floating-field" style="flex: 1;">
+                        <input type="number" id="editorChildren" min="0" required placeholder=" ">
+                        <label for="editorChildren">Children</label>
+                    </div>
+                </div>
+                <div class="floating-field">
+                    <select id="editorAttendance" required>
+                        <option value="Accepted">Accepted</option>
+                        <option value="Declined">Declined</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                    <label for="editorAttendance">Attendance Status</label>
+                </div>
+                <div class="floating-field">
+                    <select id="editorReminder">
+                        <option value="Needs Reminder">Needs Reminder</option>
+                        <option value="Reminder Sent">Reminder Sent</option>
+                        <option value="Confirmed">Confirmed</option>
+                        <option value="No Response">No Response</option>
+                    </select>
+                    <label for="editorReminder">Reminder Status</label>
+                </div>
+                
+                <!-- Ceremony Selections -->
+                <div style="border: 1px solid var(--color-line); border-radius: var(--radius-xs); padding: 12px; background: rgba(0,0,0,0.2);">
+                    <p style="margin: 0 0 8px 0; color: var(--color-gold-soft); font-size: var(--font-size-sm); font-weight: var(--font-weight-medium);">Celebration Attendance</p>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; font-size: var(--font-size-sm);">
+                        <label style="display: flex; align-items: center; gap: 8px; text-transform: none; color: var(--color-text); cursor: pointer;">
+                            <input type="checkbox" id="editorHaldi"> 🌿 Haldi
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; text-transform: none; color: var(--color-text); cursor: pointer;">
+                            <input type="checkbox" id="editorSangeet"> 🎶 Sangeet
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; text-transform: none; color: var(--color-text); cursor: pointer;">
+                            <input type="checkbox" id="editorNikah"> 💍 Nikah
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 8px; text-transform: none; color: var(--color-text); cursor: pointer;">
+                            <input type="checkbox" id="editorValima"> 🤍 Valima
+                        </label>
+                    </div>
+                </div>
+
+                <div class="floating-field">
+                    <textarea id="editorNotes" rows="2" placeholder=" "></textarea>
+                    <label for="editorNotes">Notes / Message</label>
+                </div>
+
+                <div style="display: flex; gap: var(--space-md); margin-top: var(--space-sm);">
+                    <button type="button" id="cancelEditorBtn" class="btn btn-secondary" style="flex: 1;">Cancel</button>
+                    <button type="submit" id="saveEditorBtn" class="btn" style="flex: 1;">Save Guest</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Floating Audio Toggle -->
+    <button id="floatingAudioToggle" class="floating-audio-btn" aria-label="Enable sound" title="Sound controls">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="audio-icon audio-muted">
+            <path d="M11 5L6 9H2v6h4l5 4V5z M23 9l-6 6 M17 9l6 6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+</body>
+
+</html>

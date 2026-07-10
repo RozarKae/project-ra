@@ -60,7 +60,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         {/* Brand Insignia Header */}
         <div className="p-6 border-b border-[#D4AF37]/10 flex items-center justify-between">
           <div className="flex flex-col">
-            <h1 className="font-cinzel text-lg tracking-[0.2em] text-[#D4AF37] font-bold">PROJECT RA</h1>
+            <h1 className="font-cinzel text-[16px] tracking-[0.12em] text-[#D4AF37] font-bold">NIKAHZWEDOS</h1>
             <span className="text-[9px] uppercase tracking-widest text-[#0F6D5B] font-semibold mt-1">Management Portal</span>
           </div>
           <button 

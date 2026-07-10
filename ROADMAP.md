@@ -1,345 +1,50 @@
-# Project RA Roadmap
+# ROADMAP.md — Project RA SaaS Platform
 
-Version: 1.0 Development
-
----
-
-# Current Status
-
-Project Status
-
-🟢 Active Development
-
-Current Version
-
-v1.0
-
-Current Phase
-
-Premium Experience
-
-Current Sprint
-
-Sprint 2.1 – Navigation Overhaul
+This document maps out the roadmap milestones to extend Project RA into a comprehensive, multi-wedding SaaS system.
 
 ---
 
-# Completed Milestones
+## 🚀 Completed Milestones
 
-## Foundation
+### Sprint A (UI Foundations)
+* Audited dead code, standardized responsive layouts, and designed a dashboard overview interface.
 
-✅ Project setup
-
-✅ Repository creation
-
-✅ GitHub deployment
-
-✅ Hero section
-
-✅ Story section
-
-✅ Gallery
-
-✅ Countdown
-
-✅ Events
-
-✅ Venue
-
-✅ RSVP
-
-✅ Footer
+### Sprint B (Guest Management & Firestore Upgrade)
+* Formulated local database queries with offline tab caches.
+* Refactored project directories into independent feature modules (`src/modules/*`).
+* Scoped all collection paths dynamically under `workspaces/{workspaceId}/weddings/{weddingId}/`.
+* Created abstract repositories and custom hooks (`useGuests`, `useActivityLogs`).
+* Established a role-based access control matrix.
 
 ---
 
-## Design System
-
-✅ CSS variables
-
-✅ Typography system
-
-✅ Color system
-
-✅ Spacing system
-
-✅ Shadows
-
-✅ Border radius system
-
-✅ Modular CSS architecture
-
----
-
-## Animation System
-
-✅ Loader
-
-✅ Hero reveal
-
-✅ Mouse parallax
-
-✅ Countdown
-
-✅ Gallery modal
-
-✅ Scroll animations
-
-✅ Moon animation
-
-✅ Stars animation
-
----
-
-## Gallery
-
-✅ 20 memories
-
-✅ Story modal
-
-✅ Full screen gallery
-
-✅ GSAP popup animation
-
-✅ Escape support
-
-✅ Click outside to close
-
----
-
-# Version 1.0 Roadmap
-
----
-
-## Sprint 2.1
-
-Navigation Overhaul
-
-Status
-
-⬜ Pending
-
-Tasks
-
-- Glass navigation
-
-- Active section indicator
-
-- Scroll progress bar
-
-- Hide / reveal navigation
-
-- Mobile navigation
-
-- Premium hover animations
-
----
-
-## Sprint 2.2
-
-Cinematic Story Journey
-
-Status
-
-⬜ Pending
-
-Tasks
-
-- Story chapters
-
-- ScrollTrigger timelines
-
-- Cinematic transitions
-
-- Hero transition
-
-- Animated text
-
-- Memory timeline
-
----
-
-## Sprint 2.3
-
-Gallery Experience 2.0
-
-Status
-
-⬜ Pending
-
-Tasks
-
-- Previous / Next navigation
-
-- Swipe gestures
-
-- Keyboard navigation
-
-- Memory counter
-
-- Progress indicator
-
-- Image preloading
-
-- GSAP transitions
-
----
-
-## Sprint 2.4
-
-RSVP & Guest Experience
-
-Status
-
-⬜ Pending
-
-Tasks
-
-- Multi-step form
-
-- Live validation
-
-- Progress indicator
-
-- Success screen
-
-- Calendar integration
-
-- WhatsApp shortcut
-
-- Submission animation
-
----
-
-## Sprint 2.5
-
-Performance & Accessibility
-
-Status
-
-⬜ Pending
-
-Tasks
-
-- Lazy loading
-
-- CSS optimization
-
-- JavaScript optimization
-
-- SEO
-
-- Accessibility
-
-- Lighthouse optimization
-
-- Cross-browser testing
-
----
-
-## Sprint 2.6
-
-Final Premium Polish
-
-Status
-
-⬜ Pending
-
-Tasks
-
-- Micro interactions
-
-- Ambient background
-
-- Typography audit
-
-- Spacing audit
-
-- Device testing
-
-- Browser testing
-
-- Launch checklist
-
----
-
-# Version 1.1
-
-Wedding Day Experience
-
-Planned Features
-
-- Live countdown
-
-- Guestbook
-
-- Live gallery
-
-- Guest photo upload
-
-- Wedding timeline
-
----
-
-# Version 1.2
-
-Guest Experience
-
-Planned Features
-
-- Personalized invitations
-
-- Multi-language
-
-- QR check-in
-
-- Seating plan
-
-- Gift registry
-
----
-
-# Version 2.0
-
-Project RA Platform
-
-Future Vision
-
-Transform Project RA into a reusable Wedding Website Generator where users can generate premium wedding websites through configuration instead of manual coding.
-
----
-
-# Development Workflow
-
-Plan
-
-↓
-
-Discuss
-
-↓
-
-Review
-
-↓
-
-Implement
-
-↓
-
-Test
-
-↓
-
-Commit
-
-↓
-
-Push
-
-↓
-
-Deploy
-
-Never skip the review stage.
-
-Never commit untested changes.
+## 🔮 Upcoming Sprint Milestones
+
+### Sprint C: Public RSVP Integration & Firestore Sync
+* **Target**: August 2026
+* **Scope**:
+  * Build the public-facing Nikah RSVP portal.
+  * Dynamically fetch invitation metadata via `/invitation/:guestId` to customize invitations.
+  * Connect form inputs directly to the `rsvps` sub-collection inside the active wedding instance.
+  * Add automatic check-in QR scanner logger endpoints.
+
+### Sprint D: Seating & Layout Planner
+* **Target**: September 2026
+* **Scope**:
+  * Implement an interactive seating assignment builder (drag-and-drop table layouts).
+  * Group guests by table numbers, tracking VIP priority limits.
+  * Map guests/families visually to allocated chairs.
+
+### Sprint E: Vendor and Budget Expense Trackers
+* **Target**: October 2026
+* **Scope**:
+  * Build vendor checklists (Caterers, Florists, Venues).
+  * Implement ledger cards to record wedding expenses, calculating budgets and deposits.
+  * Wire graphs showing expense categories.
+
+### Sprint F: Multi-Tenant Dashboard Generator
+* **Target**: November 2026
+* **Scope**:
+  * Enable tenant accounts registration and self-service workspaces creation.
+  * Add subscription billing tiers (Stripe checkout integrations).
+  * Build a landing page builder allowing users to style and generate custom public wedding themes.
