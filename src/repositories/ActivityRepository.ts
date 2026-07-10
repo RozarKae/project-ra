@@ -113,7 +113,10 @@ export class ActivityRepository extends BaseRepository {
   }
 
   private getDefaultSeedData(): ActivityLog[] {
+    const now = new Date();
     return [
+      { id: 'l_mock_mom', timestamp: new Date(now.getTime() - 15 * 60000).toISOString(), action: 'Update', entity: 'family', entityId: 'f1', details: 'updated 2 families', user: 'mom@projectra.com' },
+      { id: 'l_mock_dad', timestamp: new Date(now.getTime() - 2 * 3600000).toISOString(), action: 'Create', entity: 'guest', entityId: 'g_bulk', details: 'added 6 guests', user: 'dad@projectra.com' },
       { id: 'l1', timestamp: '2026-07-08T10:05:00Z', action: 'Import', entity: 'guest', entityId: 'bulk', details: 'Initialized database with Jenkins and Khan families', user: 'system@projectra.com' },
       { id: 'l2', timestamp: '2026-07-09T09:32:00Z', action: 'Create', entity: 'guest', entityId: 'g6', details: 'Added Emily & Michael Watson to Bride side', user: 'admin@projectra.com' },
       { id: 'l3', timestamp: '2026-07-09T18:42:00Z', action: 'Create', entity: 'guest', entityId: 'g12', details: 'Added Omar family (Yusuf & Aminah) as VIPs', user: 'admin@projectra.com' },

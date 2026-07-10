@@ -76,12 +76,20 @@ export class GuestRepository extends BaseRepository {
     guest: Guest,
     operator: string
   ): Promise<void> {
+    const now = new Date().toISOString();
+    const createdBy = guest.createdBy || operator;
+    const updatedBy = operator;
+
     if (isFirebaseConfigured && db) {
       const docRef = this.getDocRef(workspaceId, weddingId, 'guests', guest.id);
       if (docRef) {
         const payload = {
           ...guest,
-          updatedAt: new Date().toISOString()
+          createdAt: guest.createdAt || now,
+          updatedAt: now,
+          createdBy,
+          updatedBy,
+          isDeleted: false
         };
         await setDoc(docRef, payload, { merge: true });
         
@@ -107,13 +115,23 @@ export class GuestRepository extends BaseRepository {
       let guests: Guest[] = data ? JSON.parse(data) : this.getDefaultSeedData();
       
       const index = guests.findIndex(g => g.id === guest.id);
-      const now = new Date().toISOString();
 
       if (index > -1) {
-        guests[index] = { ...guest, updatedAt: now };
+        guests[index] = { 
+          ...guest, 
+          updatedAt: now, 
+          updatedBy 
+        };
         await this.activityRepo.addLog(workspaceId, weddingId, operator, 'Update', 'guest', guest.id, `Updated Guest: "${guest.name}"`);
       } else {
-        const newGuest = { ...guest, createdAt: now, isDeleted: false };
+        const newGuest = { 
+          ...guest, 
+          createdAt: now, 
+          updatedAt: now, 
+          createdBy, 
+          updatedBy, 
+          isDeleted: false 
+        };
         guests.push(newGuest);
         await this.activityRepo.addLog(workspaceId, weddingId, operator, 'Create', 'guest', guest.id, `Created Guest: "${guest.name}"`);
       }
@@ -162,21 +180,22 @@ export class GuestRepository extends BaseRepository {
   // Default seed guests for sandbox emulations
   private getDefaultSeedData(): Guest[] {
     return [
-      { id: 'g1', name: 'Sarah Jenkins', phone: '+15550199', side: 'bride', rsvpStatus: 'attending', isVip: true, familyName: 'Jenkins Family', notes: 'Groom\'s college friend', createdAt: '2026-07-08T10:00:00Z', isDeleted: false },
-      { id: 'g2', name: 'Robert Jenkins', phone: '+15550199', side: 'bride', rsvpStatus: 'attending', isVip: true, familyName: 'Jenkins Family', notes: 'Sarah\'s husband', createdAt: '2026-07-08T10:05:00Z', isDeleted: false },
-      { id: 'g3', name: 'Uncle Hassan', phone: '+92300123456', side: 'groom', rsvpStatus: 'attending', isVip: true, familyName: 'Khan Family', notes: 'Groom\'s paternal uncle', createdAt: '2026-07-08T11:20:00Z', isDeleted: false },
-      { id: 'g4', name: 'Aunt Fatima', phone: '+92300123456', side: 'groom', rsvpStatus: 'attending', isVip: true, familyName: 'Khan Family', notes: 'Uncle Hassan\'s wife', createdAt: '2026-07-08T11:22:00Z', isDeleted: false },
-      { id: 'g5', name: 'Tariq Khan', phone: '+92300987654', side: 'groom', rsvpStatus: 'pending', isVip: false, familyName: 'Khan Family', notes: 'Cousin', createdAt: '2026-07-08T11:25:00Z', isDeleted: false },
-      { id: 'g6', name: 'Emily Watson', phone: '+442079460018', side: 'bride', rsvpStatus: 'declined', isVip: false, familyName: 'Watson Family', notes: 'Classmate', createdAt: '2026-07-09T09:30:00Z', isDeleted: false },
-      { id: 'g7', name: 'Michael Watson', phone: '+442079460018', side: 'bride', rsvpStatus: 'declined', isVip: false, familyName: 'Watson Family', notes: 'Emily\'s husband', createdAt: '2026-07-09T09:32:00Z', isDeleted: false },
-      { id: 'g8', name: 'Bilal Ahmed', phone: '+92333112233', side: 'groom', rsvpStatus: 'attending', isVip: false, familyName: 'Ahmed Family', notes: 'Neighbor', createdAt: '2026-07-09T14:10:00Z', isDeleted: false },
-      { id: 'g9', name: 'Maryam Ahmed', phone: '+92333112233', side: 'groom', rsvpStatus: 'attending', isVip: false, familyName: 'Ahmed Family', notes: 'Bilal\'s sister', createdAt: '2026-07-09T14:12:00Z', isDeleted: false },
-      { id: 'g10', name: 'David Miller', phone: '+12025550143', side: 'bride', rsvpStatus: 'pending', isVip: false, notes: 'Colleague', createdAt: '2026-07-09T16:00:00Z', isDeleted: false },
-      { id: 'g11', name: 'Sarah Miller', phone: '+12025550143', side: 'bride', rsvpStatus: 'pending', isVip: false, notes: 'David\'s sister', createdAt: '2026-07-09T16:02:00Z', isDeleted: false },
-      { id: 'g12', name: 'Yusuf Omar', phone: '+92315887766', side: 'groom', rsvpStatus: 'pending', isVip: true, familyName: 'Omar Family', notes: 'Honored Family Friend', createdAt: '2026-07-09T18:40:00Z', isDeleted: false },
-      { id: 'g13', name: 'Aminah Omar', phone: '+92315887766', side: 'groom', rsvpStatus: 'pending', isVip: true, familyName: 'Omar Family', notes: 'Yusuf\'s mother', createdAt: '2026-07-09T18:42:00Z', isDeleted: false },
-      { id: 'g14', name: 'Zayn Malik', phone: '+447911123456', side: 'groom', rsvpStatus: 'attending', isVip: false, notes: 'Work acquaintance', createdAt: '2026-07-10T05:00:00Z', isDeleted: false },
-      { id: 'g15', name: 'Chloe Bennett', phone: '+13125550187', side: 'bride', rsvpStatus: 'pending', isVip: false, notes: 'Cousin on Bride side', createdAt: '2026-07-10T08:15:00Z', isDeleted: false }
+      { id: 'g1', name: 'Sarah Jenkins', phone: '+15550199', side: 'bride', rsvpStatus: 'attending', invitationType: 'both', membersCount: 2, familyName: 'Jenkins Family', relation: 'Friend', notes: 'Groom\'s college friend', createdAt: '2026-07-08T10:00:00Z', isDeleted: false },
+      { id: 'g2', name: 'Robert Jenkins', phone: '+15550199', side: 'bride', rsvpStatus: 'attending', invitationType: 'both', membersCount: 1, familyName: 'Jenkins Family', relation: 'Friend', notes: 'Sarah\'s husband', createdAt: '2026-07-08T10:05:00Z', isDeleted: false },
+      { id: 'g3', name: 'Uncle Hassan', phone: '+92300123456', side: 'groom', rsvpStatus: 'attending', invitationType: 'printed', membersCount: 4, familyName: 'Khan Family', relation: 'Uncle', notes: 'Groom\'s paternal uncle', createdAt: '2026-07-08T11:20:00Z', isDeleted: false },
+      { id: 'g4', name: 'Aunt Fatima', phone: '+92300123456', side: 'groom', rsvpStatus: 'attending', invitationType: 'printed', membersCount: 1, familyName: 'Khan Family', relation: 'Aunt', notes: 'Uncle Hassan\'s wife', createdAt: '2026-07-08T11:22:00Z', isDeleted: false },
+      { id: 'g5', name: 'Tariq Khan', phone: '+92300987654', side: 'groom', rsvpStatus: 'pending', invitationType: 'digital', membersCount: 1, familyName: 'Khan Family', relation: 'Cousin', notes: 'Cousin', createdAt: '2026-07-08T11:25:00Z', isDeleted: false },
+      { id: 'g6', name: 'Emily Watson', phone: '+442079460018', side: 'bride', rsvpStatus: 'declined', invitationType: 'digital', membersCount: 2, familyName: 'Watson Family', relation: 'Classmate', notes: 'Classmate', createdAt: '2026-07-09T09:30:00Z', isDeleted: false },
+      { id: 'g7', name: 'Michael Watson', phone: '+442079460018', side: 'bride', rsvpStatus: 'declined', invitationType: 'digital', membersCount: 1, familyName: 'Watson Family', relation: 'Classmate', notes: 'Emily\'s husband', createdAt: '2026-07-09T09:32:00Z', isDeleted: false },
+      { id: 'g8', name: 'Bilal Ahmed', phone: '+92333112233', side: 'groom', rsvpStatus: 'attending', invitationType: 'printed', membersCount: 3, familyName: 'Ahmed Family', relation: 'Neighbor', notes: 'Neighbor', createdAt: '2026-07-09T14:10:00Z', isDeleted: false },
+      { id: 'g9', name: 'Maryam Ahmed', phone: '+92333112233', side: 'groom', rsvpStatus: 'attending', invitationType: 'printed', membersCount: 1, familyName: 'Ahmed Family', relation: 'Neighbor', notes: 'Bilal\'s sister', createdAt: '2026-07-09T14:12:00Z', isDeleted: false },
+      { id: 'g10', name: 'David Miller', phone: '+12025550143', side: 'bride', rsvpStatus: 'pending', invitationType: 'digital', membersCount: 1, familyName: 'Miller Family', relation: 'Colleague', notes: 'Colleague', createdAt: '2026-07-09T16:00:00Z', isDeleted: false },
+      { id: 'g11', name: 'Sarah Miller', phone: '+12025550143', side: 'bride', rsvpStatus: 'pending', invitationType: 'digital', membersCount: 1, familyName: 'Miller Family', relation: 'Colleague', notes: 'David\'s sister', createdAt: '2026-07-09T16:02:00Z', isDeleted: false },
+      { id: 'g12', name: 'Yusuf Omar', phone: '+92315887766', side: 'groom', rsvpStatus: 'pending', invitationType: 'both', membersCount: 2, familyName: 'Omar Family', relation: 'Friend', notes: 'Honored Family Friend', createdAt: '2026-07-09T18:40:00Z', isDeleted: false },
+      { id: 'g13', name: 'Aminah Omar', phone: '+92315887766', side: 'groom', rsvpStatus: 'pending', invitationType: 'both', membersCount: 1, familyName: 'Omar Family', relation: 'Friend', notes: 'Yusuf\'s mother', createdAt: '2026-07-09T18:42:00Z', isDeleted: false },
+      { id: 'g14', name: 'Zayn Malik', phone: '+447911123456', side: 'groom', rsvpStatus: 'attending', invitationType: 'digital', membersCount: 1, familyName: 'Malik Family', relation: 'Acquaintance', notes: 'Work acquaintance', createdAt: '2026-07-10T05:00:00Z', isDeleted: false },
+      { id: 'g15', name: 'Chloe Bennett', phone: '+13125550187', side: 'bride', rsvpStatus: 'pending', invitationType: 'digital', membersCount: 1, familyName: 'Bennett Family', relation: 'Cousin', notes: 'Cousin on Bride side', createdAt: '2026-07-10T08:15:00Z', isDeleted: false }
     ];
   }
 }
+export default GuestRepository;

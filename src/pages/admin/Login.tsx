@@ -80,8 +80,8 @@ export const Login: React.FC = () => {
               <path d="M50,15 A35,35 0 1,0 85,50 A25,25 0 1,1 50,15" />
             </svg>
           </div>
-          <h1 className="font-cinzel text-xl tracking-[0.15em] text-[#D4AF37] font-bold text-center">
-            NIKAHZWEDOS
+          <h1 className="font-cinzel text-lg tracking-[0.1em] text-[#D4AF37] font-bold text-center">
+            NIKAHS & WEDDINGS
           </h1>
           <p className="text-[10px] uppercase tracking-widest text-[#0F6D5B] font-semibold mt-1">
             Secure Administrator Login
