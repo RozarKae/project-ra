@@ -15,7 +15,7 @@ export class ActivityRepository extends BaseRepository {
     return `ra_logs_${workspaceId}_${weddingId}`;
   }
 
-  // Subscribe to real-time Activity Log changes (Firestore or multi-tenant LocalStorage fallback)
+  // Subscribe to real-time Activity Log changes (Firestore or LocalStorage)
   public subscribeLogs(
     workspaceId: string,
     weddingId: string,
@@ -32,7 +32,6 @@ export class ActivityRepository extends BaseRepository {
         callback(logsList);
       }, (error) => {
         console.warn("Index not ready for activities query, falling back to client-sorted listener:", error);
-        // Unsorted listener fallback
         return onSnapshot(collection(db, this.getPath(workspaceId, weddingId, 'activities')), (snap) => {
           const logsList = snap.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() } as ActivityLog));
           logsList.sort((a, b) => b.timestamp.localeCompare(a.timestamp));
@@ -91,6 +90,57 @@ export class ActivityRepository extends BaseRepository {
       entity,
       entityId,
       details
+    };
+
+    if (isFirebaseConfigured && db) {
+      const colRef = collection(db, this.getPath(workspaceId, weddingId, 'activities'));
+      await addDoc(colRef, newLog);
+    } else {
+      const storageKey = this.getLocalStorageKey(workspaceId, weddingId);
+      const data = localStorage.getItem(storageKey);
+      let logs: ActivityLog[] = data ? JSON.parse(data) : this.getDefaultSeedData();
+      
+      const logWithId: ActivityLog = {
+        id: 'log_' + Math.random().toString(36).substr(2, 9),
+        ...newLog
+      };
+      
+      logs.unshift(logWithId);
+      localStorage.setItem(storageKey, JSON.stringify(logs));
+      window.dispatchEvent(new CustomEvent('ra_storage_update', { detail: { key: storageKey } }));
+    }
+  }
+
+  // Sprint C.5: Add specific timeline trace log
+  public async addGuestTimelineLog(
+    workspaceId: string,
+    weddingId: string,
+    guestId: string,
+    eventType: string,
+    title: string,
+    description: string,
+    previousValue: string,
+    newValue: string,
+    performedBy: string,
+    category: 'invitation' | 'rsvp' | 'attendance' | 'hospitality' | 'system' | 'note',
+    isPinned: boolean = false
+  ): Promise<void> {
+    const newLog: Omit<ActivityLog, 'id'> = {
+      timestamp: new Date().toISOString(),
+      user: performedBy,
+      action: eventType,
+      entity: 'guest',
+      entityId: guestId,
+      details: description,
+      guestId,
+      eventType,
+      title,
+      description,
+      previousValue,
+      newValue,
+      performedBy,
+      isPinned,
+      category
     };
 
     if (isFirebaseConfigured && db) {

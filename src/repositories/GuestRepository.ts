@@ -42,7 +42,6 @@ export class GuestRepository extends BaseRepository {
       const fetchLocal = () => {
         const data = localStorage.getItem(storageKey);
         if (!data) {
-          // Initial seed data for the first workspace/wedding
           const defaultSeed = this.getDefaultSeedData();
           localStorage.setItem(storageKey, JSON.stringify(defaultSeed));
           callback(defaultSeed);
@@ -108,6 +107,21 @@ export class GuestRepository extends BaseRepository {
           guest.id,
           `Saved Guest record: "${guest.name}" (${guest.side.toUpperCase()} side)`
         );
+
+        // C.5 Timeline audit log
+        const isNew = guest.createdAt === guest.updatedAt;
+        await this.activityRepo.addGuestTimelineLog(
+          workspaceId,
+          weddingId,
+          guest.id,
+          isNew ? 'Guest Created' : 'Guest Updated',
+          isNew ? 'Guest Profile Created' : 'Guest Profile Updated',
+          isNew ? `Guest record for "${guest.name}" has been created.` : `Guest record for "${guest.name}" has been updated.`,
+          '',
+          JSON.stringify(guest),
+          operator,
+          'system'
+        );
       }
     } else {
       const storageKey = this.getLocalStorageKey(workspaceId, weddingId);
@@ -117,12 +131,27 @@ export class GuestRepository extends BaseRepository {
       const index = guests.findIndex(g => g.id === guest.id);
 
       if (index > -1) {
+        const prevGuest = guests[index];
         guests[index] = { 
           ...guest, 
           updatedAt: now, 
           updatedBy 
         };
         await this.activityRepo.addLog(workspaceId, weddingId, operator, 'Update', 'guest', guest.id, `Updated Guest: "${guest.name}"`);
+        
+        // C.5 Timeline log
+        await this.activityRepo.addGuestTimelineLog(
+          workspaceId,
+          weddingId,
+          guest.id,
+          'Guest Updated',
+          'Guest Profile Updated',
+          `Guest record for "${guest.name}" has been updated by ${operator}.`,
+          JSON.stringify(prevGuest),
+          JSON.stringify(guests[index]),
+          operator,
+          'system'
+        );
       } else {
         const newGuest = { 
           ...guest, 
@@ -134,6 +163,20 @@ export class GuestRepository extends BaseRepository {
         };
         guests.push(newGuest);
         await this.activityRepo.addLog(workspaceId, weddingId, operator, 'Create', 'guest', guest.id, `Created Guest: "${guest.name}"`);
+        
+        // C.5 Timeline log
+        await this.activityRepo.addGuestTimelineLog(
+          workspaceId,
+          weddingId,
+          guest.id,
+          'Guest Created',
+          'Guest Profile Created',
+          `Guest record for "${guest.name}" has been created by ${operator}.`,
+          '',
+          JSON.stringify(newGuest),
+          operator,
+          'system'
+        );
       }
 
       localStorage.setItem(storageKey, JSON.stringify(guests));
@@ -158,6 +201,20 @@ export class GuestRepository extends BaseRepository {
           deletedBy: operator
         });
         await this.activityRepo.addLog(workspaceId, weddingId, operator, 'Delete', 'guest', id, `Soft deleted Guest: "${name}"`);
+        
+        // C.5 Timeline log
+        await this.activityRepo.addGuestTimelineLog(
+          workspaceId,
+          weddingId,
+          id,
+          'Guest Soft Deleted',
+          'Guest Record Deleted',
+          `Guest "${name}" was soft deleted by ${operator}.`,
+          '',
+          '',
+          operator,
+          'system'
+        );
       }
     } else {
       const storageKey = this.getLocalStorageKey(workspaceId, weddingId);
@@ -166,11 +223,27 @@ export class GuestRepository extends BaseRepository {
         let guests: Guest[] = JSON.parse(data);
         const index = guests.findIndex(g => g.id === id);
         if (index > -1) {
+          const prev = guests[index];
           guests[index].isDeleted = true;
           guests[index].deletedAt = new Date().toISOString();
           guests[index].deletedBy = operator;
           localStorage.setItem(storageKey, JSON.stringify(guests));
+          
           await this.activityRepo.addLog(workspaceId, weddingId, operator, 'Delete', 'guest', id, `Soft deleted Guest: "${name}"`);
+          
+          // C.5 Timeline log
+          await this.activityRepo.addGuestTimelineLog(
+            workspaceId,
+            weddingId,
+            id,
+            'Guest Soft Deleted',
+            'Guest Record Deleted',
+            `Guest "${name}" was soft deleted by ${operator}.`,
+            JSON.stringify(prev),
+            JSON.stringify(guests[index]),
+            operator,
+            'system'
+          );
           window.dispatchEvent(new CustomEvent('ra_storage_update', { detail: { key: storageKey } }));
         }
       }
@@ -198,4 +271,5 @@ export class GuestRepository extends BaseRepository {
     ];
   }
 }
+
 export default GuestRepository;

@@ -472,7 +472,8 @@ document.addEventListener("mousemove", (event) => {
     });
 });
 
-const weddingDate = new Date("2026-08-30T09:00:00+05:30").getTime();
+const nikahEventForTimer = settings.events?.find(e => e.id === 'nikah' || e.name?.toLowerCase().includes('nikah')) || settings.events?.[0];
+const weddingDate = new Date(nikahEventForTimer ? nikahEventForTimer.date : "2026-08-30T09:00:00+05:30").getTime();
 
 function pad(value) {
     return String(value).padStart(2, "0");
@@ -1948,20 +1949,32 @@ function buildSummary() {
 // 5. Calendar Links & Downloads
 function setupCalendarIntegrations(name, attendance) {
     const isAttending = attendance === "Yes, I'll be there";
+    const dateObj = new Date(nikahEventForTimer ? nikahEventForTimer.date : "2026-08-30T09:00:00+05:30");
+    const dateEndObj = new Date(dateObj.getTime() + 6 * 60 * 60 * 1000); // 6 hours event window
+    const primaryVenue = settings.venues?.[0];
 
     if (isAttending) {
-        successPersonalMessage.textContent = `Thank you, ${name}! We are thrilled that you will celebrate with us on 30 August 2026.`;
+        const formattedDate = dateObj.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+        successPersonalMessage.textContent = `Thank you, ${name}! We are thrilled that you will celebrate with us on ${formattedDate}.`;
         document.querySelector(".rsvp-calendar-wrapper")?.style.setProperty("display", "block");
     } else {
         successPersonalMessage.textContent = `Thank you for letting us know, ${name}. We will miss you, but we appreciate you sending your blessings!`;
         document.querySelector(".rsvp-calendar-wrapper")?.style.setProperty("display", "none");
     }
 
-    const startUtc = "20260830T033000Z";
-    const endUtc = "20260830T093000Z";
-    const title = encodeURIComponent("Rozar & Arifa's Wedding (Nikah)");
-    const details = encodeURIComponent("Join us for the Nikah ceremony at 9:00 AM. Venue: NSK & NKR A/C Mahal and Residency, Madurai.");
-    const location = encodeURIComponent("NSK & NKR A/C Mahal and Residency, GST Main Rd, Lion City, Thiru Nagar, Thanakkankulam, Madurai, Tamil Nadu");
+    const toUtcStr = (d) => d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+    const startUtc = toUtcStr(dateObj);
+    const endUtc = toUtcStr(dateEndObj);
+    
+    const rawTitle = `${settings.groomShortName} & ${settings.brideShortName}'s Wedding (Nikah)`;
+    const rawLocation = primaryVenue 
+        ? `${primaryVenue.name}, ${primaryVenue.address}, ${primaryVenue.city}, ${primaryVenue.state}`
+        : "NSK & NKR A/C Mahal and Residency, Madurai, Tamil Nadu";
+    const rawDetails = `Join us to celebrate the Nikah of ${settings.groomShortName} & ${settings.brideShortName}.`;
+
+    const title = encodeURIComponent(rawTitle);
+    const details = encodeURIComponent(rawDetails);
+    const location = encodeURIComponent(rawLocation);
 
     if (googleCalendarLink) {
         googleCalendarLink.href = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startUtc}/${endUtc}&details=${details}&location=${location}`;
@@ -1972,15 +1985,15 @@ function setupCalendarIntegrations(name, attendance) {
             const icsContent = [
                 "BEGIN:VCALENDAR",
                 "VERSION:2.0",
-                "PRODID:-//Rozar Arifa//Wedding Invitation//EN",
+                "PRODID:-//Project RA//Wedding Invitation//EN",
                 "BEGIN:VEVENT",
-                "UID:wedding-rozar-arifa-2026",
+                `UID:wedding-${settings.groomShortName.toLowerCase()}-${settings.brideShortName.toLowerCase()}-2026`,
                 "DTSTAMP:20260707T120000Z",
-                "DTSTART:20260830T033000Z",
-                "DTEND:20260830T093000Z",
-                "SUMMARY:Rozar & Arifa's Wedding (Nikah)",
-                "DESCRIPTION:Join us for the Nikah ceremony at 9:00 AM. Venue: NSK & NKR A/C Mahal and Residency, Madurai.",
-                "LOCATION:NSK & NKR A/C Mahal and Residency, GST Main Rd, Lion City, Thiru Nagar, Thanakkankulam, Madurai, Tamil Nadu",
+                `DTSTART:${startUtc}`,
+                `DTEND:${endUtc}`,
+                `SUMMARY:${rawTitle}`,
+                `DESCRIPTION:${rawDetails}`,
+                `LOCATION:${rawLocation}`,
                 "END:VEVENT",
                 "END:VCALENDAR"
             ].join("\r\n");
@@ -1988,7 +2001,7 @@ function setupCalendarIntegrations(name, attendance) {
             const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = "wedding-rozar-arifa.ics";
+            link.download = `wedding-${settings.groomShortName.toLowerCase()}-${settings.brideShortName.toLowerCase()}.ics`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

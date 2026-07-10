@@ -1,5 +1,157 @@
 document.body.classList.add("is-loading");
 
+function getWeddingSettings() {
+    const storageKey = "ra_settings_default_workspace_arifa_rozar_wedding";
+    const data = localStorage.getItem(storageKey);
+    if (data) {
+        try {
+            return JSON.parse(data);
+        } catch(e) {}
+    }
+    return {
+        brideName: "Arifa Khan",
+        groomName: "Rozar Khan",
+        brideShortName: "Arifa",
+        groomShortName: "Rozar",
+        brideParentNames: "A. Mohammed Khan & M. Feroza Begum",
+        groomParentNames: "J. Peer Mohideen & P. Kather Beevi",
+        rsvpDeadline: "2026-08-15T23:59:59",
+        rsvpOpen: true,
+        theme: "dark",
+        primaryColor: "#D4AF37",
+        secondaryColor: "#0F6D5B",
+        invitationTitleDefault: "Rozar & Arifa Wedding Invitation",
+        invitationWelcomeText: "In the name of Allah, the Most Beneficent, the Most Merciful. We cordially invite you to share our joy as we unite in holy matrimony.",
+        venues: [
+            {
+                id: 'nsk_mahal',
+                name: 'NSK & NKR A/C Mahal and Residency',
+                address: 'GST Main Rd, Lion City, Thiru Nagar, Thanakkankulam',
+                city: 'Madurai',
+                state: 'Tamil Nadu',
+                country: 'India',
+                googleMapsUrl: 'https://maps.app.goo.gl/nHmxp5HqnWTBi1R56'
+            }
+        ],
+        events: [
+            {
+                id: 'haldi',
+                name: '🌿 Haldi Ceremony',
+                date: '2026-08-29T18:00:00+05:30',
+                venueId: 'nsk_mahal',
+                description: 'Haldi celebrations at Bride\'s Residence.'
+            },
+            {
+                id: 'sangeet',
+                name: '🎶 Sangeet Night',
+                date: '2026-08-29T19:00:00+05:30',
+                venueId: 'nsk_mahal',
+                description: 'Sangeet night at NSK & NKR A/C Mahal.'
+            },
+            {
+                id: 'nikah',
+                name: '💍 Nikah Ceremony',
+                date: '2026-08-30T09:00:00+05:30',
+                venueId: 'nsk_mahal',
+                description: 'The marriage contract signing and traditional Nikah ceremony.'
+            },
+            {
+                id: 'valima',
+                name: '🤍 Valima',
+                date: '2026-08-31T11:00:00+05:30',
+                venueId: 'nsk_mahal',
+                description: 'Valima feast celebrating the union.'
+            }
+        ]
+    };
+}
+
+const settings = getWeddingSettings();
+
+// Dynamically write settings to DOM on script load
+(function initializeDynamicSettings() {
+    document.title = settings.invitationTitleDefault || `${settings.groomShortName} & ${settings.brideShortName} | Wedding Invitation`;
+
+    // Inject custom colors
+    if (settings.primaryColor) {
+        document.documentElement.style.setProperty('--color-gold', settings.primaryColor);
+        document.documentElement.style.setProperty('--color-gold-soft', settings.primaryColor);
+    }
+    if (settings.secondaryColor) {
+        document.documentElement.style.setProperty('--color-emerald', settings.secondaryColor);
+    }
+
+    // Hero title & date
+    const heroTitle = document.querySelector(".hero-content h1");
+    if (heroTitle && settings.groomShortName && settings.brideShortName) {
+        heroTitle.innerHTML = `<span class="nobrk">${settings.groomShortName}</span> <span class="ampersand">&amp;</span> <span class="nobrk">${settings.brideShortName}</span>`;
+    }
+    const heroDate = document.querySelector(".hero-content .eyebrow");
+    const nikahEvent = settings.events?.find(e => e.id === 'nikah' || e.name?.toLowerCase().includes('nikah')) || settings.events?.[0];
+    if (heroDate && nikahEvent) {
+        const dateObj = new Date(nikahEvent.date);
+        heroDate.textContent = dateObj.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    // Events timeline
+    const timelineContainer = document.querySelector(".timeline-events");
+    if (timelineContainer && settings.events) {
+        timelineContainer.innerHTML = settings.events.map((event, index) => {
+            const venue = settings.venues?.find(v => v.id === event.venueId) || {};
+            const sideClass = index % 2 === 0 ? "timeline-left" : "timeline-right";
+            const dateObj = new Date(event.date);
+            const formattedDate = dateObj.toLocaleDateString('en-US', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            }).replace(',', ' •');
+            const formattedTime = dateObj.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit'
+            });
+            const locationText = venue.name || "To Be Announced";
+            const mapsUrl = venue.googleMapsUrl || "#";
+            
+            return `
+                <article class="event-card glass-card ${sideClass}">
+                    <div class="timeline-dot" aria-hidden="true"></div>
+                    <p class="event-date">${formattedDate}</p>
+                    <h3>${event.name}</h3>
+                    <p class="event-time">${formattedTime}</p>
+                    ${venue.name ? `<p class="event-location"><a href="${mapsUrl}" target="_blank" rel="noopener">${locationText}</a></p>` : `<p class="event-location">${locationText}</p>`}
+                    ${event.description ? `<p class="event-description">${event.description}</p>` : ''}
+                </article>
+            `;
+        }).join('');
+    }
+
+    // Venue section
+    const primaryVenue = settings.venues?.[0];
+    if (primaryVenue) {
+        const venueNameEl = document.querySelector(".venue-info .venue-name");
+        if (venueNameEl) venueNameEl.textContent = primaryVenue.name;
+        
+        const venueAddressEl = document.querySelector(".venue-info .venue-address");
+        if (venueAddressEl) {
+            venueAddressEl.innerHTML = `${primaryVenue.address}<br>${primaryVenue.city}, ${primaryVenue.state}, ${primaryVenue.country}`;
+        }
+        
+        const venueMapBtn = document.querySelector(".venue-info .map-btn");
+        if (venueMapBtn && primaryVenue.googleMapsUrl) {
+            venueMapBtn.href = primaryVenue.googleMapsUrl;
+        }
+    }
+
+    // RSVP form lock
+    if (settings.rsvpOpen === false || (settings.rsvpDeadline && new Date(settings.rsvpDeadline).getTime() < Date.now())) {
+        const rsvpFormContainer = document.getElementById("rsvpForm");
+        if (rsvpFormContainer) {
+            rsvpFormContainer.innerHTML = `<div class="rsvp-closed-msg text-center py-6 font-cinzel" style="color: var(--color-gold); font-size: 14px; font-weight: bold; padding: 40px 10px;">RSVP submissions are currently closed.</div>`;
+        }
+    }
+})();
+
 const loader = document.getElementById("loader");
 const progress = document.querySelector(".loader-progress");
 const beginBtn = document.getElementById("beginBtn");
@@ -320,7 +472,8 @@ document.addEventListener("mousemove", (event) => {
     });
 });
 
-const weddingDate = new Date("2026-08-30T09:00:00+05:30").getTime();
+const nikahEventForTimer = settings.events?.find(e => e.id === 'nikah' || e.name?.toLowerCase().includes('nikah')) || settings.events?.[0];
+const weddingDate = new Date(nikahEventForTimer ? nikahEventForTimer.date : "2026-08-30T09:00:00+05:30").getTime();
 
 function pad(value) {
     return String(value).padStart(2, "0");
@@ -1796,20 +1949,32 @@ function buildSummary() {
 // 5. Calendar Links & Downloads
 function setupCalendarIntegrations(name, attendance) {
     const isAttending = attendance === "Yes, I'll be there";
+    const dateObj = new Date(nikahEventForTimer ? nikahEventForTimer.date : "2026-08-30T09:00:00+05:30");
+    const dateEndObj = new Date(dateObj.getTime() + 6 * 60 * 60 * 1000); // 6 hours event window
+    const primaryVenue = settings.venues?.[0];
 
     if (isAttending) {
-        successPersonalMessage.textContent = `Thank you, ${name}! We are thrilled that you will celebrate with us on 30 August 2026.`;
+        const formattedDate = dateObj.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
+        successPersonalMessage.textContent = `Thank you, ${name}! We are thrilled that you will celebrate with us on ${formattedDate}.`;
         document.querySelector(".rsvp-calendar-wrapper")?.style.setProperty("display", "block");
     } else {
         successPersonalMessage.textContent = `Thank you for letting us know, ${name}. We will miss you, but we appreciate you sending your blessings!`;
         document.querySelector(".rsvp-calendar-wrapper")?.style.setProperty("display", "none");
     }
 
-    const startUtc = "20260830T033000Z";
-    const endUtc = "20260830T093000Z";
-    const title = encodeURIComponent("Rozar & Arifa's Wedding (Nikah)");
-    const details = encodeURIComponent("Join us for the Nikah ceremony at 9:00 AM. Venue: NSK & NKR A/C Mahal and Residency, Madurai.");
-    const location = encodeURIComponent("NSK & NKR A/C Mahal and Residency, GST Main Rd, Lion City, Thiru Nagar, Thanakkankulam, Madurai, Tamil Nadu");
+    const toUtcStr = (d) => d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+    const startUtc = toUtcStr(dateObj);
+    const endUtc = toUtcStr(dateEndObj);
+    
+    const rawTitle = `${settings.groomShortName} & ${settings.brideShortName}'s Wedding (Nikah)`;
+    const rawLocation = primaryVenue 
+        ? `${primaryVenue.name}, ${primaryVenue.address}, ${primaryVenue.city}, ${primaryVenue.state}`
+        : "NSK & NKR A/C Mahal and Residency, Madurai, Tamil Nadu";
+    const rawDetails = `Join us to celebrate the Nikah of ${settings.groomShortName} & ${settings.brideShortName}.`;
+
+    const title = encodeURIComponent(rawTitle);
+    const details = encodeURIComponent(rawDetails);
+    const location = encodeURIComponent(rawLocation);
 
     if (googleCalendarLink) {
         googleCalendarLink.href = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startUtc}/${endUtc}&details=${details}&location=${location}`;
@@ -1820,15 +1985,15 @@ function setupCalendarIntegrations(name, attendance) {
             const icsContent = [
                 "BEGIN:VCALENDAR",
                 "VERSION:2.0",
-                "PRODID:-//Rozar Arifa//Wedding Invitation//EN",
+                "PRODID:-//Project RA//Wedding Invitation//EN",
                 "BEGIN:VEVENT",
-                "UID:wedding-rozar-arifa-2026",
+                `UID:wedding-${settings.groomShortName.toLowerCase()}-${settings.brideShortName.toLowerCase()}-2026`,
                 "DTSTAMP:20260707T120000Z",
-                "DTSTART:20260830T033000Z",
-                "DTEND:20260830T093000Z",
-                "SUMMARY:Rozar & Arifa's Wedding (Nikah)",
-                "DESCRIPTION:Join us for the Nikah ceremony at 9:00 AM. Venue: NSK & NKR A/C Mahal and Residency, Madurai.",
-                "LOCATION:NSK & NKR A/C Mahal and Residency, GST Main Rd, Lion City, Thiru Nagar, Thanakkankulam, Madurai, Tamil Nadu",
+                `DTSTART:${startUtc}`,
+                `DTEND:${endUtc}`,
+                `SUMMARY:${rawTitle}`,
+                `DESCRIPTION:${rawDetails}`,
+                `LOCATION:${rawLocation}`,
                 "END:VEVENT",
                 "END:VCALENDAR"
             ].join("\r\n");
@@ -1836,7 +2001,7 @@ function setupCalendarIntegrations(name, attendance) {
             const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = "wedding-rozar-arifa.ics";
+            link.download = `wedding-${settings.groomShortName.toLowerCase()}-${settings.brideShortName.toLowerCase()}.ics`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

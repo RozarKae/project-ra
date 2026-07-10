@@ -1,86 +1,82 @@
-# Project RA — Sprint S.3: Team Management Implementation Report
+# Project RA — Implementation Report: Sprint C.5 & Refinements
 
-This report summarizes the design patterns, role-based access control (RBAC), database structures, and components created for the **Team Management** module.
-
----
-
-## 1. Files Modified & Created
-
-| File Path | Status | Description |
-| :--- | :---: | :--- |
-| **`src/App.tsx`** | [MODIFY] | Registered `/admin/settings/team` route under the protected admin layout routing block. |
-| **`src/modules/settings/UserProfile.tsx`** | [MODIFY] | Resolved a syntax error where an unused JSX block was left outside the component boundary. |
-| **`src/modules/settings/TeamManagement.tsx`** | [NEW] | Developed the full Team Management dashboard: overview stats, responsive members list, invite workflows, permission grid, and activity summary. |
+This report summarizes the design patterns, database paths, event categories, automatic hooks, and layouts developed for the **Guest Timeline & Activity History (Sprint C.5)** module and the **Unified Activity Feed Refinement**.
 
 ---
 
-## 2. Firestore Schema & Collections
+## 1. Files Created & Modified
 
-We created and integrated two new sub-collections within the Workspace scope:
+| Category | File Path | Status | Description |
+| :--- | :--- | :---: | :--- |
+| **Model Type** | `src/types/activity.ts` | [MODIFY] | Extended `ActivityLog` interface with fields for `guestId`, `eventType`, `previousValue`, `newValue`, `performedBy`, `isPinned`, and `category`. |
+| **Database** | `src/repositories/ActivityRepository.ts` | [MODIFY] | Added the `addGuestTimelineLog` handler to save logs to the central `activities` subcollection. |
+| **Database** | `src/repositories/GuestRepository.ts` | [MODIFY] | Integrated automatic log hooks when a guest is created, edited, or soft-deleted. |
+| **Hook** | `src/hooks/useRsvps.ts` | [MODIFY] | Refactored hook to log timeline events on RSVP changes, attendance updates, hospitality adjustments, and invitation sent/viewed transitions. |
+| **Hook** | `src/hooks/useActivityLogs.ts` | [MODIFY] | Exported `addGuestTimelineLog` to support writing manual timeline notes. |
+| **Component** | `src/modules/guests/GuestProfileView.tsx` | [NEW] | Created the Guest Profile tabbed layout view featuring Overview, RSVP, Attendance, Hospitality, and Timeline controls. |
+| **UI Integration** | `src/modules/guests/Guests.tsx` | [MODIFY] | Wired up GuestProfileView to display inside the read-only guest details modal. |
+| **Header Dropdown** | `src/components/layout/Header.tsx` | [MODIFY] | Replaced mock notifications dropdown with the dynamic logs feed from `useActivityLogs` showing live alerts and relative timestamps. |
 
-### A. Team Members Roster
-* **Collection Path**: `workspaces/{workspaceId}/members`
-* **Document Attributes**:
+---
+
+## 2. Timeline Architecture & Firestore Collections
+
+All timeline entries are saved under the shared multi-tenant `activities` collection path:
+`workspaces/{workspaceId}/weddings/{weddingId}/activities/{activityId}`
+
+### Schema Model
 ```json
 {
-  "userId": "admin-dad",
-  "email": "dad@photomagic.com",
-  "displayName": "Dad",
-  "photoURL": "https://lh3.googleusercontent.com/a/...",
-  "role": "admin",
-  "status": "active",
-  "joinedAt": "2026-07-09T08:30:00Z",
-  "lastActive": "2026-07-10T16:20:00Z"
-}
-```
-
-### B. Collaborator Invitations
-* **Collection Path**: `workspaces/{workspaceId}/invitations`
-* **Document Attributes**:
-```json
-{
-  "id": "inv-1783682242357",
-  "email": "collab@example.com",
-  "role": "editor",
-  "token": "token_z8f9h3k2j",
-  "status": "pending",
-  "createdAt": "2026-07-10T16:45:00Z",
-  "expiresAt": "2026-07-17T16:45:00Z",
-  "createdBy": "rozar@nikahsandweddings.com",
-  "message": "Join us to organize the guest list sections!"
+  "activityId": "log_a23b9d8",
+  "guestId": "g1",
+  "eventType": "Meal Preference Updated",
+  "title": "Meal Selection Updated",
+  "description": "Guest Sarah Jenkins meal selection was changed to VEGAN",
+  "previousValue": "non-vegetarian",
+  "newValue": "vegan",
+  "performedBy": "admin@projectra.com",
+  "timestamp": "2026-07-10T12:16:30Z",
+  "isPinned": false,
+  "category": "hospitality"
 }
 ```
 
 ---
 
-## 3. Role-Based Access Control (RBAC)
+## 3. Timeline Event Categories
 
-The module enforces strict authorization logic:
-
-* **Workspace Owner (`owner`)**: Full read and write authority. Only Owners can trigger:
-  - Inviting new members (`+ Invite Member`).
-  - Revoking pending invitations.
-  - Modifying other collaborator roles (`Change Role`).
-  - Activating/disabling members (`Disable User`).
-  - Offboarding collaborators (`Remove User`).
-* **Collaborator Roles (`admin`, `editor`, `viewer`)**: Read-only permission. Accessing `/admin/settings/team` displays a banner alerting them to their read-only state. Action buttons and context menus are hidden or disabled.
-* **Self-Modification Guard**: The platform prevents owners from removing or disabling their own accounts.
-* **Privilege Escalation Block**: Dropdown lists and API endpoints dynamically filter role assignments so no user can assign a role higher than their own (Hierarchy: `owner` > `admin` > `editor` > `viewer`).
+Timeline events are categorized under one of the following category fields:
+1. **`system`**: Guest Created, Guest Updated, Guest Soft Deleted.
+2. **`invitation`**: Invitation Dispatched (Sent), Invitation Delivered, Invitation Link Opened (Viewed).
+3. **`rsvp`**: RSVP Submitted, RSVP Status Changed.
+4. **`attendance`**: Attendance Status Changed, Guest Count Changed, Event Selection Changed.
+5. **`hospitality`**: Hospitality Preferences Initialized, Meal Selection Updated, Hospitality Details Saved.
+6. **`note`**: Manual comments or pins created by organizers.
 
 ---
 
-## 4. Components Created
+## 4. Unified Activity Feed Integration
 
-### `TeamManagement` (`src/modules/settings/TeamManagement.tsx`)
-A unified settings layout adhering to the premium design language of Project RA:
-* **Section 1 (Team Overview)**: Displays 7 KPI count-up metrics.
-* **Section 2 (Team Members)**: A fully responsive grid that renders a detailed data table on larger viewports and adapts into compact cards on mobile screens to prevent horizontal scroll layout shifts.
-* **Section 3 (Invite Modal)**: High-fidelity dialog to capture invitation details, set tokens, and submit records.
-* **Section 4 (Role Matrix)**: Styled read-only grid outlining operations permissions for all roles.
-* **Section 5 (Activity Log)**: Fetches and sorts log entries using `useActivityLogs`, displaying the latest 20 actions.
+A single activities stream feeds four distinct components across the platform:
+1. **Guest Profile Timeline:** Shows activities filtered specifically by `log.guestId === selectedGuest.id`.
+2. **Dashboard Recent Activity:** Displays the top 4 workspace operations.
+3. **Workspace Operations Audits (Team settings):** Renders audit histories and actions.
+4. **Notification Center dropdown:** Queries the latest 5 timeline events and renders alert notices with relative timestamps.
 
 ---
 
-## 5. Known Issues
+## 5. Components & Layouts Created
 
-* **Email Dispatch Bypass**: Email server hooks are stubbed out. The invitation document successfully saves to Firestore with validation tokens, but SMTP/SendGrid delivery is bypassed in Sprint S.3.
+### `GuestProfileView` (`src/modules/guests/GuestProfileView.tsx`)
+A unified profile dashboard displaying all sub-modules for a guest:
+* **Interactive Navigation Tabs:** Click to switch between Overview (contact info), RSVP (delivery states), Attendance (headcount splits and checked ceremonies), Hospitality (meal preferences, lodging booking, transport pickup), and Timeline History.
+* **Granular Search & Category Filters:** Real-time search box filtering events by keyword, and drop-down menu sorting events by category.
+* **Manual Note Form:** Allows admins to record custom remarks and check "Pin note to top" to display vital alerts (e.g. VIP seating, allergies, wheelchair requests) in a highlight card at the top.
+* **Chronological Timeline Cards:** Render newest items on top, with category-specific icons, action titles, description, operator, and timestamp. Clicking a card expands to show the `Previous Value` and `New Value` side-by-side.
+
+---
+
+## 6. Known Issues
+* **Diff comparisons for large payloads:** Comparative details (Previous Value vs New Value) print as raw JSON strings when guest objects or nested hospitality settings are logged.
+* **Deletion event constraints:** Soft-deleted guests are hidden from the Guest List. To view the timeline of a deleted guest, organizers must access the raw logs panel.
+* **IP and Device logging:** Fields for operator IP addresses and device details are marked as placeholder targets for future implementations.

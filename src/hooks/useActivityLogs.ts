@@ -27,7 +27,33 @@ export const useActivityLogs = () => {
     await activityRepo.addLog(currentWorkspaceId, currentWeddingId, operator, action, entity, entityId, details);
   };
 
-  return { logs, loading, addLog };
+  const addGuestTimelineLog = async (
+    guestId: string,
+    eventType: string,
+    title: string,
+    description: string,
+    previousValue: string,
+    newValue: string,
+    performedBy: string,
+    category: 'invitation' | 'rsvp' | 'attendance' | 'hospitality' | 'system' | 'note',
+    isPinned: boolean = false
+  ) => {
+    await activityRepo.addGuestTimelineLog(
+      currentWorkspaceId,
+      currentWeddingId,
+      guestId,
+      eventType,
+      title,
+      description,
+      previousValue,
+      newValue,
+      performedBy,
+      category,
+      isPinned
+    );
+  };
+
+  return { logs, loading, addLog, addGuestTimelineLog };
 };
 
 export default useActivityLogs;

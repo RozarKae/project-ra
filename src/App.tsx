@@ -7,6 +7,10 @@ import Login from './pages/admin/Login';
 import AdminLayout from './pages/admin/AdminLayout';
 import Dashboard from './modules/dashboard/Dashboard';
 import Guests from './modules/guests/Guests';
+import RsvpDashboard from './modules/rsvp/RsvpDashboard';
+import RsvpDetails from './modules/rsvp/RsvpDetails';
+import RsvpAttendancePage from './modules/rsvp/RsvpAttendance';
+import RsvpHospitality from './modules/rsvp/RsvpHospitality';
 import WorkspaceSettings from './modules/settings/WorkspaceSettings';
 import UserProfile from './modules/settings/UserProfile';
 import TeamManagement from './modules/settings/TeamManagement';
@@ -39,6 +43,10 @@ function App() {
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="guests" element={<Guests />} />
+            <Route path="rsvp" element={<RsvpDashboard />} />
+            <Route path="rsvp/details" element={<RsvpDetails />} />
+            <Route path="rsvp/attendance" element={<RsvpAttendancePage />} />
+            <Route path="rsvp/hospitality" element={<RsvpHospitality />} />
             <Route path="settings/workspace" element={<WorkspaceSettings />} />
             <Route path="settings/profile" element={<UserProfile />} />
             <Route path="settings/team" element={<TeamManagement />} />

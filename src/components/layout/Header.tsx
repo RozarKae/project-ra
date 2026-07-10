@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bell, Search, Sun, Moon, Menu, ChevronDown, User, LogOut } from 'lucide-react';
+import { Bell, Search, Sun, Moon, Menu, ChevronDown, User, LogOut, Clock } from 'lucide-react';
 import { useAuth } from '../../lib/auth';
+import { useActivityLogs } from '../../hooks/useActivityLogs';
 import { toast } from 'react-hot-toast';
 
 interface HeaderProps {
@@ -9,18 +10,14 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
   const { user, logout } = useAuth();
+  const { logs } = useActivityLogs();
+  
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(true);
 
   const notificationRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
-
-  const notifications = [
-    { id: 1, text: 'New RSVP response received from Sarah Jenkins', time: '5m ago' },
-    { id: 2, text: 'Guest list imported successfully', time: '1h ago' },
-    { id: 3, text: 'Firebase database link active', time: '2d ago' },
-  ];
 
   // Sync theme with document class
   useEffect(() => {
@@ -63,6 +60,27 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
       toast.error('Logout failed.');
     }
   };
+
+  const getRelativeTime = (isoString: string): string => {
+    try {
+      const now = new Date();
+      const date = new Date(isoString);
+      const diffMs = now.getTime() - date.getTime();
+      const diffMins = Math.floor(diffMs / 60000);
+      const diffHours = Math.floor(diffMins / 60);
+      const diffDays = Math.floor(diffHours / 24);
+
+      if (diffMs < 0 || diffMins < 1) return 'Just now';
+      if (diffMins < 60) return `${diffMins}m ago`;
+      if (diffHours < 24) return `${diffHours}h ago`;
+      return `${diffDays}d ago`;
+    } catch {
+      return 'Some time ago';
+    }
+  };
+
+  // Display top 5 most recent activity entries
+  const recentActivities = logs.slice(0, 5);
 
   return (
     <header className="h-16 border-b border-[#D4AF37]/10 bg-[#141414]/70 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30 font-poppins text-[#F5F5F5]">
@@ -116,70 +134,68 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSidebar }) => {
             aria-label="Notifications"
           >
             <Bell size={16} />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#0F6D5B] shadow-[0_0_8px_#0F6D5B]" />
+            {recentActivities.length > 0 && (
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#0F6D5B] shadow-[0_0_8px_#0F6D5B]" />
+            )}
           </button>
 
           {showNotifications && (
             <div className="absolute right-0 mt-3 w-80 glass-panel rounded-xl overflow-hidden shadow-xl z-50">
               <div className="p-4 border-b border-[#D4AF37]/10 flex items-center justify-between">
                 <span className="text-xs font-semibold uppercase tracking-wider font-cinzel text-[#D4AF37]">Notifications</span>
-                <span className="text-[9px] text-[#0F6D5B] bg-[#0F6D5B]/10 px-2 py-0.5 rounded-full font-semibold uppercase">3 New</span>
+                <span className="text-[9px] text-[#0F6D5B] bg-[#0F6D5B]/10 px-2 py-0.5 rounded-full font-semibold uppercase">
+                  {recentActivities.length} Alert{recentActivities.length !== 1 ? 's' : ''}
+                </span>
               </div>
-              <div className="divide-y divide-[#D4AF37]/10">
-                {notifications.map((notif) => (
+              <div className="divide-y divide-[#D4AF37]/10 max-h-[300px] overflow-y-auto">
+                {recentActivities.map((notif) => (
                   <div key={notif.id} className="p-4 hover:bg-[#141414]/90 transition cursor-pointer">
-                    <p className="text-xs text-[#F5F5F5]/85 leading-relaxed">{notif.text}</p>
-                    <span className="text-[9px] text-[#F5F5F5]/40 mt-1 block">{notif.time}</span>
+                    <p className="text-xs text-[#F5F5F5]/85 leading-relaxed">{notif.details || notif.description}</p>
+                    <span className="text-[9px] text-[#F5F5F5]/40 mt-1 block font-mono">{getRelativeTime(notif.timestamp)}</span>
                   </div>
                 ))}
+                {recentActivities.length === 0 && (
+                  <div className="p-6 text-center text-zinc-500 text-xs font-poppins">
+                    No active notifications.
+                  </div>
+                )}
               </div>
-              <div className="p-3 bg-[#090909]/40 border-t border-[#D4AF37]/10 text-center">
-                <button className="text-[10px] uppercase tracking-wider text-[#D4AF37] hover:text-[#F3E7C4] font-semibold transition">
-                  Clear All Notifications
-                </button>
-              </div>
+              {recentActivities.length > 0 && (
+                <div className="p-3 bg-[#090909]/40 border-t border-[#D4AF37]/10 text-center">
+                  <span className="text-[9px] uppercase tracking-wider text-[#D4AF37]/65 block">
+                    Synced with System Activity Feed
+                  </span>
+                </div>
+              )}
             </div>
           )}
         </div>
 
-        {/* Profile Menu Dropdown */}
+        {/* Profile Dropdown */}
         <div className="relative" ref={profileRef}>
           <button
             onClick={() => setShowProfileMenu(!showProfileMenu)}
-            className="flex items-center gap-2 pl-2 pr-1 py-1 rounded-full bg-[#090909] border border-[#D4AF37]/15 hover:border-[#D4AF37]/35 transition"
+            className="flex items-center gap-1.5 text-zinc-400 hover:text-white transition"
           >
-            <div className="w-7 h-7 rounded-full bg-[#0F6D5B]/30 border border-[#0F6D5B]/50 flex items-center justify-center text-[#D4AF37] font-semibold text-xs uppercase shadow-[0_0_8px_rgba(15,109,91,0.15)]">
-              {user?.email ? user.email.charAt(0) : 'A'}
+            <div className="w-8 h-8 rounded-full border border-[#D4AF37]/20 flex items-center justify-center bg-zinc-900 overflow-hidden font-cinzel text-xs font-bold text-[#D4AF37]">
+              {user?.email ? user.email.slice(0, 2).toUpperCase() : 'AD'}
             </div>
-            <span className="hidden sm:block text-xs font-medium text-[#F5F5F5]/80 max-w-[80px] truncate">
-              {user?.displayName || 'Admin'}
-            </span>
-            <ChevronDown size={14} className="text-[#F5F5F5]/50" />
+            <ChevronDown size={14} />
           </button>
 
           {showProfileMenu && (
-            <div className="absolute right-0 mt-3 w-56 glass-panel rounded-xl overflow-hidden shadow-xl z-50">
-              <div className="p-4 border-b border-[#D4AF37]/10">
-                <p className="text-xs font-semibold text-[#F5F5F5]/90 truncate">{user?.displayName || 'Administrator'}</p>
-                <p className="text-[10px] text-[#F5F5F5]/50 truncate mt-0.5">{user?.email}</p>
+            <div className="absolute right-0 mt-3 w-48 glass-panel rounded-xl overflow-hidden shadow-xl z-50">
+              <div className="p-3 border-b border-[#D4AF37]/10">
+                <span className="text-[10px] text-zinc-500 block uppercase tracking-wider font-semibold">Logged in as</span>
+                <span className="text-xs font-semibold block text-zinc-300 truncate">{user?.email || 'admin@projectra.com'}</span>
               </div>
               <div className="p-1">
                 <button
-                  onClick={() => {
-                    setShowProfileMenu(false);
-                    toast.success('Profile Settings is scheduled for Sprint B!');
-                  }}
-                  className="flex items-center gap-3 w-full px-3 py-2.5 text-xs hover:bg-[#141414] rounded-lg transition text-[#F5F5F5]/70 hover:text-[#F5F5F5]"
-                >
-                  <User size={14} />
-                  <span>My Profile</span>
-                </button>
-                <button
                   onClick={handleLogout}
-                  className="flex items-center gap-3 w-full px-3 py-2.5 text-xs text-red-400 hover:bg-red-950/20 rounded-lg transition"
+                  className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-xs text-rose-400 hover:bg-rose-500/5 rounded-lg transition"
                 >
                   <LogOut size={14} />
-                  <span>Log Out</span>
+                  <span>Logout</span>
                 </button>
               </div>
             </div>

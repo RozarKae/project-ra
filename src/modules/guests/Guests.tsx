@@ -23,6 +23,7 @@ import Button from '../../components/common/Button';
 import Card from '../../components/common/Card';
 import Modal from '../../components/common/Modal';
 import { Guest } from '../../types/guest';
+import { GuestProfileView } from './GuestProfileView';
 import { toast } from 'react-hot-toast';
 import { useGuests } from '../../hooks/useGuests';
 import { useWorkspace } from '../../contexts/WorkspaceContext';
@@ -1204,9 +1205,12 @@ export const Guests: React.FC = () => {
       <Modal
         isOpen={isAddEditModalOpen}
         onClose={handleCancelClick}
-        title={isReadOnly ? 'View Guest Details' : (selectedGuest ? 'Edit Guest Record' : 'Register New Guest')}
+        title={isReadOnly && selectedGuest ? `Guest Profile — ${selectedGuest.name}` : (selectedGuest ? 'Edit Guest Record' : 'Register New Guest')}
       >
-        <form onSubmit={(e) => handleSave(e, false)} className="space-y-4 font-poppins">
+        {isReadOnly && selectedGuest ? (
+          <GuestProfileView guest={selectedGuest} onClose={handleCancelClick} />
+        ) : (
+          <form onSubmit={(e) => handleSave(e, false)} className="space-y-4 font-poppins">
           
           {/* Guest Name (Required) */}
           <div>
@@ -1459,6 +1463,7 @@ export const Guests: React.FC = () => {
           </div>
 
         </form>
+        )}
       </Modal>
 
       {/* Discard Changes Confirmation Modal */}

@@ -26,7 +26,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
     { name: 'Guest List', href: '/admin/guests', icon: Users },
-    { name: 'RSVP', href: '/admin/rsvp', icon: CheckSquare, disabled: true },
+    { 
+      name: 'RSVP', 
+      href: '/admin/rsvp', 
+      icon: CheckSquare,
+      subItems: [
+        { name: 'Dashboard', href: '/admin/rsvp' },
+        { name: 'RSVP Details', href: '/admin/rsvp/details' },
+        { name: 'Attendance', href: '/admin/rsvp/attendance' },
+        { name: 'Hospitality', href: '/admin/rsvp/hospitality' }
+      ]
+    },
     { name: 'Invitations', href: '/admin/invitations', icon: Send, disabled: true },
     { name: 'Reports', href: '/admin/reports', icon: BarChart3, disabled: true },
     { 
