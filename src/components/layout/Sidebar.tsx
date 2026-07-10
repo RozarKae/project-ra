@@ -35,7 +35,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       icon: Settings,
       subItems: [
         { name: 'Workspace', href: '/admin/settings/workspace' },
-        { name: 'My Profile', href: '/admin/settings/profile' }
+        { name: 'My Profile', href: '/admin/settings/profile' },
+        { name: 'Team', href: '/admin/settings/team' }
       ]
     },
   ];

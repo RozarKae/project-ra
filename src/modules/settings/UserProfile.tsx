@@ -772,4 +772,19 @@ export const UserProfile: React.FC = () => {
   );
 };
 
+{/* Card 7: Recent Activity */}
+<Card className="p-5 border border-[#D4AF37]/10 space-y-3">
+  <div className="flex items-center gap-2 border-b border-[#D4AF37]/5 pb-2 mb-2">
+    <Activity size={16} className="text-[#D4AF37]" />
+    <h3 className="font-cinzel text-xs font-bold uppercase tracking-wider text-[#D4AF37]">
+      Recent Activity
+    </h3>
+  </div>
+  <ul className="list-none space-y-1 text-[11px] text-[#F5F5F5]/80">
+    <li>• Added 12 guests today</li>
+    <li>• Edited Ibrahim Family</li>
+    <li>• Changed workspace logo</li>
+    <li>• Last login: Today, 8:42 PM</li>
+  </ul>
+</Card>
 export default UserProfile;
