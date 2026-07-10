@@ -9,6 +9,8 @@ import Dashboard from './modules/dashboard/Dashboard';
 import Guests from './modules/guests/Guests';
 import WorkspaceSettings from './modules/settings/WorkspaceSettings';
 import UserProfile from './modules/settings/UserProfile';
+import TeamManagement from './modules/settings/TeamManagement';
+import WeddingSettingsPage from './modules/settings/WeddingSettings';
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
             <Route path="guests" element={<Guests />} />
             <Route path="settings/workspace" element={<WorkspaceSettings />} />
             <Route path="settings/profile" element={<UserProfile />} />
+            <Route path="settings/team" element={<TeamManagement />} />
+            <Route path="settings/wedding" element={<WeddingSettingsPage />} />
             {/* Catch all in admin area and redirect back to admin main */}
             <Route path="*" element={<Navigate to="/admin" replace />} />
           </Route>

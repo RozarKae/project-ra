@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Clock } from 'lucide-react';
 import Card from '../common/Card';
+import { useWeddingSettings } from '../../hooks/useWeddingSettings';
 
 interface TimeLeft {
   days: number;
@@ -10,8 +11,17 @@ interface TimeLeft {
 }
 
 export const CountdownCard: React.FC = () => {
-  const targetDate = new Date('2026-08-30T11:00:00').getTime();
+  const { settings } = useWeddingSettings();
   
+  // Resolve the Nikah event or the first available event date
+  const nikahEvent = settings?.events?.find(
+    e => e.id === 'nikah' || e.name.toLowerCase().includes('nikah')
+  ) || settings?.events?.[0];
+  
+  const targetDate = nikahEvent 
+    ? new Date(nikahEvent.date).getTime() 
+    : new Date('2026-08-30T11:00:00').getTime();
+
   const calculateTimeLeft = (): TimeLeft => {
     const difference = targetDate - Date.now();
     let timeLeft: TimeLeft = { days: 0, hours: 0, minutes: 0, seconds: 0 };
@@ -30,12 +40,15 @@ export const CountdownCard: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft());
 
   useEffect(() => {
+    // Recalculate on mount or target date change
+    setTimeLeft(calculateTimeLeft());
+    
     const timer = setInterval(() => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [targetDate]);
 
   const timeSegments = [
     { label: 'Days', value: timeLeft.days },
@@ -44,18 +57,30 @@ export const CountdownCard: React.FC = () => {
     { label: 'Secs', value: timeLeft.seconds },
   ];
 
+  const dateLabel = nikahEvent ? nikahEvent.name : 'Nikah Date';
+  const dateFormatted = nikahEvent 
+    ? `${new Date(nikahEvent.date).toLocaleDateString(undefined, { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      })} • ${new Date(nikahEvent.date).toLocaleTimeString(undefined, { 
+        hour: 'numeric', 
+        minute: '2-digit' 
+      })}`
+    : 'August 30, 2026 • 11:00 AM';
+
   return (
     <Card className="w-full">
       <div>
         <div className="flex items-center gap-3 border-b border-[#D4AF37]/10 pb-4 mb-4">
           <Clock size={18} className="text-[#D4AF37]" />
           <h3 className="text-sm font-semibold tracking-wider font-cinzel uppercase text-[#F5F5F5]">
-            Nikah Countdown
+            Wedding Countdown
           </h3>
         </div>
 
         <p className="text-[10px] text-[#F5F5F5]/45 uppercase tracking-widest font-medium mb-4 block">
-          Nikah Date: August 30, 2026 • 11:00 AM
+          {dateLabel}: {dateFormatted}
         </p>
 
         <div className="grid grid-cols-4 gap-2">

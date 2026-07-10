@@ -1,13 +1,7 @@
 import { BaseRepository } from './BaseRepository';
 import { isFirebaseConfigured, db } from '../lib/firebase';
 import { doc, onSnapshot, setDoc } from 'firebase/firestore';
-
-export interface WeddingSettings {
-  id: string;
-  nikahDate: string;
-  rsvpOpen: boolean;
-  theme: string;
-}
+import { WeddingSettings } from '../types/settings';
 
 export class SettingRepository extends BaseRepository {
   
@@ -27,7 +21,7 @@ export class SettingRepository extends BaseRepository {
           if (docSnap.exists()) {
             callback({ id: docSnap.id, ...docSnap.data() } as WeddingSettings);
           } else {
-            callback(null);
+            callback(this.getDefaultSettings(weddingId));
           }
         });
       }
@@ -36,7 +30,13 @@ export class SettingRepository extends BaseRepository {
       const storageKey = this.getLocalStorageKey(workspaceId, weddingId);
       const fetchLocal = () => {
         const data = localStorage.getItem(storageKey);
-        callback(data ? JSON.parse(data) : { id: 'general', nikahDate: '2026-08-30T11:00:00', rsvpOpen: true, theme: 'dark' });
+        if (!data) {
+          const defaults = this.getDefaultSettings(weddingId);
+          localStorage.setItem(storageKey, JSON.stringify(defaults));
+          callback(defaults);
+        } else {
+          callback(JSON.parse(data));
+        }
       };
       fetchLocal();
       const handler = (e: Event) => {
@@ -68,6 +68,55 @@ export class SettingRepository extends BaseRepository {
       localStorage.setItem(storageKey, JSON.stringify(settings));
       window.dispatchEvent(new CustomEvent('ra_storage_update', { detail: { key: storageKey } }));
     }
+  }
+
+  public getDefaultSettings(weddingId: string): WeddingSettings {
+    return {
+      id: 'general',
+      brideName: 'Arifa Khan',
+      groomName: 'Rozar Khan',
+      brideShortName: 'Arifa',
+      groomShortName: 'Rozar',
+      brideParentNames: 'A. Mohammed Khan & M. Feroza Begum',
+      groomParentNames: 'J. Peer Mohideen & P. Kather Beevi',
+      rsvpDeadline: '2026-08-15T23:59:59',
+      rsvpOpen: true,
+      timezone: 'UTC+05:30',
+      theme: 'dark',
+      primaryColor: '#D4AF37', // Gold
+      secondaryColor: '#0F6D5B', // Emerald
+      qrCodeUrl: '',
+      qrLogoUrl: '',
+      invitationTitleDefault: 'Rozar & Arifa Wedding Invitation',
+      invitationWelcomeText: 'In the name of Allah, the Most Beneficent, the Most Merciful. We cordially invite you to share our joy as we unite in holy matrimony.',
+      venues: [
+        {
+          id: 'nsk_mahal',
+          name: 'NSK & NKR A/C Mahal and Residency',
+          address: 'GST Main Rd, Lion City, Thiru Nagar, Thanakkankulam',
+          city: 'Madurai',
+          state: 'Tamil Nadu',
+          country: 'India',
+          googleMapsUrl: 'https://maps.app.goo.gl/nHmxp5HqnWTBi1R56'
+        }
+      ],
+      events: [
+        {
+          id: 'nikah',
+          name: 'Nikah (Wedding Ceremony)',
+          date: '2026-08-30T09:00:00+05:30',
+          venueId: 'nsk_mahal',
+          description: 'The marriage contract signing and traditional Nikah ceremony.'
+        },
+        {
+          id: 'reception',
+          name: 'Reception & Feast',
+          date: '2026-08-30T11:00:00+05:30',
+          venueId: 'nsk_mahal',
+          description: 'A grand reception celebrating the union.'
+        }
+      ]
+    };
   }
 }
 
