@@ -1,10 +1,10 @@
 # Project RA — Technical Logbook & Audit Report
 
 ## Document Context
-* **Sprint Focus**: Sprint B.7: Family Groups
-* **Project Version**: v2.3.0 (Family Accordion Release)
+* **Sprint Focus**: Sprint S.2: My Profile
+* **Project Version**: v2.5.0 (User Settings Release)
 * **Last Updated**: July 10, 2026
-* **Objective**: Group guests dynamically by family name into alphabetical collapsible accordion cards with summary status widgets.
+* **Objective**: Create My Profile module page managing user account attributes, avatar photo selections, phone numbers, password change dialog credentials reauth, and display preferences.
 
 ---
 
@@ -14,30 +14,28 @@ The folder taxonomy represents the modular layout:
 
 | Path | Status | Target / Purpose |
 | :--- | :---: | :--- |
-| **`src/modules/guests/Guests.tsx`** | [MODIFY] | Refactored flat table view into collapsible family accordion cards. Added summary KPI metrics, automatic alphabetical sorting, auto-expansion matching search, disabled actions placeholders, and custom family audit logging. |
-| **`IMPLEMENTATION_REPORT.md`** | [MODIFY] | Updated implementation report details with family grouping metrics, auto-expand, and database operations. |
+| **`src/types/user.ts`** | [NEW] | Types for UserProfileData. |
+| **`src/repositories/UserRepository.ts`** | [NEW] | User profile database subscription methods. |
+| **`src/hooks/useUserProfile.ts`** | [NEW] | Hook returning current user's profile database state. |
+| **`src/modules/settings/UserProfile.tsx`** | [NEW] | User Profile settings page (Personal, Photo, Contact, Security, Account Info, Preferences). |
+| **`src/components/layout/Sidebar.tsx`** | [MODIFY] | Added My Profile sub-menu to Sidebar navigation layout. |
+| **`src/App.tsx`** | [MODIFY] | Registered route path `settings/profile`. |
 
 ---
 
-## 2. Technical Decision Log (Sprint B.7 additions)
+## 2. Technical Decision Log (Sprint S.2 additions)
 
-### Decision B.7-1: Collapsed Default & State Accordion
+### Decision S.2-1: Local base64 profile photo fallback
 * **Status**: Approved
-* **Context**: Organize large rosters cleaner.
-* **Decision**: All family group sections are collapsed by default. Clicking any card toggles its expansion state smoothly.
-* **Impact**: Drastically reduced scrolling, cleaner visual design.
+* **Context**: Allow avatar photo previews and updates to save in LocalStorage when offline.
+* **Decision**: Deployed base64 converting DataURI fallbacks identical to the workspace logo uploading strategy.
+* **Impact**: Visual profile picture tests run cleanly on local mock credentials.
 
-### Decision B.7-2: Auto-accordion Search Trigger
+### Decision S.2-2: Firebase Auth re-authentication credentials
 * **Status**: Approved
-* **Context**: Avoid forcing administrators to manually open cards to search for matches.
-* **Decision**: Added an effect that auto-expands all cards when the search query is active.
-* **Impact**: Matches appear instantly inside expanded sections, keeping the workflow fluid.
-
-### Decision B.7-3: Family Summary KPI blocks
-* **Status**: Approved
-* **Context**: High-fidelity dashboard details inside cards.
-* **Decision**: Shows active guests count, total members (sum of all counts), RSVP status ratios (accepted, pending, declined, maybe), and invitation method ratios.
-* **Impact**: Instant, high-fidelity administrative insights.
+* **Context**: Satisfy security constraints on credential update calls.
+* **Decision**: Imports `reauthenticateWithCredential` and `EmailAuthProvider` dynamically, asking the user for confirmation prior to updating.
+* **Impact**: Maximizes security compliance for active database profiles.
 
 ---
 
@@ -50,7 +48,7 @@ Locked in luxury dark theme styling guidelines (gold `#D4AF37`, emerald `#0F6D5B
 ## 4. Verification & Server Status
 
 * Production build `npm run build` compiled successfully (zero errors).
-* Accordion toggling, summary metric computations, and search auto-expansion run cleanly.
+* Password checks, timezone selectors, and toggles write to Firestore correctly.
 
 ---
 
@@ -58,7 +56,6 @@ Locked in luxury dark theme styling guidelines (gold `#D4AF37`, emerald `#0F6D5B
 
 ```mermaid
 graph TD
-    A[Sprint B.5: Search & Filters] -->|Done| B[Sprint B.6: Duplicate Detection]
-    B -->|Done| C[Sprint B.7: Family Groups]
-    C -->|Current| D[Sprint C: RSVP Web Integration]
+    A[Sprint S.1: Workspace Settings] -->|Done| B[Sprint S.2: My Profile]
+    B -->|Current| C[Sprint S.3: Team Management]
 ```

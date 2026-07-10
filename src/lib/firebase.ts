@@ -1,6 +1,7 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -20,6 +21,7 @@ export const isFirebaseConfigured =
 let app;
 let authInstance = null;
 let dbInstance: any = null;
+let storageInstance: any = null;
 
 if (isFirebaseConfigured) {
   try {
@@ -32,6 +34,8 @@ if (isFirebaseConfigured) {
         tabManager: persistentMultipleTabManager()
       })
     });
+
+    storageInstance = getStorage(app);
   } catch (error) {
     console.error('Firebase initialization failed:', error);
   }
@@ -43,4 +47,5 @@ if (isFirebaseConfigured) {
 
 export const auth = authInstance;
 export const db = dbInstance;
+export const storage = storageInstance;
 export default app;

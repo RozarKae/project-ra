@@ -7,6 +7,8 @@ import Login from './pages/admin/Login';
 import AdminLayout from './pages/admin/AdminLayout';
 import Dashboard from './modules/dashboard/Dashboard';
 import Guests from './modules/guests/Guests';
+import WorkspaceSettings from './modules/settings/WorkspaceSettings';
+import UserProfile from './modules/settings/UserProfile';
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="guests" element={<Guests />} />
+            <Route path="settings/workspace" element={<WorkspaceSettings />} />
+            <Route path="settings/profile" element={<UserProfile />} />
             {/* Catch all in admin area and redirect back to admin main */}
             <Route path="*" element={<Navigate to="/admin" replace />} />
           </Route>

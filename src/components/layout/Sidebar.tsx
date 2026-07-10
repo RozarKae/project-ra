@@ -25,11 +25,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
 
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-    { name: 'Guest List', href: '/admin/guests', icon: Users, disabled: false },
+    { name: 'Guest List', href: '/admin/guests', icon: Users },
     { name: 'RSVP', href: '/admin/rsvp', icon: CheckSquare, disabled: true },
     { name: 'Invitations', href: '/admin/invitations', icon: Send, disabled: true },
     { name: 'Reports', href: '/admin/reports', icon: BarChart3, disabled: true },
-    { name: 'Settings', href: '/admin/settings', icon: Settings, disabled: true },
+    { 
+      name: 'Settings', 
+      href: '/admin/settings/workspace', 
+      icon: Settings,
+      subItems: [
+        { name: 'Workspace', href: '/admin/settings/workspace' },
+        { name: 'My Profile', href: '/admin/settings/profile' }
+      ]
+    },
   ];
 
   const handleLogout = async () => {
@@ -73,16 +81,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Navigation list */}
-        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+        <nav className="flex-1 px-4 py-6 space-y-3 overflow-y-auto">
           {navigation.map((item) => {
-            const isActive = location.pathname === item.href;
+            const isActive = location.pathname.startsWith(item.href) || (item.subItems && item.subItems.some(sub => location.pathname === sub.href));
             const Icon = item.icon;
 
             if (item.disabled) {
               return (
                 <div
                   key={item.name}
-                  className="flex items-center gap-4 px-4 py-3 text-[#F5F5F5]/30 cursor-not-allowed select-none rounded-lg text-sm border border-transparent animate-fade-in"
+                  className="flex items-center gap-4 px-4 py-3 text-[#F5F5F5]/30 cursor-not-allowed select-none rounded-lg text-sm border border-transparent"
                   title="Coming Soon in a future Sprint"
                 >
                   <Icon size={16} />
@@ -93,21 +101,46 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             }
 
             return (
-              <Link
-                key={item.name}
-                to={item.href}
-                onClick={onClose}
-                className={`
-                  flex items-center gap-4 px-4 py-3 rounded-lg text-sm transition-all duration-300 font-poppins border
-                  ${isActive 
-                    ? 'bg-[#D4AF37]/10 text-[#D4AF37] border-[#D4AF37]/20 shadow-[0_0_15px_rgba(212,175,55,0.05)]' 
-                    : 'text-[#F5F5F5]/70 hover:bg-[#141414] hover:text-[#F5F5F5] border-transparent'
-                  }
-                `}
-              >
-                <Icon size={16} className={isActive ? 'text-[#D4AF37]' : 'text-[#F5F5F5]/50'} />
-                <span>{item.name}</span>
-              </Link>
+              <div key={item.name} className="space-y-1">
+                <Link
+                  to={item.href}
+                  onClick={onClose}
+                  className={`
+                    flex items-center gap-4 px-4 py-3 rounded-lg text-sm transition-all duration-300 font-poppins border
+                    ${isActive 
+                      ? 'bg-[#D4AF37]/10 text-[#D4AF37] border-[#D4AF37]/20 shadow-[0_0_15px_rgba(212,175,55,0.05)]' 
+                      : 'text-[#F5F5F5]/70 hover:bg-[#141414] hover:text-[#F5F5F5] border-transparent'
+                    }
+                  `}
+                >
+                  <Icon size={16} className={isActive ? 'text-[#D4AF37]' : 'text-[#F5F5F5]/50'} />
+                  <span>{item.name}</span>
+                </Link>
+
+                {item.subItems && (
+                  <div className="pl-10 space-y-1">
+                    {item.subItems.map((sub) => {
+                      const isSubActive = location.pathname === sub.href;
+                      return (
+                        <Link
+                          key={sub.name}
+                          to={sub.href}
+                          onClick={onClose}
+                          className={`
+                            block px-3 py-2 text-xs font-poppins rounded-lg transition-all border
+                            ${isSubActive 
+                              ? 'text-[#D4AF37] border-[#D4AF37]/20 bg-[#D4AF37]/5 font-semibold' 
+                              : 'text-[#F5F5F5]/50 hover:text-white border-transparent'
+                            }
+                          `}
+                        >
+                          {sub.name}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             );
           })}
         </nav>

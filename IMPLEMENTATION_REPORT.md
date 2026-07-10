@@ -1,63 +1,80 @@
-# Project RA — Sprint B.7: Family Groups Implementation Report
+# Project RA — Sprint S.2: My Profile Implementation Report
 
-This report summarizes the design patterns, performance strategies, and code modifications for the **Family Groups** system inside the Guest Management module.
-
----
-
-## 1. Files Modified
-
-| File Path | Description |
-| :--- | :--- |
-| **`src/modules/guests/Guests.tsx`** | Transformed the layout from a flat table view into a collapsed, family-centric card list layout. Integrated automatic alphabet sorting, accordion state trackers, summary statistics indicators, soft delete modals, search triggers, and "Family Created"/"Family Updated" audit logging. |
+This report summarizes the design patterns, security rules, and code modifications for the **My Profile** settings page.
 
 ---
 
-## 2. Family Grouping Strategy
+## 1. Files Modified & Created
 
-* **Implicit Grouping**:
-  * Guests are grouped dynamically in memory using the `familyName` string parameter.
-  * When a new guest is saved, if their typed `familyName` doesn't exist, the system automatically creates and logs a new Family Group.
-  * If a family's guests are all soft-deleted, the family group has zero active records and is hidden naturally from rosters (preserving the data history).
-* **Collapsible Family Card Header Details**:
-  * Displays:
-    * **Family Name** (e.g. *"Jenkins Family"*)
-    * **Side Badge** (e.g. *"Bride Side"*)
-    * **Guests Count** and **Total members** (the sum of `membersCount` of all guests in the family)
-    * **RSVP Progress** (total confirmed, pending, and declined RSVP statuses)
-    * **Invitation Type Summary** (total digital, printed, or both invitation count)
-    * **Last Activity timestamp**
-* **Expandable Summary & Roster Table**:
-  * Clicking a card opens it, displaying a detailed summary card grid and a roster table listing family members with actions (Edit & soft-Delete) and duplicate alert badges.
+| File Path | Status | Description |
+| :--- | :---: | :--- |
+| **`src/types/user.ts`** | [NEW] | Defined types for `UserProfileData`. |
+| **`src/repositories/UserRepository.ts`** | [NEW] | Created profile load, real-time subscribe, and setDoc write handlers. |
+| **`src/hooks/useUserProfile.ts`** | [NEW] | Formulated settings load hook for profile views. |
+| **`src/modules/settings/UserProfile.tsx`** | [NEW] | Developed Personal Information forms, avatar uploads, timezone/country selects, password updates with strength indicators, account metadata cards, and UI preferences (Theme, Compact, Animations). |
+| **`src/components/layout/Sidebar.tsx`** | [MODIFY] | Added the "My Profile" sub-navigation link under the "Settings" menu parent. |
+| **`src/App.tsx`** | [MODIFY] | Registered `/admin/settings/profile` route in the Protected Route block. |
 
 ---
 
-## 3. Search & Filter Behaviors
+## 2. Firestore Schema
 
-* **Auto-Accordion Expansion**:
-  * If a user types into the search bar (e.g., searching *"Ahmed"*), the system automatically expands all matching family accordion cards (e.g., *"Ahmed Family"*) and lists the matches instantly.
-* **Filter Context Integration**:
-  * Active filters (e.g., *Bride Side* or *Pending RSVP*) continue to filter the guest roster. Guests matching the active criteria are still presented inside their corresponding family group card.
+* **Document Path**: `users/{userId}`
+* **Document Attributes**:
+```json
+{
+  "userId": "mock-admin-uid-12345",
+  "firstName": "Sarah",
+  "lastName": "Jenkins",
+  "displayName": "Sarah J.",
+  "bio": "Lead Wedding Planner and Administrator.",
+  "photoURL": "https://firebasestorage.googleapis.com/... or data:image/png;base64,...",
+  "phone": "+919876543210",
+  "country": "India",
+  "timezone": "UTC+05:30",
+  "language": "en",
+  "theme": "dark",
+  "compactMode": false,
+  "animationPreference": "full",
+  "createdAt": "2026-07-08T10:00:00Z",
+  "lastLogin": "2026-07-10T16:22:00Z",
+  "emailVerified": true,
+  "role": "owner",
+  "workspaceId": "default_workspace",
+  "updatedAt": "2026-07-10T16:23:00Z",
+  "updatedBy": "sarah@projectra.com"
+}
+```
 
 ---
 
-## 4. Database & Activity Logging
+## 3. Storage Paths
 
-* **Firestore Collection**: `activities`
-  * Logs family lifecycles when guests are added or updated:
-    * `action`: `"Family Created"` (if the group name did not exist previously) or `"Family Updated"`
-    * `entity`: `"family"`
-    * `entityId`: `{familyName}`
+* **Storage Directory**: `users/{userId}/profile/`
+* **Objects Saved**:
+  * `photo_{timestamp}` (User profile photo avatar)
+* **Local Fallback**: Like the workspace assets, local avatar photos convert to Base64 DataURIs via a `FileReader` and persist inside LocalStorage when running offline.
 
 ---
 
-## 5. Performance Considerations
+## 4. Firebase Authentication Integration
 
-* **Alpha Sort and Memoization**:
-  * Accordion arrays and summary metric counts (such as RSVP sums and invitation type totals) are calculated inside a React `useMemo` block.
-  * Sorting runs alphabetically: `Object.keys(familyGroups).sort()`, ensuring standard ordering.
+* **Email**: Read-only field extracted directly from `auth.currentUser.email` or mock settings.
+* **Password Modifications**:
+  * Supports real-time password updates via Firebase Auth `updatePassword` on the active user instance.
+  * Dynamically checks password complexity and renders a colored strength progress bar (*Weak*, *Medium*, *Strong*).
+  * Prompts the administrator for confirmation (`window.confirm`) prior to credentials submission.
+
+---
+
+## 5. UI Preferences & Visual Design
+
+* **Theme Options**: Supports swapping Dark/Light/System theme targets.
+* **Compact Mode**: Toggles table padding layouts.
+* **Animation Profiles**: Allows swapping Full Animations ( luxury staggers and fades ) vs Reduced Animations ( low motion styles ) to respect accessibility rules.
 
 ---
 
 ## 6. Known Issues
 
-* None. The layout operates cleanly across desktop, tablet, and mobile (collapsing details into vertical accordions).
+* None. breakpoint structures adapt cleanly.
