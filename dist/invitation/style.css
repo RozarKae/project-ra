@@ -4182,93 +4182,133 @@ nav {
     bottom: 24px;
     left: 24px;
     z-index: 999;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: rgba(15, 15, 15, 0.25);
-    border: 1px solid rgba(212, 175, 55, 0.25);
+    background: transparent;
+    border: none;
+    box-shadow: none;
     color: var(--color-gold-soft);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    padding: 0;
     opacity: 0.75;
-    transition: opacity 0.4s var(--ease-standard), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), background 0.4s, border-color 0.4s, box-shadow 0.4s;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    transition: opacity 0.4s var(--ease-standard), transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-.floating-audio-btn.playing {
-    animation: crescent-breathing 4s infinite ease-in-out;
-}
-
-.floating-audio-btn.muted {
-    border-color: rgba(212, 175, 55, 0.15);
-}
-
-.floating-audio-btn:hover,
-.floating-audio-btn:focus-visible {
+.floating-audio-btn:hover {
     opacity: 1 !important;
-    background: rgba(212, 175, 55, 0.1);
-    border-color: rgba(212, 175, 55, 0.5);
     transform: scale(1.06);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
 }
 
 .floating-audio-btn:focus-visible {
     outline: 2px solid var(--color-gold-soft);
-    outline-offset: 2px;
+    outline-offset: 4px;
+    border-radius: 4px;
 }
 
-.floating-audio-btn svg {
+.audio-indicator-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.audio-crescent {
     display: block;
-    width: 20px;
-    height: 20px;
-    transition: transform 0.3s var(--ease-standard);
+    width: 18px;
+    height: 18px;
+    transition: opacity 0.4s ease;
 }
 
-.floating-audio-btn:active svg {
-    transform: scale(0.92);
+.floating-audio-btn.muted .audio-crescent {
+    opacity: 0.55;
 }
 
-.floating-audio-btn.playing .twinkle-star {
-    animation: star-twinkle 3.5s infinite ease-in-out;
-    transform-origin: 17px 9px;
+.audio-equalizer {
+    display: flex;
+    align-items: flex-end;
+    gap: 2.5px;
+    height: 11px;
+    width: 15px;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    opacity: 1;
 }
 
-@keyframes star-twinkle {
-    0%, 100% {
-        opacity: 0.25;
-        transform: scale(0.75);
-    }
-    50% {
-        opacity: 1;
-        transform: scale(1.15);
-    }
+.floating-audio-btn.muted .audio-equalizer {
+    width: 0;
+    opacity: 0;
+    gap: 0;
+    margin-left: -6px;
+    pointer-events: none;
 }
 
-@keyframes crescent-breathing {
-    0%, 100% {
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 6px rgba(212, 175, 55, 0.08);
-        border-color: rgba(212, 175, 55, 0.25);
-    }
-    50% {
-        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35), 0 0 12px rgba(212, 175, 55, 0.22);
-        border-color: rgba(212, 175, 55, 0.45);
-    }
+.audio-equalizer .bar {
+    display: block;
+    width: 1.5px;
+    height: 100%;
+    background-color: var(--color-gold-soft);
+    border-radius: 0.75px;
+    transform-origin: bottom;
+    transform: scaleY(0.3);
+    transition: transform 0.4s ease;
+}
+
+.floating-audio-btn.playing .bar-1 {
+    animation: bar-breathe-1 2.2s infinite ease-in-out;
+}
+
+.floating-audio-btn.playing .bar-2 {
+    animation: bar-breathe-2 1.8s infinite ease-in-out;
+}
+
+.floating-audio-btn.playing .bar-3 {
+    animation: bar-breathe-3 2.5s infinite ease-in-out;
+}
+
+.floating-audio-btn.playing .bar-4 {
+    animation: bar-breathe-4 2.0s infinite ease-in-out;
+}
+
+@keyframes bar-breathe-1 {
+    0%, 100% { transform: scaleY(0.35); }
+    50% { transform: scaleY(0.85); }
+}
+
+@keyframes bar-breathe-2 {
+    0%, 100% { transform: scaleY(0.25); }
+    50% { transform: scaleY(1.0); }
+}
+
+@keyframes bar-breathe-3 {
+    0%, 100% { transform: scaleY(0.4); }
+    50% { transform: scaleY(0.75); }
+}
+
+@keyframes bar-breathe-4 {
+    0%, 100% { transform: scaleY(0.3); }
+    50% { transform: scaleY(0.9); }
 }
 
 @media (max-width: 768px) {
     .floating-audio-btn {
         bottom: 16px;
         left: 16px;
-        width: 38px;
-        height: 38px;
     }
-    .floating-audio-btn svg {
-        width: 18px;
-        height: 18px;
+    .audio-crescent {
+        width: 16px;
+        height: 16px;
+    }
+    .audio-equalizer {
+        height: 9px;
+        width: 13px;
+        gap: 2px;
+    }
+    .audio-equalizer .bar {
+        width: 1.2px;
+    }
+    .floating-audio-btn.muted .audio-equalizer {
+        margin-left: -6px;
     }
 }
 

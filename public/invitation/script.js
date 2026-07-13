@@ -2779,27 +2779,28 @@ const AudioManager = {
         if (!isPlaying) {
             btn.classList.add('muted');
             btn.classList.remove('playing');
-            btn.innerHTML = `
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="audio-icon">
-                    <!-- Thin crescent moon filled with soft opacity -->
-                    <path d="M12 4a8 8 0 1 0 8 8 8.5 8.5 0 0 1-8-8z" fill="currentColor" opacity="0.6"/>
-                    <!-- Thin diagonal slash -->
-                    <line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="1.5"/>
-                </svg>
-            `;
             btn.setAttribute('aria-label', 'Enable sound');
         } else {
             btn.classList.add('playing');
             btn.classList.remove('muted');
-            btn.innerHTML = `
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="audio-icon">
-                    <!-- Thin crescent moon filled completely -->
-                    <path d="M12 4a8 8 0 1 0 8 8 8.5 8.5 0 0 1-8-8z" fill="currentColor"/>
-                    <!-- Twinkling Star positioned in crescent opening -->
-                    <path class="twinkle-star" d="M17 7l0.6 1.4 1.4 0.6-1.4 0.6-0.6 1.4-0.6-1.4-1.4-0.6 1.4-0.6z" fill="currentColor"/>
-                </svg>
-            `;
             btn.setAttribute('aria-label', 'Mute sound');
+        }
+
+        // Initialize wrapper structure inside button container if not already present
+        if (!btn.querySelector('.audio-indicator-wrapper')) {
+            btn.innerHTML = `
+                <div class="audio-indicator-wrapper">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="audio-crescent">
+                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" fill="currentColor"/>
+                    </svg>
+                    <div class="audio-equalizer">
+                        <span class="bar bar-1"></span>
+                        <span class="bar bar-2"></span>
+                        <span class="bar bar-3"></span>
+                        <span class="bar bar-4"></span>
+                    </div>
+                </div>
+            `;
         }
     },
 
