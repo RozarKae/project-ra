@@ -98,22 +98,68 @@ export class SettingRepository extends BaseRepository {
           state: 'Tamil Nadu',
           country: 'India',
           googleMapsUrl: 'https://maps.app.goo.gl/nHmxp5HqnWTBi1R56'
+        },
+        {
+          id: 'brides_residence',
+          name: "Bride's Residence",
+          address: 'Madurai',
+          city: 'Madurai',
+          state: 'Tamil Nadu',
+          country: 'India',
+          googleMapsUrl: 'https://maps.app.goo.gl/5Z7sW3SojqCc7gPV9'
+        },
+        {
+          id: 'grooms_residence',
+          name: "Groom's Residence",
+          address: 'Madurai',
+          city: 'Madurai',
+          state: 'Tamil Nadu',
+          country: 'India',
+          googleMapsUrl: ''
         }
       ],
       events: [
         {
+          id: 'haldi',
+          name: '🌿 Haldi Ceremony',
+          date: '2026-08-28T19:00:00+05:30',
+          venueId: 'brides_residence',
+          description: 'An intimate evening of colours, blessings and joyful family traditions as the wedding celebrations begin.'
+        },
+        {
+          id: 'nalang',
+          name: '✨ Nalang Ceremony',
+          date: '2026-08-29T11:00:00+05:30',
+          venueId: 'grooms_residence',
+          description: 'A traditional ceremony filled with laughter, customs and family blessings before the wedding festivities continue.'
+        },
+        {
+          id: 'sangeet',
+          name: '🎶 Sangeet & DJ Night',
+          date: '2026-08-29T19:00:00+05:30',
+          venueId: 'nsk_mahal',
+          description: 'An evening of music, dance and celebration with friends and family.'
+        },
+        {
           id: 'nikah',
-          name: 'Nikah (Wedding Ceremony)',
+          name: '💍 Nikkah',
           date: '2026-08-30T09:00:00+05:30',
           venueId: 'nsk_mahal',
-          description: 'The marriage contract signing and traditional Nikah ceremony.'
+          description: 'The sacred Nikāh ceremony where two families unite in faith, love and lifelong companionship.'
         },
         {
           id: 'reception',
-          name: 'Reception & Feast',
+          name: '🍽️ Wedding Feast & Reception',
           date: '2026-08-30T11:00:00+05:30',
           venueId: 'nsk_mahal',
-          description: 'A grand reception celebrating the union.'
+          description: 'Join us for lunch as we celebrate the beginning of our new journey together.'
+        },
+        {
+          id: 'valima',
+          name: 'Valima',
+          date: 'TBA',
+          venueId: 'nsk_mahal',
+          description: 'The Valima reception will be announced soon. We look forward to celebrating with everyone once the date is confirmed.'
         }
       ]
     };

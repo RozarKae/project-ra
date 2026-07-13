@@ -31,36 +31,68 @@ function getWeddingSettings() {
                 state: 'Tamil Nadu',
                 country: 'India',
                 googleMapsUrl: 'https://maps.app.goo.gl/nHmxp5HqnWTBi1R56'
+            },
+            {
+                id: 'brides_residence',
+                name: "Bride's Residence",
+                address: 'Madurai',
+                city: 'Madurai',
+                state: 'Tamil Nadu',
+                country: 'India',
+                googleMapsUrl: 'https://maps.app.goo.gl/5Z7sW3SojqCc7gPV9'
+            },
+            {
+                id: 'grooms_residence',
+                name: "Groom's Residence",
+                address: 'Madurai',
+                city: 'Madurai',
+                state: 'Tamil Nadu',
+                country: 'India',
+                googleMapsUrl: ''
             }
         ],
         events: [
             {
                 id: 'haldi',
                 name: '🌿 Haldi Ceremony',
-                date: '2026-08-29T18:00:00+05:30',
-                venueId: 'nsk_mahal',
-                description: 'Haldi celebrations at Bride\'s Residence.'
+                date: '2026-08-28T19:00:00+05:30',
+                venueId: 'brides_residence',
+                description: 'An intimate evening of colours, blessings and joyful family traditions as the wedding celebrations begin.'
+            },
+            {
+                id: 'nalang',
+                name: '✨ Nalang Ceremony',
+                date: '2026-08-29T11:00:00+05:30',
+                venueId: 'grooms_residence',
+                description: 'A traditional ceremony filled with laughter, customs and family blessings before the wedding festivities continue.'
             },
             {
                 id: 'sangeet',
-                name: '🎶 Sangeet Night',
+                name: '🎶 Sangeet & DJ Night',
                 date: '2026-08-29T19:00:00+05:30',
                 venueId: 'nsk_mahal',
-                description: 'Sangeet night at NSK & NKR A/C Mahal.'
+                description: 'An evening of music, dance and celebration with friends and family.'
             },
             {
                 id: 'nikah',
-                name: '💍 Nikah Ceremony',
+                name: '💍 Nikkah',
                 date: '2026-08-30T09:00:00+05:30',
                 venueId: 'nsk_mahal',
-                description: 'The marriage contract signing and traditional Nikah ceremony.'
+                description: 'The sacred Nikāh ceremony where two families unite in faith, love and lifelong companionship.'
+            },
+            {
+                id: 'reception',
+                name: '🍽️ Wedding Feast & Reception',
+                date: '2026-08-30T11:00:00+05:30',
+                venueId: 'nsk_mahal',
+                description: 'Join us for lunch as we celebrate the beginning of our new journey together.'
             },
             {
                 id: 'valima',
-                name: '🤍 Valima',
-                date: '2026-08-31T11:00:00+05:30',
+                name: 'Valima',
+                date: 'TBA',
                 venueId: 'nsk_mahal',
-                description: 'Valima feast celebrating the union.'
+                description: 'The Valima reception will be announced soon. We look forward to celebrating with everyone once the date is confirmed.'
             }
         ]
     };
@@ -99,6 +131,30 @@ const settings = getWeddingSettings();
         timelineContainer.innerHTML = settings.events.map((event, index) => {
             const venue = settings.venues?.find(v => v.id === event.venueId) || {};
             const sideClass = index % 2 === 0 ? "timeline-left" : "timeline-right";
+            
+            const isValima = event.id === 'valima' || event.name?.toLowerCase().includes('valima');
+            const isTba = isValima || !event.date || event.date === 'TBA' || isNaN(new Date(event.date).getTime());
+            
+            if (isTba) {
+                return `
+                    <article class="event-card glass-card event-valima ${sideClass}">
+                        <div class="timeline-dot" aria-hidden="true"></div>
+                        <div class="valima-islamic-bg" aria-hidden="true">
+                            <svg class="valima-lantern-svg" viewBox="0 0 100 100" fill="none" stroke="var(--color-gold)" stroke-width="1">
+                                <path d="M50,5 L63,20 L80,20 L80,37 L95,50 L80,63 L80,80 L63,80 L50,95 L37,80 L20,80 L20,63 L5,50 L20,37 L20,20 L37,20 Z" opacity="0.1" />
+                                <path d="M48,32 A12,12 0 1,0 60,46 A10,10 0 1,1 48,32 Z" fill="var(--color-gold)" opacity="0.2" stroke="none" />
+                                <path d="M50,45 L50,38 M45,45 L55,45 L52,55 L48,55 Z" stroke-width="1.5" opacity="0.25" />
+                                <line x1="50" y1="20" x2="50" y2="38" opacity="0.25" />
+                            </svg>
+                        </div>
+                        <p class="event-date">To Be Announced</p>
+                        <h3>🤍 ${event.name}</h3>
+                        <div class="valima-coming-soon-badge">Coming Soon</div>
+                        <p class="event-description">${event.description || "The Valima reception will be announced soon. We look forward to celebrating with everyone once the date is confirmed."}</p>
+                    </article>
+                `;
+            }
+            
             const dateObj = new Date(event.date);
             const formattedDate = dateObj.toLocaleDateString('en-US', {
                 weekday: 'long',
@@ -106,10 +162,16 @@ const settings = getWeddingSettings();
                 month: 'long',
                 year: 'numeric'
             }).replace(',', ' •');
-            const formattedTime = dateObj.toLocaleTimeString('en-US', {
+            
+            let formattedTime = dateObj.toLocaleTimeString('en-US', {
                 hour: 'numeric',
                 minute: '2-digit'
             });
+            
+            if (event.id === 'sangeet' || event.name?.toLowerCase().includes('sangeet')) {
+                formattedTime = "After 7:00 PM";
+            }
+            
             const locationText = venue.name || "To Be Announced";
             const mapsUrl = venue.googleMapsUrl || "#";
             
