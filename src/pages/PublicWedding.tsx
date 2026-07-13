@@ -1,8 +1,16 @@
 import React, { useEffect } from 'react';
 import { useWeddingSettings } from '../hooks/useWeddingSettings';
+import { useGuests } from '../hooks/useGuests';
+import { useRsvps } from '../hooks/useRsvps';
+import { RsvpRepository } from '../repositories/RsvpRepository';
+import { Guest } from '../types/guest';
+
+const rsvpRepo = new RsvpRepository();
 
 export const PublicWedding: React.FC = () => {
   const { settings } = useWeddingSettings();
+  const { guests, save: saveGuest } = useGuests();
+  const { rsvps, saveRsvp } = useRsvps();
 
   useEffect(() => {
     // Construct dynamic tab title based on centralized settings (Sprint S.4 logic)
@@ -10,6 +18,93 @@ export const PublicWedding: React.FC = () => {
     const brideName = settings?.bride?.name || 'Arifa';
     document.title = `${groomName} & ${brideName} Wedding Invitation`;
   }, [settings]);
+
+  useEffect(() => {
+    const handleMessage = async (event: MessageEvent) => {
+      if (event.data && event.data.type === 'RSVP_SUBMIT') {
+        const { name, attendance, guestsCount, message } = event.data.payload;
+        if (!name) return;
+
+        console.log('Received RSVP Submission from iframe:', name, attendance, guestsCount, message);
+
+        const cleanName = name.trim().toLowerCase();
+        let targetGuest = guests.find(g => g.name.trim().toLowerCase() === cleanName);
+        const isAttending = attendance.toLowerCase().includes('yes');
+        const count = isAttending ? (parseInt(guestsCount, 10) || 1) : 0;
+        const nowStr = new Date().toISOString();
+
+        // 1. Create or Update Guest
+        if (!targetGuest) {
+          const newId = `GST-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+          const newG: Guest = {
+            id: newId,
+            name: name.trim(),
+            familyName: 'General',
+            relation: 'General',
+            side: 'groom',
+            invitationType: 'digital',
+            rsvpStatus: isAttending ? 'attending' : 'declined',
+            membersCount: count,
+            isDeleted: false,
+            createdAt: nowStr,
+            updatedAt: nowStr,
+            createdBy: 'public-form',
+            updatedBy: 'public-form'
+          };
+          await saveGuest(newG, 'Guest Submission');
+          targetGuest = newG;
+        } else {
+          const updatedG: Guest = {
+            ...targetGuest,
+            rsvpStatus: isAttending ? 'attending' : 'declined',
+            membersCount: count,
+            updatedAt: nowStr,
+            updatedBy: 'public-form'
+          };
+          await saveGuest(updatedG, 'Guest Submission');
+        }
+
+        // 2. Find or Create RSVP Entry
+        let existingRsvp = rsvps.find(r => r.guestId === targetGuest!.id);
+        if (!existingRsvp) {
+          existingRsvp = rsvpRepo.createDefaultRsvp(
+            targetGuest.id,
+            targetGuest.name,
+            targetGuest.familyName || 'General',
+            targetGuest.invitationType || 'digital'
+          );
+        }
+
+        const updatedRsvp = {
+          ...existingRsvp,
+          status: (isAttending ? 'accepted' : 'declined') as 'accepted' | 'declined',
+          response: (isAttending ? 'yes' : 'no') as 'yes' | 'no',
+          notes: message || '',
+          respondedAt: nowStr,
+          membersAttending: {
+            adults: count,
+            children: 0,
+            total: count
+          },
+          attendance: {
+            status: (isAttending ? 'attending' : 'not-attending') as 'attending' | 'not-attending',
+            adults: count,
+            children: 0,
+            infants: 0,
+            events: ['nikah', 'valima'],
+            specialAttendance: [],
+            completion: 100
+          }
+        };
+
+        // 3. Save RSVP (will update logs & sync guest status automatically)
+        await saveRsvp(updatedRsvp, name.trim(), true);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [guests, rsvps, saveGuest, saveRsvp]);
 
   return (
     <div className="w-screen h-screen overflow-hidden bg-[#090909]">

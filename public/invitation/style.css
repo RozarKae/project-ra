@@ -967,6 +967,7 @@ nav a.active::after {
     display: flex;
     gap: var(--space-md);
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .calendar-buttons .btn {

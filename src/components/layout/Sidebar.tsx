@@ -23,7 +23,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const location = useLocation();
   const { logout, isMock } = useAuth();
 
-  const navigation = [
+  interface NavItem {
+    name: string;
+    href: string;
+    icon: React.ComponentType<any>;
+    subItems?: { name: string; href: string }[];
+    disabled?: boolean;
+  }
+
+  const navigation: NavItem[] = [
     { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
     { name: 'Guest List', href: '/admin/guests', icon: Users },
     { 
@@ -37,8 +45,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         { name: 'Hospitality', href: '/admin/rsvp/hospitality' }
       ]
     },
-    { name: 'Invitations', href: '/admin/invitations', icon: Send, disabled: true },
-    { name: 'Reports', href: '/admin/reports', icon: BarChart3, disabled: true },
+    { name: 'Invitations', href: '/admin/invitations', icon: Send },
+    { name: 'Reports', href: '/admin/reports', icon: BarChart3 },
     { 
       name: 'Settings', 
       href: '/admin/settings/workspace', 

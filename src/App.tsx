@@ -15,6 +15,8 @@ import WorkspaceSettings from './modules/settings/WorkspaceSettings';
 import UserProfile from './modules/settings/UserProfile';
 import TeamManagement from './modules/settings/TeamManagement';
 import WeddingSettingsPage from './modules/settings/WeddingSettings';
+import InvitationDashboard from './modules/invitations/InvitationDashboard';
+import ReportsDashboard from './modules/reports/ReportsDashboard';
 
 function App() {
   return (
@@ -47,6 +49,8 @@ function App() {
             <Route path="rsvp/details" element={<RsvpDetails />} />
             <Route path="rsvp/attendance" element={<RsvpAttendancePage />} />
             <Route path="rsvp/hospitality" element={<RsvpHospitality />} />
+            <Route path="invitations" element={<InvitationDashboard />} />
+            <Route path="reports" element={<ReportsDashboard />} />
             <Route path="settings/workspace" element={<WorkspaceSettings />} />
             <Route path="settings/profile" element={<UserProfile />} />
             <Route path="settings/team" element={<TeamManagement />} />

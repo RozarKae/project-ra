@@ -1775,6 +1775,8 @@ const rsvpFailureState = document.querySelector(".rsvp-failure-state");
 const successPersonalMessage = document.getElementById("successPersonalMessage");
 
 const googleCalendarLink = document.getElementById("googleCalendarLink");
+const outlookCalendarLink = document.getElementById("outlookCalendarLink");
+const microsoft365CalendarLink = document.getElementById("microsoft365CalendarLink");
 const downloadIcsBtn = document.getElementById("downloadIcsBtn");
 const retrySubmitBtn = document.getElementById("retrySubmitBtn");
 
@@ -1946,17 +1948,75 @@ function buildSummary() {
     summaryMessage.textContent = wish ? wish : "No message left.";
 }
 
+// Helper to escape iCalendar special characters
+function escapeIcsText(str) {
+    if (!str) return "";
+    return str
+        .replace(/\\/g, "\\\\")
+        .replace(/,/g, "\\,")
+        .replace(/;/g, "\\;")
+        .replace(/\n/g, "\\n")
+        .replace(/\r/g, "");
+}
+
+// Helper to fold long lines to 75 characters (RFC 5545)
+function foldLine(line) {
+    if (line.length <= 75) return line;
+    let result = line.slice(0, 75);
+    let remaining = line.slice(75);
+    while (remaining.length > 0) {
+        result += "\r\n ";
+        result += remaining.slice(0, 74);
+        remaining = remaining.slice(74);
+    }
+    return result;
+}
+
 // 5. Calendar Links & Downloads
 function setupCalendarIntegrations(name, attendance) {
-    const isAttending = attendance === "Yes, I'll be there";
+    const calendarHeading = document.querySelector(".calendar-heading");
+    const calendarButtonsDiv = document.querySelector(".calendar-buttons");
+
+    if (!settings || !settings.groomShortName || !settings.brideShortName) {
+        console.error("Missing wedding settings event details.");
+        if (calendarHeading) {
+            calendarHeading.textContent = "Calendar integration is unavailable: groom or bride names are missing in settings.";
+            calendarHeading.style.color = "#ff4d4d";
+        }
+        if (calendarButtonsDiv) {
+            calendarButtonsDiv.style.display = "none";
+        }
+        return;
+    }
+
     const dateObj = new Date(nikahEventForTimer ? nikahEventForTimer.date : "2026-08-30T09:00:00+05:30");
+    if (isNaN(dateObj.getTime())) {
+        console.error("Invalid event date configured.");
+        if (calendarHeading) {
+            calendarHeading.textContent = "Calendar integration is unavailable: wedding date is invalid or missing.";
+            calendarHeading.style.color = "#ff4d4d";
+        }
+        if (calendarButtonsDiv) {
+            calendarButtonsDiv.style.display = "none";
+        }
+        return;
+    }
+
     const dateEndObj = new Date(dateObj.getTime() + 6 * 60 * 60 * 1000); // 6 hours event window
     const primaryVenue = settings.venues?.[0];
 
+    const isAttending = attendance === "Yes, I'll be there";
     if (isAttending) {
         const formattedDate = dateObj.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' });
         successPersonalMessage.textContent = `Thank you, ${name}! We are thrilled that you will celebrate with us on ${formattedDate}.`;
         document.querySelector(".rsvp-calendar-wrapper")?.style.setProperty("display", "block");
+        if (calendarHeading) {
+            calendarHeading.textContent = "Add this celebration to your calendar:";
+            calendarHeading.style.color = "";
+        }
+        if (calendarButtonsDiv) {
+            calendarButtonsDiv.style.display = "flex";
+        }
     } else {
         successPersonalMessage.textContent = `Thank you for letting us know, ${name}. We will miss you, but we appreciate you sending your blessings!`;
         document.querySelector(".rsvp-calendar-wrapper")?.style.setProperty("display", "none");
@@ -1965,46 +2025,111 @@ function setupCalendarIntegrations(name, attendance) {
     const toUtcStr = (d) => d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
     const startUtc = toUtcStr(dateObj);
     const endUtc = toUtcStr(dateEndObj);
+    const currentUtc = toUtcStr(new Date());
+
+    const toOutlookUtcStr = (d) => d.toISOString().split('.')[0] + 'Z';
     
     const rawTitle = `${settings.groomShortName} & ${settings.brideShortName}'s Wedding (Nikah)`;
     const rawLocation = primaryVenue 
         ? `${primaryVenue.name}, ${primaryVenue.address}, ${primaryVenue.city}, ${primaryVenue.state}`
         : "NSK & NKR A/C Mahal and Residency, Madurai, Tamil Nadu";
-    const rawDetails = `Join us to celebrate the Nikah of ${settings.groomShortName} & ${settings.brideShortName}.`;
+        
+    const siteUrl = window.location.origin;
+    const mapsUrl = primaryVenue?.googleMapsUrl || "https://maps.google.com";
 
-    const title = encodeURIComponent(rawTitle);
-    const details = encodeURIComponent(rawDetails);
-    const location = encodeURIComponent(rawLocation);
+    const rawDetails = `You are cordially invited to celebrate the wedding of ${settings.groomShortName} & ${settings.brideShortName}.\n\n` +
+        `Venue: ${primaryVenue?.name || "NSK & NKR A/C Mahal"}\n` +
+        `Address: ${primaryVenue?.address || "GST Main Rd, Lion City"}, ${primaryVenue?.city || "Madurai"}, ${primaryVenue?.state || "Tamil Nadu"}\n\n` +
+        `Wedding Website: ${siteUrl}\n` +
+        `Google Maps Link: ${mapsUrl}`;
 
+    // Google Calendar
     if (googleCalendarLink) {
-        googleCalendarLink.href = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startUtc}/${endUtc}&details=${details}&location=${location}`;
+        const googleParams = new URLSearchParams({
+            action: "TEMPLATE",
+            text: rawTitle,
+            dates: `${startUtc}/${endUtc}`,
+            details: rawDetails,
+            location: rawLocation
+        });
+        googleCalendarLink.href = `https://calendar.google.com/calendar/render?${googleParams.toString()}`;
     }
 
+    // Outlook & Microsoft 365
+    const outlookParams = new URLSearchParams({
+        path: "/calendar/action/compose",
+        rru: "addevent",
+        subject: rawTitle,
+        startdt: toOutlookUtcStr(dateObj),
+        enddt: toOutlookUtcStr(dateEndObj),
+        body: rawDetails,
+        location: rawLocation
+    });
+    
+    if (outlookCalendarLink) {
+        outlookCalendarLink.href = `https://outlook.live.com/calendar/deeplink/compose?${outlookParams.toString()}`;
+    }
+    
+    if (microsoft365CalendarLink) {
+        microsoft365CalendarLink.href = `https://outlook.office.com/calendar/deeplink/compose?${outlookParams.toString()}`;
+    }
+
+    // Apple / iOS .ics download
     if (downloadIcsBtn) {
-        downloadIcsBtn.onclick = () => {
-            const icsContent = [
+        downloadIcsBtn.onclick = async () => {
+            const icsLines = [
                 "BEGIN:VCALENDAR",
                 "VERSION:2.0",
                 "PRODID:-//Project RA//Wedding Invitation//EN",
+                "CALSCALE:GREGORIAN",
+                "METHOD:PUBLISH",
                 "BEGIN:VEVENT",
-                `UID:wedding-${settings.groomShortName.toLowerCase()}-${settings.brideShortName.toLowerCase()}-2026`,
-                "DTSTAMP:20260707T120000Z",
+                `UID:wedding-${settings.groomShortName.toLowerCase()}-${settings.brideShortName.toLowerCase()}-2026@project-ra.com`,
+                `DTSTAMP:${currentUtc}`,
                 `DTSTART:${startUtc}`,
                 `DTEND:${endUtc}`,
-                `SUMMARY:${rawTitle}`,
-                `DESCRIPTION:${rawDetails}`,
-                `LOCATION:${rawLocation}`,
+                `SUMMARY:${escapeIcsText(rawTitle)}`,
+                `DESCRIPTION:${escapeIcsText(rawDetails)}`,
+                `LOCATION:${escapeIcsText(rawLocation)}`,
                 "END:VEVENT",
                 "END:VCALENDAR"
-            ].join("\r\n");
+            ];
 
+            const foldedLines = icsLines.map(line => foldLine(line));
+            const icsContent = foldedLines.join("\r\n");
+
+            const filename = `wedding-${settings.groomShortName.toLowerCase()}-${settings.brideShortName.toLowerCase()}.ics`;
             const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+
+            // On modern mobile devices (especially iOS Safari), use navigator.share if available
+            if (navigator.share && navigator.canShare) {
+                try {
+                    const file = new File([blob], filename, { type: "text/calendar" });
+                    if (navigator.canShare({ files: [file] })) {
+                        await navigator.share({
+                            files: [file],
+                            title: rawTitle,
+                            text: rawDetails
+                        });
+                        return;
+                    }
+                } catch (shareError) {
+                    console.warn("navigator.share failed, falling back to download link", shareError);
+                }
+            }
+
+            // Desktop and fallback download link
             const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = `wedding-${settings.groomShortName.toLowerCase()}-${settings.brideShortName.toLowerCase()}.ics`;
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.download = filename;
             document.body.appendChild(link);
             link.click();
-            document.body.removeChild(link);
+            
+            setTimeout(() => {
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            }, 100);
         };
     }
 }
@@ -2037,6 +2162,19 @@ async function executeRsvpSubmission() {
         // Dynamically log to admin guest management
         if (typeof registerNewRSVPSubmission === "function") {
             registerNewRSVPSubmission(name, attendance, formData.get("guests") || 1, formData.get("message") || "");
+        }
+
+        // Post message to parent window (Vite/React app) to update Firestore / central database
+        if (window.parent) {
+            window.parent.postMessage({
+                type: 'RSVP_SUBMIT',
+                payload: {
+                    name: name,
+                    attendance: attendance,
+                    guestsCount: formData.get("guests") || 1,
+                    message: formData.get("message") || ""
+                }
+            }, '*');
         }
 
         localStorage.setItem("rsvpSubmitted", "true");

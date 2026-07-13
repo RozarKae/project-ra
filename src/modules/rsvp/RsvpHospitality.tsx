@@ -3,25 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft,
   Search,
-  Eye,
-  Settings,
   AlertCircle,
-  Check,
   Utensils,
   Car,
   Home,
   Accessibility,
-  Heart,
-  Calendar,
   Lock,
-  Compass,
   FileText
 } from 'lucide-react';
 import Card from '../../components/common/Card';
 import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
-import Table from '../../components/common/Table';
 import { toast } from 'react-hot-toast';
+import { useAuth } from '../../lib/auth';
 import { useGuests } from '../../hooks/useGuests';
 import { useRsvps } from '../../hooks/useRsvps';
 import { useUserProfile } from '../../hooks/useUserProfile';
@@ -33,6 +27,7 @@ const rsvpRepo = new RsvpRepository();
 
 export const RsvpHospitality: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { guests, loading: guestsLoading } = useGuests();
   const { rsvps, loading: rsvpsLoading, saveRsvp } = useRsvps();
   const { profile: currentUserProfile, loading: profileLoading } = useUserProfile();
@@ -125,7 +120,7 @@ export const RsvpHospitality: React.FC = () => {
 
     setIsSaving(true);
     try {
-      const operator = currentUserProfile?.displayName || currentUserProfile?.email || 'Admin';
+      const operator = currentUserProfile?.displayName || user?.email || 'Admin';
       const prevHosp = selectedRsvp.hospitality;
 
       const updatedPayload: RsvpEntry = {

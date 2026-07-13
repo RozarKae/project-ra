@@ -7,7 +7,7 @@ Copy-Item CNAME public/CNAME -Force
 npm run build
 
 # 3. Navigate into the dist/ output folder
-cd dist
+Set-Location dist
 
 # 4. Initialize temporary git repository
 git init
@@ -20,6 +20,6 @@ git push -f https://github.com/RozarKae/project-ra.git gh-pages
 
 # 6. Clean up temporary git repository inside dist/
 Remove-Item .git -Recurse -Force
-cd ..
+Set-Location ..
 
 Write-Host "Deployment completed successfully! The website is updating on GitHub Pages."
