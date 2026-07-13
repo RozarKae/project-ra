@@ -2,13 +2,7 @@ document.body.classList.add("is-loading");
 
 function getWeddingSettings() {
     const storageKey = "ra_settings_default_workspace_arifa_rozar_wedding";
-    const data = localStorage.getItem(storageKey);
-    if (data) {
-        try {
-            return JSON.parse(data);
-        } catch(e) {}
-    }
-    return {
+    const freshDefaults = {
         brideName: "Arifa Khan",
         groomName: "Rozar Khan",
         brideShortName: "Arifa",
@@ -25,7 +19,7 @@ function getWeddingSettings() {
         venues: [
             {
                 id: 'nsk_mahal',
-                name: 'NSK & NKR A/C Mahal and Residency',
+                name: 'NSK & NKR A/C Mahal',
                 address: 'GST Main Rd, Lion City, Thiru Nagar, Thanakkankulam',
                 city: 'Madurai',
                 state: 'Tamil Nadu',
@@ -49,6 +43,15 @@ function getWeddingSettings() {
                 state: 'Tamil Nadu',
                 country: 'India',
                 googleMapsUrl: ''
+            },
+            {
+                id: 'celebration_hall',
+                name: 'Celebration Hall',
+                address: 'Madurai',
+                city: 'Madurai',
+                state: 'Tamil Nadu',
+                country: 'India',
+                googleMapsUrl: 'https://maps.app.goo.gl/nHmxp5HqnWTBi1R56'
             }
         ],
         events: [
@@ -57,45 +60,59 @@ function getWeddingSettings() {
                 name: '🌿 Haldi Ceremony',
                 date: '2026-08-28T19:00:00+05:30',
                 venueId: 'brides_residence',
-                description: 'An intimate evening of colours, blessings and joyful family traditions as the wedding celebrations begin.'
+                description: 'A colourful evening filled with blessings, laughter and family traditions as the wedding celebrations begin.'
             },
             {
                 id: 'nalang',
                 name: '✨ Nalang Ceremony',
                 date: '2026-08-29T11:00:00+05:30',
                 venueId: 'grooms_residence',
-                description: 'A traditional ceremony filled with laughter, customs and family blessings before the wedding festivities continue.'
+                description: 'Traditional pre-wedding rituals celebrated with close family and friends.'
             },
             {
                 id: 'sangeet',
                 name: '🎶 Sangeet & DJ Night',
                 date: '2026-08-29T19:00:00+05:30',
-                venueId: 'nsk_mahal',
-                description: 'An evening of music, dance and celebration with friends and family.'
+                venueId: 'celebration_hall',
+                description: 'An evening of music, dance and unforgettable memories with family and friends.'
             },
             {
                 id: 'nikah',
                 name: '💍 Nikkah',
                 date: '2026-08-30T09:00:00+05:30',
                 venueId: 'nsk_mahal',
-                description: 'The sacred Nikāh ceremony where two families unite in faith, love and lifelong companionship.'
+                description: 'The sacred Nikāh ceremony where two souls begin their lifelong journey together.'
             },
             {
                 id: 'reception',
                 name: '🍽️ Wedding Feast & Reception',
                 date: '2026-08-30T11:00:00+05:30',
                 venueId: 'nsk_mahal',
-                description: 'Join us for lunch as we celebrate the beginning of our new journey together.'
+                description: 'Join us for lunch as we celebrate our union with love, joy and gratitude.'
             },
             {
                 id: 'valima',
                 name: 'Valima',
                 date: 'TBA',
                 venueId: 'nsk_mahal',
-                description: 'The Valima reception will be announced soon. We look forward to celebrating with everyone once the date is confirmed.'
+                description: 'The Valima reception will be announced soon. We look forward to celebrating together once the date is finalized.'
             }
         ]
     };
+
+    const data = localStorage.getItem(storageKey);
+    if (data) {
+        try {
+            const parsed = JSON.parse(data);
+            if (!parsed.events || parsed.events.length < 6) {
+                parsed.events = freshDefaults.events;
+                parsed.venues = freshDefaults.venues;
+                localStorage.setItem(storageKey, JSON.stringify(parsed));
+            }
+            return parsed;
+        } catch(e) {}
+    }
+    return freshDefaults;
 }
 
 const settings = getWeddingSettings();
@@ -691,6 +708,9 @@ function transitionToMemory(index) {
     isAnimating = true;
     currentMemoryIndex = index;
 
+    AudioManager.playWhoosh();
+    AudioManager.triggerHaptic(20);
+
     const targetItem = galleryItems[index];
     const img = targetItem.querySelector("img");
     const storyData = targetItem.querySelector(".caption-card");
@@ -798,6 +818,9 @@ function openModal(index) {
     modalOverlay.classList.add("active");
     document.body.classList.add("modal-open");
 
+    AudioManager.playPageTurn();
+    AudioManager.triggerHaptic([60, 40, 60]);
+
     if (hasGsap()) {
         const rect = img.getBoundingClientRect();
         const wrapperW = modalWrapper.offsetWidth || 720;
@@ -834,6 +857,9 @@ function openModal(index) {
 }
 
 function closeModal() {
+    AudioManager.playWhoosh();
+    AudioManager.triggerHaptic(20);
+
     if (hasGsap()) {
         const item = galleryItems[currentMemoryIndex];
         const img = item?.querySelector("img");
@@ -2677,146 +2703,176 @@ document.querySelectorAll('[data-slider]').forEach(initChapterSlider);
 
 const AudioManager = {
     ctx: null,
-    muted: true,
-    ambientPad: null,
-    masterPadGain: null,
+    muted: false,
+    bgm: null,
+    bgmFadeInterval: null,
 
     init() {
-        if (this.ctx) return;
+        if (this.bgm) return;
         
         // Respect audio preference from localStorage
         const savedMute = localStorage.getItem('project_ra_muted');
         if (savedMute !== null) {
             this.muted = savedMute === 'true';
+        } else {
+            this.muted = false; // ENABLED by default
         }
 
-        // Initialize audio context
+        // Initialize audio context for synthesized sound effects
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContextClass) return;
-        this.ctx = new AudioContextClass();
+        if (AudioContextClass) {
+            try {
+                this.ctx = new AudioContextClass();
+            } catch (e) {
+                console.warn('AudioContext creation failed:', e);
+            }
+        }
 
-        // Create ambient pad
-        this.createAmbientPad();
+        // Create HTML5 audio element for loopable BGM streaming
+        this.bgm = new Audio();
+        this.bgm.src = 'assets/sound/bgm.mp3';
+        this.bgm.loop = true;
+        this.bgm.volume = 0; // Start silent for fade-in
+        this.bgm.crossOrigin = 'anonymous';
+
+        // Bind events to update floating audio toggle button icon in real time
+        this.bgm.addEventListener('play', () => this.updateToggleUI());
+        this.bgm.addEventListener('playing', () => this.updateToggleUI());
+        this.bgm.addEventListener('pause', () => this.updateToggleUI());
 
         this.updateToggleUI();
+
+        if (!this.muted) {
+            this.startBgm();
+        }
     },
 
     toggleMute() {
         this.init();
-        if (!this.ctx) return;
+        if (!this.bgm) return;
 
         this.muted = !this.muted;
         localStorage.setItem('project_ra_muted', this.muted);
 
-        if (this.ctx.state === 'suspended') {
-            this.ctx.resume();
+        if (this.ctx && this.ctx.state === 'suspended') {
+            this.ctx.resume().catch(() => {});
         }
 
         if (this.muted) {
-            this.stopPad();
+            this.stopBgm();
         } else {
-            this.startPad();
+            this.startBgm();
         }
 
         this.updateToggleUI();
         this.playClick();
-        this.triggerHaptic(30); // light haptic feedback on sound toggle
+        this.triggerHaptic(30); // Light haptic feedback on sound toggle
     },
 
     updateToggleUI() {
         const btn = document.getElementById('floatingAudioToggle');
         if (!btn) return;
 
-        if (this.muted) {
+        // Represents the actual playback state: playing, not paused, and not system-muted
+        const isPlaying = this.bgm && !this.bgm.paused && !this.muted;
+
+        if (!isPlaying) {
+            btn.classList.add('muted');
+            btn.classList.remove('playing');
             btn.innerHTML = `
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="audio-icon audio-muted">
-                    <path d="M11 5L6 9H2v6h4l5 4V5z M23 9l-6 6 M17 9l6 6" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="audio-icon">
+                    <!-- Thin crescent moon filled with soft opacity -->
+                    <path d="M12 4a8 8 0 1 0 8 8 8.5 8.5 0 0 1-8-8z" fill="currentColor" opacity="0.6"/>
+                    <!-- Thin diagonal slash -->
+                    <line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="1.5"/>
                 </svg>
             `;
             btn.setAttribute('aria-label', 'Enable sound');
         } else {
+            btn.classList.add('playing');
+            btn.classList.remove('muted');
             btn.innerHTML = `
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" class="audio-icon audio-playing">
-                    <path d="M11 5L6 9H2v6h4l5 4V5z M15.54 8.46a5 5 0 0 1 0 7.07 M19.07 4.93a10 10 0 0 1 0 14.14" stroke-linecap="round" stroke-linejoin="round"/>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="audio-icon">
+                    <!-- Thin crescent moon filled completely -->
+                    <path d="M12 4a8 8 0 1 0 8 8 8.5 8.5 0 0 1-8-8z" fill="currentColor"/>
+                    <!-- Twinkling Star positioned in crescent opening -->
+                    <path class="twinkle-star" d="M17 7l0.6 1.4 1.4 0.6-1.4 0.6-0.6 1.4-0.6-1.4-1.4-0.6 1.4-0.6z" fill="currentColor"/>
                 </svg>
             `;
             btn.setAttribute('aria-label', 'Mute sound');
         }
     },
 
-    // Synthetic Ambient Pad drone (Warm & Cinematic)
-    createAmbientPad() {
-        if (!this.ctx) return;
+    startBgm() {
+        if (this.muted || !this.bgm) return;
 
-        // Clean up existing pad if any
-        this.stopPad();
+        // Try to play BGM
+        const playPromise = this.bgm.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(() => {
+                // Autoplay blocked: listen on first interaction to play
+                this.setupAutoplayFallback();
+            });
+        }
 
-        // Frequencies for a warm major chord pad (C major: C3, G3, C4, E4)
-        const freqs = [130.81, 196.00, 261.63, 329.63];
-        const oscs = [];
+        // Clear existing fade intervals
+        clearInterval(this.bgmFadeInterval);
 
-        // Main output master gain for pad
-        this.masterPadGain = this.ctx.createGain();
-        this.masterPadGain.gain.setValueAtTime(0, this.ctx.currentTime);
-        
-        // Lowpass filter to keep it soft, warm and elegant
-        const filter = this.ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(450, this.ctx.currentTime);
+        // Fade in smoothly over 3 seconds
+        const targetVol = 0.15;
+        const step = 0.005;
+        const intervalTime = 100; // ms
 
-        this.masterPadGain.connect(filter);
-        filter.connect(this.ctx.destination);
+        this.bgmFadeInterval = setInterval(() => {
+            if (this.muted) {
+                clearInterval(this.bgmFadeInterval);
+                return;
+            }
+            if (this.bgm.volume < targetVol) {
+                this.bgm.volume = Math.min(targetVol, this.bgm.volume + step);
+            } else {
+                clearInterval(this.bgmFadeInterval);
+            }
+        }, intervalTime);
+    },
 
-        freqs.forEach((freq, idx) => {
-            const osc = this.ctx.createOscillator();
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+    stopBgm() {
+        if (!this.bgm) return;
 
-            // Volume gain for this individual oscillator
-            const oscGain = this.ctx.createGain();
-            oscGain.gain.setValueAtTime(idx === 0 ? 0.08 : 0.05, this.ctx.currentTime);
+        clearInterval(this.bgmFadeInterval);
 
-            osc.connect(oscGain);
-            oscGain.connect(this.masterPadGain);
-            osc.start(0);
+        // Fade out smoothly over 1.5 seconds
+        const step = 0.01;
+        const intervalTime = 100;
 
-            // Gentle detune/modulation LFO to simulate real instruments
-            const lfo = this.ctx.createOscillator();
-            const lfoGain = this.ctx.createGain();
-            lfo.type = 'sine';
-            lfo.frequency.setValueAtTime(0.2 + idx * 0.05, this.ctx.currentTime); // very slow LFO
-            lfoGain.gain.setValueAtTime(8, this.ctx.currentTime); // detuning depth
+        this.bgmFadeInterval = setInterval(() => {
+            if (this.bgm.volume > 0) {
+                this.bgm.volume = Math.max(0, this.bgm.volume - step);
+            } else {
+                clearInterval(this.bgmFadeInterval);
+                this.bgm.pause();
+            }
+        }, intervalTime);
+    },
 
-            lfo.connect(lfoGain);
-            lfoGain.connect(osc.detune);
-            lfo.start(0);
-
-            oscs.push(osc);
+    setupAutoplayFallback() {
+        const resumeOnInteract = () => {
+            if (this.bgm && !this.muted) {
+                this.bgm.play().then(() => {
+                    this.startBgm();
+                }).catch(() => {});
+            }
+            if (this.ctx && this.ctx.state === 'suspended') {
+                this.ctx.resume().catch(() => {});
+            }
+            // Remove interaction listeners
+            ['click', 'touchstart', 'scroll', 'keydown'].forEach(evt => {
+                window.removeEventListener(evt, resumeOnInteract);
+            });
+        };
+        ['click', 'touchstart', 'scroll', 'keydown'].forEach(evt => {
+            window.addEventListener(evt, resumeOnInteract, { passive: true });
         });
-
-        this.ambientPad = oscs;
-    },
-
-    startPad() {
-        if (!this.ctx) return;
-        if (this.ctx.state === 'suspended') {
-            this.ctx.resume();
-        }
-        if (this.masterPadGain) {
-            // Fade in ambient pad smoothly over 3 seconds
-            this.masterPadGain.gain.cancelScheduledValues(this.ctx.currentTime);
-            this.masterPadGain.gain.setValueAtTime(this.masterPadGain.gain.value, this.ctx.currentTime);
-            this.masterPadGain.gain.linearRampToValueAtTime(0.12, this.ctx.currentTime + 3);
-        }
-    },
-
-    stopPad() {
-        if (this.masterPadGain) {
-            // Fade out pad smoothly over 1.5 seconds to avoid sudden cutoffs
-            this.masterPadGain.gain.cancelScheduledValues(this.ctx.currentTime);
-            this.masterPadGain.gain.setValueAtTime(this.masterPadGain.gain.value, this.ctx.currentTime);
-            this.masterPadGain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 1.5);
-        }
     },
 
     // Synthetic Sound Effects
@@ -2986,6 +3042,28 @@ const AudioManager = {
         });
     },
 
+    playHover() {
+        if (this.muted || !this.ctx) return;
+        // Check if device is touch-only to prevent false hover triggers on tap
+        if (window.matchMedia('(pointer: coarse)').matches) return;
+
+        try {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1200, this.ctx.currentTime);
+            
+            gain.gain.setValueAtTime(0.003, this.ctx.currentTime); // quiet and subtle
+            gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.02);
+            
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start();
+            osc.stop(this.ctx.currentTime + 0.02);
+        } catch (e) {}
+    },
+
     // Web Vibration API
     triggerHaptic(duration) {
         if ('vibrate' in navigator) {
@@ -3003,17 +3081,41 @@ document.getElementById('floatingAudioToggle')?.addEventListener('click', () => 
     AudioManager.toggleMute();
 });
 
-// Bind map buttons clicks for directions click sound
+// Bind map buttons clicks for directions click sound and haptics
 document.querySelectorAll('.map-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         AudioManager.playNavigationClick();
+        AudioManager.triggerHaptic(20);
     });
 });
 
-// Bind all standard buttons and slide transitions for standard clicks
-document.querySelectorAll('button:not(#floatingAudioToggle), .btn:not(.map-btn)').forEach(btn => {
+// Bind all standard buttons, modals, and close buttons for standard clicks and haptics
+document.querySelectorAll('button:not(#floatingAudioToggle), .btn:not(.map-btn), .modal-close-btn, .modal-nav-btn, .nav-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         AudioManager.playClick();
+        AudioManager.triggerHaptic(15);
+    });
+});
+
+// Bind navigation links for sound and haptics
+document.querySelectorAll('#primary-nav a').forEach(link => {
+    link.addEventListener('click', () => {
+        AudioManager.playNavigationClick();
+        AudioManager.triggerHaptic(20);
+    });
+});
+
+// Bind timeline card interaction haptics
+document.querySelectorAll('.event-card').forEach(card => {
+    card.addEventListener('click', () => {
+        AudioManager.triggerHaptic(15);
+    });
+});
+
+// Bind card and interactive element hovers for desktop-only hover sounds
+document.querySelectorAll('.event-card, .gallery-item, button, .btn, #primary-nav a, .map-btn, .modal-dot').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+        AudioManager.playHover();
     });
 });
 

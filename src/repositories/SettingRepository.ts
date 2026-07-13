@@ -19,7 +19,15 @@ export class SettingRepository extends BaseRepository {
       if (docRef) {
         return onSnapshot(docRef, (docSnap) => {
           if (docSnap.exists()) {
-            callback({ id: docSnap.id, ...docSnap.data() } as WeddingSettings);
+            const data = docSnap.data() as WeddingSettings;
+            if (!data.events || data.events.length < 6) {
+              const defaults = this.getDefaultSettings(weddingId);
+              const merged = { ...defaults, ...data, events: defaults.events, venues: defaults.venues };
+              setDoc(docRef, merged, { merge: true });
+              callback(merged);
+            } else {
+              callback({ id: docSnap.id, ...data });
+            }
           } else {
             callback(this.getDefaultSettings(weddingId));
           }
@@ -30,12 +38,23 @@ export class SettingRepository extends BaseRepository {
       const storageKey = this.getLocalStorageKey(workspaceId, weddingId);
       const fetchLocal = () => {
         const data = localStorage.getItem(storageKey);
+        const defaults = this.getDefaultSettings(weddingId);
         if (!data) {
-          const defaults = this.getDefaultSettings(weddingId);
           localStorage.setItem(storageKey, JSON.stringify(defaults));
           callback(defaults);
         } else {
-          callback(JSON.parse(data));
+          try {
+            const parsed = JSON.parse(data);
+            if (!parsed.events || parsed.events.length < 6) {
+              const merged = { ...defaults, ...parsed, events: defaults.events, venues: defaults.venues };
+              localStorage.setItem(storageKey, JSON.stringify(merged));
+              callback(merged);
+            } else {
+              callback(parsed);
+            }
+          } catch (e) {
+            callback(defaults);
+          }
         }
       };
       fetchLocal();
@@ -92,7 +111,7 @@ export class SettingRepository extends BaseRepository {
       venues: [
         {
           id: 'nsk_mahal',
-          name: 'NSK & NKR A/C Mahal and Residency',
+          name: 'NSK & NKR A/C Mahal',
           address: 'GST Main Rd, Lion City, Thiru Nagar, Thanakkankulam',
           city: 'Madurai',
           state: 'Tamil Nadu',
@@ -116,6 +135,15 @@ export class SettingRepository extends BaseRepository {
           state: 'Tamil Nadu',
           country: 'India',
           googleMapsUrl: ''
+        },
+        {
+          id: 'celebration_hall',
+          name: 'Celebration Hall',
+          address: 'Madurai',
+          city: 'Madurai',
+          state: 'Tamil Nadu',
+          country: 'India',
+          googleMapsUrl: 'https://maps.app.goo.gl/nHmxp5HqnWTBi1R56'
         }
       ],
       events: [
@@ -124,42 +152,42 @@ export class SettingRepository extends BaseRepository {
           name: '🌿 Haldi Ceremony',
           date: '2026-08-28T19:00:00+05:30',
           venueId: 'brides_residence',
-          description: 'An intimate evening of colours, blessings and joyful family traditions as the wedding celebrations begin.'
+          description: 'A colourful evening filled with blessings, laughter and family traditions as the wedding celebrations begin.'
         },
         {
           id: 'nalang',
           name: '✨ Nalang Ceremony',
           date: '2026-08-29T11:00:00+05:30',
           venueId: 'grooms_residence',
-          description: 'A traditional ceremony filled with laughter, customs and family blessings before the wedding festivities continue.'
+          description: 'Traditional pre-wedding rituals celebrated with close family and friends.'
         },
         {
           id: 'sangeet',
           name: '🎶 Sangeet & DJ Night',
           date: '2026-08-29T19:00:00+05:30',
-          venueId: 'nsk_mahal',
-          description: 'An evening of music, dance and celebration with friends and family.'
+          venueId: 'celebration_hall',
+          description: 'An evening of music, dance and unforgettable memories with family and friends.'
         },
         {
           id: 'nikah',
           name: '💍 Nikkah',
           date: '2026-08-30T09:00:00+05:30',
           venueId: 'nsk_mahal',
-          description: 'The sacred Nikāh ceremony where two families unite in faith, love and lifelong companionship.'
+          description: 'The sacred Nikāh ceremony where two souls begin their lifelong journey together.'
         },
         {
           id: 'reception',
           name: '🍽️ Wedding Feast & Reception',
           date: '2026-08-30T11:00:00+05:30',
           venueId: 'nsk_mahal',
-          description: 'Join us for lunch as we celebrate the beginning of our new journey together.'
+          description: 'Join us for lunch as we celebrate our union with love, joy and gratitude.'
         },
         {
           id: 'valima',
           name: 'Valima',
           date: 'TBA',
           venueId: 'nsk_mahal',
-          description: 'The Valima reception will be announced soon. We look forward to celebrating with everyone once the date is confirmed.'
+          description: 'The Valima reception will be announced soon. We look forward to celebrating together once the date is finalized.'
         }
       ]
     };
