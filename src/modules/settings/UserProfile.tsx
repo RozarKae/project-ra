@@ -20,6 +20,7 @@ import { useAuth } from '../../lib/auth';
 import { UserProfileData } from '../../types/user';
 import { isFirebaseConfigured, storage, auth } from '../../lib/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { updatePassword, EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 
 export const UserProfile: React.FC = () => {
   const { profile, loading, saveProfile } = useUserProfile();
@@ -289,7 +290,6 @@ export const UserProfile: React.FC = () => {
     setIsChangingPassword(true);
     try {
       if (isFirebaseConfigured && auth && auth.currentUser) {
-        const { updatePassword, EmailAuthProvider, reauthenticateWithCredential } = await import('firebase/auth');
         const userObj = auth.currentUser;
         if (userObj.email) {
           const credential = EmailAuthProvider.credential(userObj.email, currentPassword);
