@@ -1,5 +1,288 @@
 document.body.classList.add("is-loading");
 
+// =============================================================================
+// DRESS INSPIRATION LOOKBOOK SYSTEM
+// =============================================================================
+const DRESS_INSPIRATION_CONFIG = {
+    haldi: {
+        folder: "haldi",
+        prefix: "h",
+        title: "Haldi Style Guide",
+        counts: { w: 5, m: 5 },
+        titles: {
+            w: ["Anarkali Graced Lehanga", "Flowing Saree Elegance", "Soft Pastel Saree", "Ivory Floral Saree", "Soft White Anarkali"],
+            m: ["Ivory Linen Kurta", "Mustard Nehru Ensemble", "Minimal Linen Kurta", "Marigold Heritage", "Pastel Yellow Linen Kurta"]
+        },
+        descriptions: {
+            w: [
+                "Vibrant yellow shades with mirror or embroidery details.",
+                "Summery floral prints for a cheerful, traditional look.",
+                "Elegant lightweight pastels with gold borders.",
+                "Traditional mustard yellow salwar suits for convenience.",
+                "Flowing yellow chiffon sarees with minimal borders."
+            ],
+            m: [
+                "Classic turmeric hued raw silk or soft cotton kurtas.",
+                "Sleek yellow waistcoats to add a festive layer.",
+                "Modern pastel fusion wear designed for movement.",
+                "Clean white traditional wear with yellow stole accents.",
+                "Light breathable linen shirts in shades of yellow."
+            ]
+        }
+    },
+    nalang: {
+        folder: "nalang",
+        prefix: "n",
+        title: "Nalang Style Guide",
+        counts: { w: 5, m: 5 },
+        titles: {
+            w: ["Traditional Saree", "Pastel Anarkali", "Light Lehenga", "Salwar Kameez", "Printed Drape"],
+            m: ["Cotton Kurta Pajama", "Traditional Dhoti Kurta", "Simple Ethnic Wear", "Linen Kurta", "Short Kurta"]
+        },
+        descriptions: {
+            w: [
+                "Classic yellow or green cotton/silk sarees.",
+                "Lightweight pastel kurtas with soft detailing.",
+                "Flowing traditional festive wear for intimate gatherings.",
+                "Simple cotton salwar suits for rituals.",
+                "Flowing ethnic prints in soft comfortable cotton."
+            ],
+            m: [
+                "Comfortable and classic traditional white/pastel kurtas.",
+                "Traditional drapes styled with modern fabrics.",
+                "Simple ethnic wear suited for sacred pre-wedding rituals.",
+                "Breathable linen kurtas in light earthy tones.",
+                "Casual short kurtas paired with denims or pyjamas."
+            ]
+        }
+    },
+    sangeet: {
+        folder: "sangeet",
+        prefix: "s",
+        title: "Sangeet Style Guide",
+        counts: { w: 5, m: 5 },
+        titles: {
+            w: ["Glamorous Lehenga", "Indo-Western Gown", "Sequined Saree", "Anarkali Gown", "Sharara Suit"],
+            m: ["Designer Sherwani", "Indo-Western Achkan", "Evening Bandhgala", "Classic Kurta Jacket", "Tuxedo-Style Fusion"]
+        },
+        descriptions: {
+            w: [
+                "Heavy sparkles, mirrors, and deep shades.",
+                "Modern fusion gowns with dramatic drapes.",
+                "Elegant sequined sarees for a night under the lights.",
+                "Flowing designer floor-length Anarkalis.",
+                "Chic sharara suits with mirror work details."
+            ],
+            m: [
+                "Intricate designer sherwanis in deep navy or black.",
+                "Fusion cuts and asymmetric kurtas.",
+                "Tailored classic bandhgalas for the sangeet performance.",
+                "Silk kurta paired with an embellished jacket.",
+                "Modern tuxedo styles fused with traditional details."
+            ]
+        }
+    },
+    nikkah: {
+        folder: "nikkah",
+        prefix: "k",
+        title: "Nikkah Style Guide",
+        counts: { w: 5, m: 5 },
+        titles: {
+            w: ["Royal Emerald Lehenga", "Ivory Modest Dress", "Classic Gharara", "Heavy Anarkali", "Silk Abaya Gown"],
+            m: ["Ivory Sherwani", "Royal Green Kurta", "Classic Bandhgala", "Peshawari Kurta", "Embroidered Achkan"]
+        },
+        descriptions: {
+            w: [
+                "Rich emerald green velvets with ornate gold zardozi.",
+                "Sophisticated modest luxury dress in ivory or cream.",
+                "Traditional ghararas with intricate borders and veils.",
+                "Ornate heavy georgette or silk Anarkali suits.",
+                "Premium silk modest abaya style gowns."
+            ],
+            m: [
+                "Ornate ivory sherwani styled with gold accents.",
+                "Rich dark green fabrics with classic cuts.",
+                "Elegant classic bandhgala for a timeless wedding look.",
+                "Traditional loose Peshawari styling in fine fabrics.",
+                "Embroidered wedding achkan with subtle threadwork."
+            ]
+        }
+    },
+    valima: {
+        folder: "valima",
+        prefix: "v",
+        title: "Valima Style Guide",
+        counts: { w: 5, m: 5 },
+        titles: {
+            w: ["Designer Gown", "Modern Silk Saree", "Pastel Lehenga", "Contemporary Sharara", "Floor-Length Jacket Suit"],
+            m: ["Formal Tuxedo", "Classic Black Tie Suit", "Tailored Sherwani", "Three-Piece Suit", "Modern Jodhpur Suit"]
+        },
+        descriptions: {
+            w: [
+                "Contemporary structured gowns with luxury trail details.",
+                "Sophisticated silks in modern, minimal pastel shades.",
+                "Intricately detailed pastel lehengas with silver work.",
+                "Chic modern shararas with sequin work.",
+                "Elegant floor-length jackets layered over trousers."
+            ],
+            m: [
+                "Sleek midnight black tuxedo with satin lapels.",
+                "Tailored luxury formal suits in charcoal or navy.",
+                "Understated premium sherwani for the final reception look.",
+                "Double-breasted classic three-piece suit.",
+                "Modern jodhpur suits with elegant brass buttons."
+            ]
+        }
+    }
+};
+
+function generateOutfitCards(eventKey) {
+    const config = DRESS_INSPIRATION_CONFIG[eventKey];
+    if (!config) return "";
+
+    const outfits = [];
+    const types = ['w', 'm'];
+    
+    types.forEach(t => {
+        const count = config.counts[t] || 0;
+        for (let i = 1; i <= count; i++) {
+            const imagePath = `assets/dress-inspirations/${config.folder}/${config.prefix}${t}${i}.jpg`;
+            const title = config.titles[t]?.[i-1] || (t === 'w' ? 'Women Outfit' : 'Men Outfit');
+            const desc = config.descriptions[t]?.[i-1] || 'Premium outfit inspiration.';
+            
+            outfits.push({
+                image: imagePath,
+                title: title,
+                desc: desc
+            });
+        }
+    });
+
+    return outfits.map(outfit => `
+        <div class="lookbook-card">
+            <div class="lookbook-img-wrap">
+                <img src="${outfit.image}" alt="${outfit.title}" loading="lazy">
+            </div>
+            <div class="lookbook-info">
+                <h4>${outfit.title}</h4>
+            </div>
+        </div>
+    `).join("");
+}
+
+function getDressInspirationMarkup(eventId, eventName) {
+    const key = eventId?.toLowerCase() || "";
+    let dataKey = null;
+    if (key.includes("haldi") || eventName?.toLowerCase().includes("haldi")) dataKey = "haldi";
+    else if (key.includes("nalang") || eventName?.toLowerCase().includes("nalang")) dataKey = "nalang";
+    else if (key.includes("sangeet") || eventName?.toLowerCase().includes("sangeet")) dataKey = "sangeet";
+    else if (key.includes("nikah") || eventName?.toLowerCase().includes("nikah")) dataKey = "nikkah";
+    else if (key.includes("valima") || eventName?.toLowerCase().includes("valima")) dataKey = "valima";
+
+    if (!dataKey) return "";
+
+    const config = DRESS_INSPIRATION_CONFIG[dataKey];
+    const outfitsHtml = generateOutfitCards(dataKey);
+    const totalOutfits = (config.counts.w || 0) + (config.counts.m || 0);
+
+    return `
+        <div class="dress-inspiration-container">
+            <button type="button" class="btn-dress-inspiration" data-event="${dataKey}">
+                <span>Style Guide</span>
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" class="chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="dress-inspiration-panel" id="inspiration-${dataKey}" style="display: none; opacity: 0; height: 0;">
+                <div class="dress-inspiration-inner">
+                    <div class="dress-lookbook-carousel" data-event="${dataKey}">
+                        ${outfitsHtml}
+                    </div>
+                    <div class="lookbook-dots">
+                        ${Array.from({ length: totalOutfits }).map((_, i) => `<span class="lookbook-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></span>`).join("")}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function initLookbookCarousel(carousel) {
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    
+    // Mouse drag controls
+    carousel.addEventListener('mousedown', (e) => {
+        isDown = true;
+        carousel.classList.add('dragging');
+        carousel.style.scrollSnapType = 'none';
+        startX = e.pageX - carousel.offsetLeft;
+        scrollLeft = carousel.scrollLeft;
+    });
+
+    carousel.addEventListener('mouseleave', () => {
+        isDown = false;
+        carousel.classList.remove('dragging');
+        carousel.style.scrollSnapType = 'x mandatory';
+    });
+
+    carousel.addEventListener('mouseup', () => {
+        isDown = false;
+        carousel.classList.remove('dragging');
+        carousel.style.scrollSnapType = 'x mandatory';
+    });
+
+    carousel.addEventListener('mousemove', (e) => {
+        if(!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - carousel.offsetLeft;
+        const walk = (x - startX) * 2;
+        carousel.scrollLeft = scrollLeft - walk;
+    });
+
+    // Touch momentum/scroll tracking
+    const dots = carousel.parentElement.querySelectorAll('.lookbook-dot');
+    const cards = carousel.querySelectorAll('.lookbook-card');
+    
+    carousel.addEventListener('scroll', () => {
+        const cardWidth = cards[0]?.offsetWidth || 190;
+        const gap = 16;
+        const step = cardWidth + gap;
+        const index = Math.round(carousel.scrollLeft / step);
+        
+        dots.forEach((dot, idx) => {
+            if (idx === index) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+
+        // Parallax image shifting
+        cards.forEach(card => {
+            const img = card.querySelector('img');
+            if (img) {
+                const cardLeft = card.offsetLeft;
+                const relativeOffset = cardLeft - carousel.scrollLeft;
+                const carouselWidth = carousel.offsetWidth || 1;
+                const shift = (relativeOffset / carouselWidth) * -20; // Shift parallax X offset slightly
+                img.style.setProperty('--scroll-offset', `${shift}px`);
+            }
+        });
+    });
+
+    // Tap page dots to navigate
+    dots.forEach((dot, idx) => {
+        dot.addEventListener('click', () => {
+            const cardWidth = cards[0]?.offsetWidth || 190;
+            const gap = 16;
+            carousel.scrollTo({
+                left: idx * (cardWidth + gap),
+                behavior: 'smooth'
+            });
+        });
+    });
+}
+
 function getWeddingSettings() {
     const storageKey = "ra_settings_default_workspace_arifa_rozar_wedding";
     const freshDefaults = {
@@ -168,6 +451,7 @@ const settings = getWeddingSettings();
                         <h3>🤍 ${event.name}</h3>
                         <div class="valima-coming-soon-badge">Coming Soon</div>
                         <p class="event-description">${event.description || "The Valima reception will be announced soon. We look forward to celebrating with everyone once the date is confirmed."}</p>
+                        ${getDressInspirationMarkup(event.id, event.name)}
                     </article>
                 `;
             }
@@ -200,6 +484,7 @@ const settings = getWeddingSettings();
                     <p class="event-time">${formattedTime}</p>
                     ${venue.name ? `<p class="event-location"><a href="${mapsUrl}" target="_blank" rel="noopener">${locationText}</a></p>` : `<p class="event-location">${locationText}</p>`}
                     ${event.description ? `<p class="event-description">${event.description}</p>` : ''}
+                    ${getDressInspirationMarkup(event.id, event.name)}
                 </article>
             `;
         }).join('');
@@ -229,6 +514,70 @@ const settings = getWeddingSettings();
             rsvpFormContainer.innerHTML = `<div class="rsvp-closed-msg text-center py-6 font-cinzel" style="color: var(--color-gold); font-size: 14px; font-weight: bold; padding: 40px 10px;">RSVP submissions are currently closed.</div>`;
         }
     }
+
+    // Bind Dress Inspiration expansion events
+    document.querySelectorAll(".btn-dress-inspiration").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const dataKey = btn.getAttribute("data-event");
+            const panel = document.getElementById(`inspiration-${dataKey}`);
+            const carousel = panel.querySelector(".dress-lookbook-carousel");
+            const cards = panel.querySelectorAll(".lookbook-card");
+            
+            if (panel.classList.contains("expanded")) {
+                panel.classList.remove("expanded");
+                btn.classList.remove("active");
+                if (hasGsap()) {
+                    gsap.to(panel, {
+                        height: 0,
+                        opacity: 0,
+                        duration: 0.5,
+                        ease: "power2.inOut",
+                        onComplete: () => {
+                            panel.style.display = "none";
+                        }
+                    });
+                } else {
+                    panel.style.display = "none";
+                }
+            } else {
+                panel.classList.add("expanded");
+                btn.classList.add("active");
+                panel.style.display = "block";
+                
+                if (hasGsap()) {
+                    gsap.killTweensOf(panel);
+                    gsap.fromTo(panel, 
+                        { height: 0, opacity: 0 },
+                        { height: "auto", opacity: 1, duration: 0.6, ease: "power2.out" }
+                    );
+                    
+                    gsap.killTweensOf(cards);
+                    gsap.fromTo(cards,
+                        { opacity: 0, y: 20, x: 25 },
+                        { 
+                            opacity: 1, 
+                            y: 0, 
+                            x: 0, 
+                            duration: 0.8, 
+                            stagger: 0.1, 
+                            ease: "power3.out",
+                            delay: 0.1
+                        }
+                    );
+                } else {
+                    panel.style.height = "auto";
+                    panel.style.opacity = "1";
+                    cards.forEach(c => c.style.opacity = "1");
+                }
+                
+                // Initialize custom drag, scroll, parallax events once opened
+                if (carousel && !carousel.classList.contains("initialized")) {
+                    carousel.classList.add("initialized");
+                    initLookbookCarousel(carousel);
+                }
+            }
+        });
+    });
 })();
 
 const loader = document.getElementById("loader");
@@ -1741,18 +2090,6 @@ if (hasGsap() && window.ScrollTrigger) {
         }
     });
 
-    // 6b. Dress Code Section Timeline
-    gsap.from("#dress-code .dress-card", {
-        scrollTrigger: {
-            trigger: "#dress-code",
-            start: "top 85%"
-        },
-        y: 30,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-    });
 
     // 7. RSVP Section Timeline
     const rsvpTimeline = gsap.timeline({
