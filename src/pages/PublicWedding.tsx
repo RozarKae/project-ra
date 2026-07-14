@@ -14,9 +14,16 @@ export const PublicWedding: React.FC = () => {
 
   useEffect(() => {
     // Construct dynamic tab title based on centralized settings (Sprint S.4 logic)
-    const groomName = settings?.groom?.name || 'Rozar';
-    const brideName = settings?.bride?.name || 'Arifa';
+    const groomName = settings?.groomShortName || 'Rozar';
+    const brideName = settings?.brideShortName || 'Arifa';
     document.title = `${groomName} & ${brideName} Wedding Invitation`;
+
+    // Synchronize Firestore settings to local storage key expected by the invitation iframe
+    if (settings) {
+      const storageKey = 'ra_settings_default_workspace_arifa_rozar_wedding';
+      localStorage.setItem(storageKey, JSON.stringify(settings));
+      window.dispatchEvent(new CustomEvent('ra_storage_update', { detail: { key: storageKey } }));
+    }
   }, [settings]);
 
   useEffect(() => {

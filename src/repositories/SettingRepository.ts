@@ -18,18 +18,26 @@ export class SettingRepository extends BaseRepository {
       const docRef = this.getDocRef(workspaceId, weddingId, 'settings', 'general');
       if (docRef) {
         return onSnapshot(docRef, (docSnap) => {
+          const storageKey = this.getLocalStorageKey(workspaceId, weddingId);
           if (docSnap.exists()) {
             const data = docSnap.data() as WeddingSettings;
             if (!data.events || data.events.length < 6) {
               const defaults = this.getDefaultSettings(weddingId);
               const merged = { ...defaults, ...data, events: defaults.events, venues: defaults.venues };
               setDoc(docRef, merged, { merge: true });
+              localStorage.setItem(storageKey, JSON.stringify(merged));
+              window.dispatchEvent(new CustomEvent('ra_storage_update', { detail: { key: storageKey } }));
               callback(merged);
             } else {
+              localStorage.setItem(storageKey, JSON.stringify(data));
+              window.dispatchEvent(new CustomEvent('ra_storage_update', { detail: { key: storageKey } }));
               callback({ id: docSnap.id, ...data });
             }
           } else {
-            callback(this.getDefaultSettings(weddingId));
+            const defaults = this.getDefaultSettings(weddingId);
+            localStorage.setItem(storageKey, JSON.stringify(defaults));
+            window.dispatchEvent(new CustomEvent('ra_storage_update', { detail: { key: storageKey } }));
+            callback(defaults);
           }
         });
       }
@@ -81,6 +89,9 @@ export class SettingRepository extends BaseRepository {
       const docRef = this.getDocRef(workspaceId, weddingId, 'settings', 'general');
       if (docRef) {
         await setDoc(docRef, settings, { merge: true });
+        const storageKey = this.getLocalStorageKey(workspaceId, weddingId);
+        localStorage.setItem(storageKey, JSON.stringify(settings));
+        window.dispatchEvent(new CustomEvent('ra_storage_update', { detail: { key: storageKey } }));
       }
     } else {
       const storageKey = this.getLocalStorageKey(workspaceId, weddingId);
