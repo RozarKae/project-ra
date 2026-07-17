@@ -36,23 +36,23 @@ const DRESS_INSPIRATION_CONFIG = {
         title: "Nalang Style Guide",
         counts: { w: 5, m: 5 },
         titles: {
-            w: ["Traditional Saree", "Pastel Anarkali", "Light Lehenga", "Salwar Kameez", "Printed Drape"],
-            m: ["Cotton Kurta Pajama", "Traditional Dhoti Kurta", "Simple Ethnic Wear", "Linen Kurta", "Short Kurta"]
+            w: ["Olive Blossom Kurta", "Azure Coast Resortwear", "Pastel Bloom Jacket Set", "Sage Petal Salwar", "Peach Royale Anarkali"],
+            m: ["Mint Rosé Heritage Suit", "Blush Whisper Suit", "Royal Sherwani Collection", "Modern Heritage Edit", "Rosewood Couture Suit"]
         },
         descriptions: {
             w: [
-                "Classic yellow or green cotton/silk sarees.",
-                "Lightweight pastel kurtas with soft detailing.",
-                "Flowing traditional festive wear for intimate gatherings.",
-                "Simple cotton salwar suits for rituals.",
-                "Flowing ethnic prints in soft comfortable cotton."
+                "Fresh olive tones paired with soft peach accents for a refined daytime celebration.",
+                "Breezy linen separates crafted for effortless elegance from brunch to sunset.",
+                "Contemporary pastel layering that blends youthful charm with sophisticated tailoring.",
+                "Floral embroidery and blush drapes create an effortlessly graceful festive ensemble.",
+                "Flowing elegance in soft peach, designed for understated grandeur."
             ],
             m: [
-                "Comfortable and classic traditional white/pastel kurtas.",
-                "Traditional drapes styled with modern fabrics.",
-                "Simple ethnic wear suited for sacred pre-wedding rituals.",
-                "Breathable linen kurtas in light earthy tones.",
-                "Casual short kurtas paired with denims or pyjamas."
+                "Delicate embroidery meets airy silhouettes for timeless festive sophistication.",
+                "Minimal embroidery and dreamy pastel tones define quiet luxury.",
+                "Regal sherwanis crafted for distinguished celebrations with timeless elegance.",
+                "Traditional tailoring reimagined through clean silhouettes and contemporary styling.",
+                "Ornate embroidery and refined tailoring for the modern gentleman who stands apart."
             ]
         }
     },
