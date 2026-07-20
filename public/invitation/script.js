@@ -13,6 +13,22 @@ const DRESS_INSPIRATION_CONFIG = {
             w: ["Anarkali Graced Lehanga", "Flowing Saree Elegance", "Soft Pastel Saree", "Ivory Floral Saree", "Soft White Anarkali"],
             m: ["Ivory Linen Kurta", "Mustard Nehru Ensemble", "Minimal Linen Kurta", "Marigold Heritage", "Pastel Yellow Linen Kurta"]
         },
+        stylings: {
+            w: [
+                "Vibrant • Festive • Graceful",
+                "Floral • Breezy • Summery",
+                "Pastel • Lightweight • Traditional",
+                "Classic • Floral • Salwar",
+                "Yellow Chiffon • Minimal • Flowing"
+            ],
+            m: [
+                "Turmeric • Raw Silk • Classic",
+                "Yellow Waistcoat • Festive • Sleek",
+                "Pastel Fusion • Modern • Active",
+                "Crisp White • Stole Accents • Clean",
+                "Linen • Breathable • Contemporary"
+            ]
+        },
         descriptions: {
             w: [
                 "Vibrant yellow shades with mirror or embroidery details.",
@@ -32,27 +48,39 @@ const DRESS_INSPIRATION_CONFIG = {
     },
     nalang: {
         folder: "nalang",
-        prefix: "",
+        prefix: "n",
         title: "Nalang Style Guide",
         counts: { w: 5, m: 5 },
         titles: {
-            w: ["Pastel Bloom Jacket Set", "Sage Petal Salwar", "Mint Rosé Heritage Suit", "Peach Royale Anarkali", "Blush Whisper Suit"],
-            m: ["Olive Blossom Kurta", "Azure Coast Resortwear", "Royal Sherwani Collection", "Modern Heritage Edit", "Rosewood Couture Suit"]
+            w: [
+                { left: "Lavender Grace Saree", right: "Sage Blossom Suit" },
+                { left: "Botanical Bloom Saree", right: "Peach Whisper Suit" },
+                { left: "Blush Pearl Saree", right: "Mint Celeste Ensemble" },
+                { left: "Lavender Modest Gown", right: "Sage Garden Anarkali" },
+                { left: "Peach Garden Saree", right: "Powder Blue Modest Set" }
+            ],
+            m: [
+                { left: "Sky Breeze Linen Shirt", right: "Sage Resort Co-ord" },
+                { left: "Ivory Heritage Kurta", right: "Mint Polo Classic" },
+                { left: "Mint Riviera Shirt", right: "Sage Heritage Veshti" },
+                { left: "Blush Polo Classic", right: "Ivory Weekend Layers" },
+                { left: "Mint Casual Edit", right: "Lavender Heritage Kurta" }
+            ]
         },
         descriptions: {
             w: [
-                "Contemporary pastel layering that blends youthful charm with sophisticated tailoring.",
-                "Floral embroidery and blush drapes create an effortlessly graceful festive ensemble.",
-                "Delicate embroidery meets airy silhouettes for timeless festive sophistication.",
-                "Flowing elegance in soft peach, designed for understated grandeur.",
-                "Minimal embroidery and dreamy pastel tones define quiet luxury."
+                { left: "Delicate lavender drapes create graceful elegance with subtle shimmer.", right: "Fresh floral embroidery brings effortless sophistication to the celebration." },
+                { left: "Soft floral drapes offer timeless femininity with natural charm.", right: "Minimal peach tailoring delivers refined elegance and comfort." },
+                { left: "Romantic blush embroidery creates a graceful and timeless festive look.", right: "Flowing mint silhouettes embody soft sophistication and effortless beauty." },
+                { left: "Graceful flowing layers with modest elegance and delicate sparkle.", right: "Pastel floral artistry brings modern refinement to traditional wear." },
+                { left: "Elegant peach florals blend timeless draping with soft romance.", right: "Powder blue tailoring creates a serene and sophisticated festive statement." }
             ],
             m: [
-                "Fresh olive tones paired with soft peach accents for a refined daytime celebration.",
-                "Breezy linen separates crafted for effortless elegance from brunch to sunset.",
-                "Regal sherwanis crafted for distinguished celebrations with timeless elegance.",
-                "Traditional tailoring reimagined through clean silhouettes and contemporary styling.",
-                "Ornate embroidery and refined tailoring for the modern gentleman who stands apart."
+                { left: "Airy blue linen paired with cream tailoring for effortless daytime elegance.", right: "Soft sage tones create a fresh and refined festive statement." },
+                { left: "Classic ivory traditional wear designed for timeless family celebrations.", right: "Modern knit styling with pastel sophistication and relaxed charm." },
+                { left: "Fresh linen separates crafted for relaxed elegance and comfort.", right: "Traditional pastel styling with effortless cultural sophistication." },
+                { left: "Soft blush knitwear delivers understated luxury for daytime festivities.", right: "Neutral layering creates a clean contemporary celebration look." },
+                { left: "Contemporary mint styling with clean lines and timeless simplicity.", right: "Pastel lavender tradition meets modern elegance with refined tailoring." }
             ]
         }
     },
@@ -62,23 +90,51 @@ const DRESS_INSPIRATION_CONFIG = {
         title: "Sangeet Style Guide",
         counts: { w: 5, m: 5 },
         titles: {
-            w: ["Glamorous Lehenga", "Indo-Western Gown", "Sequined Saree", "Anarkali Gown", "Sharara Suit"],
-            m: ["Designer Sherwani", "Indo-Western Achkan", "Evening Bandhgala", "Classic Kurta Jacket", "Tuxedo-Style Fusion"]
+            w: [
+                "Ivory Radiance Sharara",
+                "Mauve Moonlight Sharara",
+                "Sage Celeste Gown",
+                "Midnight Emerald Ensemble",
+                "Emerald & Wine Evening Gowns"
+            ],
+            m: [
+                "Ivory Luxe Resort Suit",
+                "Midnight Noir Blazer",
+                "Sandstone Evening Layers",
+                "Emerald Noir Evening Suit",
+                "Champagne Riviera Set"
+            ]
+        },
+        stylings: {
+            w: [
+                "Sparkling • Glamorous • Unforgettable",
+                "Romantic • Flowing • Evening",
+                "Soft • Draped • Sophisticated",
+                "Rich • Regal • Contemporary",
+                "Jewel • Luxurious • Striking"
+            ],
+            m: [
+                "Relaxed • Ivory • Evening",
+                "Dark • Textured • Cocktail",
+                "Neutral • Refined • Festive",
+                "Deep Emerald • Bold • Elegant",
+                "Minimal • Knit • Sunset"
+            ]
         },
         descriptions: {
             w: [
-                "Heavy sparkles, mirrors, and deep shades.",
-                "Modern fusion gowns with dramatic drapes.",
-                "Elegant sequined sarees for a night under the lights.",
-                "Flowing designer floor-length Anarkalis.",
-                "Chic sharara suits with mirror work details."
+                "Sparkling ivory embroidery brings graceful glamour to an unforgettable celebration.",
+                "Romantic mauve shimmer and flowing layers create effortless evening elegance.",
+                "Soft sage sparkle and graceful draping embody timeless sophistication.",
+                "Rich emerald embroidery offers regal elegance with contemporary festive appeal.",
+                "Luxurious jewel tones and flowing silhouettes make a striking celebration statement."
             ],
             m: [
-                "Intricate designer sherwanis in deep navy or black.",
-                "Fusion cuts and asymmetric kurtas.",
-                "Tailored classic bandhgalas for the sangeet performance.",
-                "Silk kurta paired with an embellished jacket.",
-                "Modern tuxedo styles fused with traditional details."
+                "Relaxed ivory tailoring with effortless sophistication for elegant evening celebrations.",
+                "Dark textured tailoring delivers timeless charm with modern cocktail-night confidence.",
+                "Warm neutral layering creates a refined contemporary look for festive celebrations.",
+                "Deep emerald tailoring paired with black accents for a bold yet elegant statement.",
+                "Minimal knit styling and soft champagne tones define relaxed luxury after sunset."
             ]
         }
     },
@@ -88,25 +144,52 @@ const DRESS_INSPIRATION_CONFIG = {
         title: "Nikkah Style Guide",
         counts: { w: 5, m: 5 },
         titles: {
-            w: ["Royal Emerald Lehenga", "Ivory Modest Dress", "Classic Gharara", "Heavy Anarkali", "Silk Abaya Gown"],
-            m: ["Ivory Sherwani", "Royal Green Kurta", "Classic Bandhgala", "Peshawari Kurta", "Embroidered Achkan"]
-        },
-        descriptions: {
             w: [
-                "Rich emerald green velvets with ornate gold zardozi.",
-                "Sophisticated modest luxury dress in ivory or cream.",
-                "Traditional ghararas with intricate borders and veils.",
-                "Ornate heavy georgette or silk Anarkali suits.",
-                "Premium silk modest abaya style gowns."
+                {
+                    left: { title: "Sage Modest Luxe", styling: "Modest • Graceful • Elegant", desc: "Flowing sage embroidery creates a serene and sophisticated festive look." },
+                    right: { title: "Pearl Ivory Saree", styling: "Classic • Timeless • Regal", desc: "Intricate ivory embroidery elevates traditional draping with effortless elegance." }
+                },
+                {
+                    left: { title: "Royal Sapphire Gown", styling: "Regal • Luxurious • Graceful", desc: "Deep sapphire embroidery delivers unforgettable evening sophistication." },
+                    right: { title: "Emerald Heritage Saree", styling: "Traditional • Rich • Elegant", desc: "Classic emerald silk showcases timeless beauty with regal detailing." }
+                },
+                {
+                    left: { title: "Blush Modest Ensemble", styling: "Soft • Elegant • Feminine", desc: "Delicate blush embroidery creates refined elegance with modest styling." },
+                    right: { title: "Olive Satin Abaya", styling: "Modest • Contemporary • Luxurious", desc: "Fluid olive satin offers graceful movement with understated sophistication." }
+                },
+                {
+                    left: { title: "Burgundy Heritage Suit", styling: "Traditional • Rich • Festive", desc: "Warm burgundy embroidery reflects timeless celebration and refined craftsmanship." },
+                    right: { title: "Fuchsia Celebration Set", styling: "Modern • Vibrant • Chic", desc: "Bold jewel tones bring confident glamour to the wedding festivities." }
+                },
+                {
+                    left: { title: "Emerald Evening Gown", styling: "Elegant • Flowing • Luxurious", desc: "Graceful emerald draping creates an effortlessly regal evening presence." },
+                    right: { title: "Royal Wine Anarkali", styling: "Classic • Regal • Sophisticated", desc: "Rich wine embroidery blends timeless tradition with luxurious elegance." }
+                }
             ],
             m: [
-                "Ornate ivory sherwani styled with gold accents.",
-                "Rich dark green fabrics with classic cuts.",
-                "Elegant classic bandhgala for a timeless wedding look.",
-                "Traditional loose Peshawari styling in fine fabrics.",
-                "Embroidered wedding achkan with subtle threadwork."
+                {
+                    left: { title: "Ivory Executive Suit", styling: "Modern • Elegant • Timeless", desc: "A refined ivory suit tailored for sophisticated daytime celebrations." },
+                    right: { title: "Charcoal Regal Sherwani", styling: "Royal • Classic • Distinguished", desc: "A structured charcoal sherwani that blends heritage with contemporary luxury." }
+                },
+                {
+                    left: { title: "Stone Urban Layers", styling: "Minimal • Modern • Smart", desc: "Neutral layering creates effortless sophistication with relaxed tailoring." },
+                    right: { title: "Champagne Prestige Suit", styling: "Clean • Luxurious • Refined", desc: "Champagne tailoring offers timeless elegance for a polished wedding appearance." }
+                },
+                {
+                    left: { title: "Ivory Emirati Bisht", styling: "Traditional • Regal • Elegant", desc: "A ceremonial bisht paired with crisp white attire for graceful Islamic elegance." },
+                    right: { title: "Linen Riviera Suit", styling: "Modern • Relaxed • Premium", desc: "Soft linen tailoring delivers understated luxury with effortless charm." }
+                },
+                {
+                    left: { title: "Navy Signature Suit", styling: "Executive • Sharp • Timeless", desc: "Classic navy tailoring creates an impeccably polished formal statement." },
+                    right: { title: "Emerald Royal Bandhgala", styling: "Royal • Sophisticated • Bold", desc: "Rich emerald tailoring embodies regal confidence with refined detailing." }
+                },
+                {
+                    left: { title: "Ivory Heritage Sherwani", styling: "Classic • Regal • Traditional", desc: "Elegant ivory embroidery celebrates timeless cultural sophistication." },
+                    right: { title: "Modern Ivory Linen", styling: "Minimal • Contemporary • Elegant", desc: "Relaxed ivory tailoring offers clean modern luxury for daytime festivities." }
+                }
             ]
-        }
+        },
+        descriptions: {}
     },
     valima: {
         folder: "valima",
@@ -116,6 +199,22 @@ const DRESS_INSPIRATION_CONFIG = {
         titles: {
             w: ["Designer Gown", "Modern Silk Saree", "Pastel Lehenga", "Contemporary Sharara", "Floor-Length Jacket Suit"],
             m: ["Formal Tuxedo", "Classic Black Tie Suit", "Tailored Sherwani", "Three-Piece Suit", "Modern Jodhpur Suit"]
+        },
+        stylings: {
+            w: [
+                "Contemporary • Structured • Luxury",
+                "Silk • Pastel • Minimal",
+                "Intricate • Silver • Pastel",
+                "Chic • Sequined • Modern",
+                "Elegant • Layered • Floor-Length"
+            ],
+            m: [
+                "Tuxedo • Satin Lapel • Sleek",
+                "Tailored • Charcoal • Navy",
+                "Sherwani • Understated • Reception",
+                "Double-Breasted • Classic • 3-Piece",
+                "Jodhpur Suit • Brass Buttons • Modern"
+            ]
         },
         descriptions: {
             w: [
@@ -133,6 +232,68 @@ const DRESS_INSPIRATION_CONFIG = {
                 "Modern jodhpur suits with elegant brass buttons."
             ]
         }
+    },
+    reception: {
+        folder: "nikkah",
+        prefix: "k",
+        title: "Wedding Feast & Reception",
+        counts: { w: 5, m: 5 },
+        shuffleOrder: {
+            w: [3, 5, 1, 4, 2],
+            m: [4, 2, 5, 1, 3]
+        },
+        titles: {
+            w: [
+                {
+                    left: { title: "Sage Celeste Abaya", desc: "Soft sage elegance with graceful modest luxury.", styling: ["Nude heels", "Champagne clutch", "Pearl earrings", "Satin hijab"] },
+                    right: { title: "Ivory Noor Saree", desc: "Classic ivory drapes radiate timeless wedding elegance.", styling: ["Pearl jewellery", "Nude heels", "Champagne clutch", "Soft makeup"] }
+                },
+                {
+                    left: { title: "Royal Sapphire Gown", desc: "Rich sapphire embroidery creates regal evening sophistication.", styling: ["Silver earrings", "Metallic heels", "Crystal clutch", "Soft curls"] },
+                    right: { title: "Emerald Heritage Saree", desc: "Traditional emerald silk with luxurious golden craftsmanship.", styling: ["Temple jewellery", "Gold bangles", "Gold heels", "Elegant bun"] }
+                },
+                {
+                    left: { title: "Blush Grace Ensemble", desc: "Soft blush tones bring warmth and refined celebration elegance.", styling: ["Nude heels", "Pearl clutch", "Rose-gold jewellery", "Light makeup"] },
+                    right: { title: "Magenta Celebration Set", desc: "Bold magenta layers create a vibrant festive statement.", styling: ["Gold heels", "Statement earrings", "Champagne clutch", "Soft curls"] }
+                },
+                {
+                    left: { title: "Emerald Evening Gown", desc: "Flowing emerald elegance crafted for luxurious evening celebrations.", styling: ["Gold clutch", "Gold earrings", "Metallic heels", "Soft waves"] },
+                    right: { title: "Royal Maroon Ensemble", desc: "Rich maroon embroidery reflects timeless festive grandeur.", styling: ["Antique gold jewellery", "Nude heels", "Gold clutch", "Elegant bun"] }
+                },
+                {
+                    left: { title: "Peach Blossom Saree", desc: "Romantic peach florals create graceful contemporary elegance.", styling: ["Pearl earrings", "Nude heels", "Soft curls", "Champagne clutch"] },
+                    right: { title: "Powder Blue Modest Set", desc: "Soft blue tailoring offers refined modest sophistication.", styling: ["Beige hijab", "Nude heels", "Pearl handbag", "Minimal jewellery"] }
+                }
+            ],
+            m: [
+                {
+                    left: { title: "Ivory Prestige Suit", desc: "Modern ivory tailoring crafted for an elegant wedding celebration.", styling: ["Brown leather loafers", "White dress shirt", "Beige pocket square", "Silver watch"] },
+                    right: { title: "Charcoal Regal Sherwani", desc: "Classic charcoal heritage tailoring with timeless ceremonial elegance.", styling: ["Black formal shoes", "Black kurta", "Silver pocket square", "Minimal accessories"] }
+                },
+                {
+                    left: { title: "Stone Contemporary Layers", desc: "Relaxed neutral layering with refined modern sophistication.", styling: ["Black loafers", "Black shirt", "Leather watch", "No tie"] },
+                    right: { title: "Champagne Luxe Suit", desc: "Soft champagne tailoring designed for effortless reception elegance.", styling: ["Brown loafers", "Cream shirt", "Pocket square", "Gold watch"] }
+                },
+                {
+                    left: { title: "Royal Bisht Ensemble", desc: "Traditional ceremonial attire with distinguished timeless luxury.", styling: ["White thobe", "Gold bisht", "Brown leather shoes", "Classic silver watch"] },
+                    right: { title: "Linen Reception Suit", desc: "Minimal linen tailoring for an elegant daytime wedding feast.", styling: ["Brown loafers", "White shirt", "Beige pocket square", "Minimal belt"] }
+                },
+                {
+                    left: { title: "Midnight Executive Suit", desc: "Sharp navy tailoring for sophisticated formal celebrations.", styling: ["Navy tie", "Black Oxford shoes", "White pocket square", "Steel watch"] },
+                    right: { title: "Emerald Royal Bandhgala", desc: "Deep emerald tailoring blends royal tradition with modern refinement.", styling: ["Black trousers", "Black formal shoes", "Gold chain brooch", "Pocket square"] }
+                },
+                {
+                    left: { title: "Ivory Heritage Sherwani", desc: "Elegant ivory ceremonial wear with timeless craftsmanship.", styling: ["Brown leather loafers", "White churidar", "Ivory pocket square", "Minimal watch"] },
+                    right: { title: "Classic Ivory Smart Casual", desc: "Relaxed ivory separates for effortless family celebration style.", styling: ["Brown belt", "Brown loafers", "White mandarin shirt", "Steel watch"] }
+                }
+            ]
+        },
+        descriptions: {}
+    }}
+                }
+            ]
+        },
+        descriptions: {}
     }
 };
 
@@ -145,64 +306,115 @@ function generateOutfitCards(eventKey) {
 
     types.forEach(t => {
         const count = config.counts[t] || 0;
-        for (let i = 1; i <= count; i++) {
+        const order = config.shuffleOrder?.[t] || Array.from({ length: count }, (_, idx) => idx + 1);
+
+        order.forEach(i => {
             const imagePath = `assets/dress-inspirations/${config.folder}/${config.prefix}${t}${i}.jpg`;
             const title = config.titles[t]?.[i - 1] || (t === 'w' ? 'Women Outfit' : 'Men Outfit');
             const desc = config.descriptions[t]?.[i - 1] || 'Premium outfit inspiration.';
+            const isDual = typeof title === 'object' && title !== null && 'left' in title;
 
             outfits.push({
                 image: imagePath,
                 title: title,
-                desc: desc
+                desc: desc,
+                isDual: isDual
             });
-        }
+        });
     });
 
-    return outfits.map(outfit => `
-        <div class="lookbook-card">
-            <div class="lookbook-img-wrap">
-                <img src="${outfit.image}" alt="${outfit.title}" loading="lazy">
+    return outfits.map(outfit => {
+        if (outfit.isDual) {
+            const leftTitle = typeof outfit.title.left === 'object' ? outfit.title.left.title : outfit.title.left;
+            const leftDesc = typeof outfit.title.left === 'object' ? outfit.title.left.desc : outfit.desc.left;
+            const leftStyling = typeof outfit.title.left === 'object' ? outfit.title.left.styling : null;
+
+            const rightTitle = typeof outfit.title.right === 'object' ? outfit.title.right.title : outfit.title.right;
+            const rightDesc = typeof outfit.title.right === 'object' ? outfit.title.right.desc : outfit.desc.right;
+            const rightStyling = typeof outfit.title.right === 'object' ? outfit.title.right.styling : null;
+
+            const renderStyling = (items) => {
+                if (!items) return "";
+                if (typeof items === 'string') {
+                    return `<div class="lookbook-styling-text">${items}</div>`;
+                }
+                if (Array.isArray(items)) {
+                    return `<div class="lookbook-styling-text">${items.join(" • ")}</div>`;
+                }
+                return "";
+            };
+
+            return `
+                <div class="lookbook-card dual-look-card">
+                    <div class="lookbook-img-wrap">
+                        <img src="${outfit.image}" alt="${leftTitle} & ${rightTitle}" loading="lazy">
+                    </div>
+                    <div class="lookbook-info-dual">
+                        <div class="look-col left-look">
+                            <h4>${leftTitle}</h4>
+                            ${renderStyling(leftStyling)}
+                            <p>${leftDesc}</p>
+                        </div>
+                        <div class="look-col right-look">
+                            <h4>${rightTitle}</h4>
+                            ${renderStyling(rightStyling)}
+                            <p>${rightDesc}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        return `
+            <div class="lookbook-card">
+                <div class="lookbook-img-wrap">
+                    <img src="${outfit.image}" alt="${outfit.title}" loading="lazy">
+                </div>
+                <div class="lookbook-info">
+                    <h4>${outfit.title}</h4>
+                    <p>${outfit.desc}</p>
+                </div>
             </div>
-            <div class="lookbook-info">
-                <h4>${outfit.title}</h4>
-            </div>
-        </div>
-    `).join("");
+        `;
+    }).join("");
 }
 
 function getDressInspirationMarkup(eventId, eventName) {
     const key = eventId?.toLowerCase() || "";
-    let dataKey = null;
-    if (key.includes("haldi") || eventName?.toLowerCase().includes("haldi")) dataKey = "haldi";
-    else if (key.includes("nalang") || eventName?.toLowerCase().includes("nalang")) dataKey = "nalang";
-    else if (key.includes("sangeet") || eventName?.toLowerCase().includes("sangeet")) dataKey = "sangeet";
-    else if (key.includes("nikah") || eventName?.toLowerCase().includes("nikah")) dataKey = "nikkah";
-    else if (key.includes("valima") || eventName?.toLowerCase().includes("valima")) dataKey = "valima";
+    let dataKeys = [];
+    if (key.includes("haldi") || eventName?.toLowerCase().includes("haldi")) dataKeys = ["haldi"];
+    else if (key.includes("nalang") || eventName?.toLowerCase().includes("nalang")) dataKeys = ["nalang"];
+    else if (key.includes("sangeet") || eventName?.toLowerCase().includes("sangeet")) dataKeys = ["sangeet"];
+    else if (key.includes("nikah") || eventName?.toLowerCase().includes("nikah")) dataKeys = ["nikkah"];
+    else if (key.includes("valima") || eventName?.toLowerCase().includes("valima")) dataKeys = ["valima"];
+    else if (key.includes("reception") || eventName?.toLowerCase().includes("reception")) dataKeys = ["reception"];
 
-    if (!dataKey) return "";
+    if (dataKeys.length === 0) return "";
 
-    const config = DRESS_INSPIRATION_CONFIG[dataKey];
-    const outfitsHtml = generateOutfitCards(dataKey);
-    const totalOutfits = (config.counts.w || 0) + (config.counts.m || 0);
+    return dataKeys.map(dataKey => {
+        const config = DRESS_INSPIRATION_CONFIG[dataKey];
+        const outfitsHtml = generateOutfitCards(dataKey);
+        const totalOutfits = (config.counts.w || 0) + (config.counts.m || 0);
+        const buttonLabel = "Style Guide";
 
-    return `
-        <div class="dress-inspiration-container">
-            <button type="button" class="btn-dress-inspiration" data-event="${dataKey}">
-                <span>Style Guide</span>
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" class="chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </button>
-            <div class="dress-inspiration-panel" id="inspiration-${dataKey}" style="display: none; opacity: 0; height: 0;">
-                <div class="dress-inspiration-inner">
-                    <div class="dress-lookbook-carousel" data-event="${dataKey}">
-                        ${outfitsHtml}
-                    </div>
-                    <div class="lookbook-dots">
-                        ${Array.from({ length: totalOutfits }).map((_, i) => `<span class="lookbook-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></span>`).join("")}
+        return `
+            <div class="dress-inspiration-container" style="margin-top: 15px;">
+                <button type="button" class="btn-dress-inspiration" data-event="${dataKey}">
+                    <span>${buttonLabel}</span>
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" class="chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div class="dress-inspiration-panel" id="inspiration-${dataKey}" style="display: none; opacity: 0; height: 0;">
+                    <div class="dress-inspiration-inner">
+                        <div class="dress-lookbook-carousel" data-event="${dataKey}">
+                            ${outfitsHtml}
+                        </div>
+                        <div class="lookbook-dots">
+                            ${Array.from({ length: totalOutfits }).map((_, i) => `<span class="lookbook-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></span>`).join("")}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    `;
+        `;
+    }).join("");
 }
 
 function initLookbookCarousel(carousel) {

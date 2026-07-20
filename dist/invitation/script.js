@@ -13,6 +13,22 @@ const DRESS_INSPIRATION_CONFIG = {
             w: ["Anarkali Graced Lehanga", "Flowing Saree Elegance", "Soft Pastel Saree", "Ivory Floral Saree", "Soft White Anarkali"],
             m: ["Ivory Linen Kurta", "Mustard Nehru Ensemble", "Minimal Linen Kurta", "Marigold Heritage", "Pastel Yellow Linen Kurta"]
         },
+        stylings: {
+            w: [
+                "Vibrant • Festive • Graceful",
+                "Floral • Breezy • Summery",
+                "Pastel • Lightweight • Traditional",
+                "Classic • Floral • Salwar",
+                "Yellow Chiffon • Minimal • Flowing"
+            ],
+            m: [
+                "Turmeric • Raw Silk • Classic",
+                "Yellow Waistcoat • Festive • Sleek",
+                "Pastel Fusion • Modern • Active",
+                "Crisp White • Stole Accents • Clean",
+                "Linen • Breathable • Contemporary"
+            ]
+        },
         descriptions: {
             w: [
                 "Vibrant yellow shades with mirror or embroidery details.",
@@ -36,23 +52,35 @@ const DRESS_INSPIRATION_CONFIG = {
         title: "Nalang Style Guide",
         counts: { w: 5, m: 5 },
         titles: {
-            w: ["Traditional Saree", "Pastel Anarkali", "Light Lehenga", "Salwar Kameez", "Printed Drape"],
-            m: ["Cotton Kurta Pajama", "Traditional Dhoti Kurta", "Simple Ethnic Wear", "Linen Kurta", "Short Kurta"]
+            w: [
+                { left: "Lavender Grace Saree", right: "Sage Blossom Suit" },
+                { left: "Botanical Bloom Saree", right: "Peach Whisper Suit" },
+                { left: "Blush Pearl Saree", right: "Mint Celeste Ensemble" },
+                { left: "Lavender Modest Gown", right: "Sage Garden Anarkali" },
+                { left: "Peach Garden Saree", right: "Powder Blue Modest Set" }
+            ],
+            m: [
+                { left: "Sky Breeze Linen Shirt", right: "Sage Resort Co-ord" },
+                { left: "Ivory Heritage Kurta", right: "Mint Polo Classic" },
+                { left: "Mint Riviera Shirt", right: "Sage Heritage Veshti" },
+                { left: "Blush Polo Classic", right: "Ivory Weekend Layers" },
+                { left: "Mint Casual Edit", right: "Lavender Heritage Kurta" }
+            ]
         },
         descriptions: {
             w: [
-                "Classic yellow or green cotton/silk sarees.",
-                "Lightweight pastel kurtas with soft detailing.",
-                "Flowing traditional festive wear for intimate gatherings.",
-                "Simple cotton salwar suits for rituals.",
-                "Flowing ethnic prints in soft comfortable cotton."
+                { left: "Delicate lavender drapes create graceful elegance with subtle shimmer.", right: "Fresh floral embroidery brings effortless sophistication to the celebration." },
+                { left: "Soft floral drapes offer timeless femininity with natural charm.", right: "Minimal peach tailoring delivers refined elegance and comfort." },
+                { left: "Romantic blush embroidery creates a graceful and timeless festive look.", right: "Flowing mint silhouettes embody soft sophistication and effortless beauty." },
+                { left: "Graceful flowing layers with modest elegance and delicate sparkle.", right: "Pastel floral artistry brings modern refinement to traditional wear." },
+                { left: "Elegant peach florals blend timeless draping with soft romance.", right: "Powder blue tailoring creates a serene and sophisticated festive statement." }
             ],
             m: [
-                "Comfortable and classic traditional white/pastel kurtas.",
-                "Traditional drapes styled with modern fabrics.",
-                "Simple ethnic wear suited for sacred pre-wedding rituals.",
-                "Breathable linen kurtas in light earthy tones.",
-                "Casual short kurtas paired with denims or pyjamas."
+                { left: "Airy blue linen paired with cream tailoring for effortless daytime elegance.", right: "Soft sage tones create a fresh and refined festive statement." },
+                { left: "Classic ivory traditional wear designed for timeless family celebrations.", right: "Modern knit styling with pastel sophistication and relaxed charm." },
+                { left: "Fresh linen separates crafted for relaxed elegance and comfort.", right: "Traditional pastel styling with effortless cultural sophistication." },
+                { left: "Soft blush knitwear delivers understated luxury for daytime festivities.", right: "Neutral layering creates a clean contemporary celebration look." },
+                { left: "Contemporary mint styling with clean lines and timeless simplicity.", right: "Pastel lavender tradition meets modern elegance with refined tailoring." }
             ]
         }
     },
@@ -62,23 +90,51 @@ const DRESS_INSPIRATION_CONFIG = {
         title: "Sangeet Style Guide",
         counts: { w: 5, m: 5 },
         titles: {
-            w: ["Glamorous Lehenga", "Indo-Western Gown", "Sequined Saree", "Anarkali Gown", "Sharara Suit"],
-            m: ["Designer Sherwani", "Indo-Western Achkan", "Evening Bandhgala", "Classic Kurta Jacket", "Tuxedo-Style Fusion"]
+            w: [
+                "Ivory Radiance Sharara",
+                "Mauve Moonlight Sharara",
+                "Sage Celeste Gown",
+                "Midnight Emerald Ensemble",
+                "Emerald & Wine Evening Gowns"
+            ],
+            m: [
+                "Ivory Luxe Resort Suit",
+                "Midnight Noir Blazer",
+                "Sandstone Evening Layers",
+                "Emerald Noir Evening Suit",
+                "Champagne Riviera Set"
+            ]
+        },
+        stylings: {
+            w: [
+                "Sparkling • Glamorous • Unforgettable",
+                "Romantic • Flowing • Evening",
+                "Soft • Draped • Sophisticated",
+                "Rich • Regal • Contemporary",
+                "Jewel • Luxurious • Striking"
+            ],
+            m: [
+                "Relaxed • Ivory • Evening",
+                "Dark • Textured • Cocktail",
+                "Neutral • Refined • Festive",
+                "Deep Emerald • Bold • Elegant",
+                "Minimal • Knit • Sunset"
+            ]
         },
         descriptions: {
             w: [
-                "Heavy sparkles, mirrors, and deep shades.",
-                "Modern fusion gowns with dramatic drapes.",
-                "Elegant sequined sarees for a night under the lights.",
-                "Flowing designer floor-length Anarkalis.",
-                "Chic sharara suits with mirror work details."
+                "Sparkling ivory embroidery brings graceful glamour to an unforgettable celebration.",
+                "Romantic mauve shimmer and flowing layers create effortless evening elegance.",
+                "Soft sage sparkle and graceful draping embody timeless sophistication.",
+                "Rich emerald embroidery offers regal elegance with contemporary festive appeal.",
+                "Luxurious jewel tones and flowing silhouettes make a striking celebration statement."
             ],
             m: [
-                "Intricate designer sherwanis in deep navy or black.",
-                "Fusion cuts and asymmetric kurtas.",
-                "Tailored classic bandhgalas for the sangeet performance.",
-                "Silk kurta paired with an embellished jacket.",
-                "Modern tuxedo styles fused with traditional details."
+                "Relaxed ivory tailoring with effortless sophistication for elegant evening celebrations.",
+                "Dark textured tailoring delivers timeless charm with modern cocktail-night confidence.",
+                "Warm neutral layering creates a refined contemporary look for festive celebrations.",
+                "Deep emerald tailoring paired with black accents for a bold yet elegant statement.",
+                "Minimal knit styling and soft champagne tones define relaxed luxury after sunset."
             ]
         }
     },
@@ -88,25 +144,52 @@ const DRESS_INSPIRATION_CONFIG = {
         title: "Nikkah Style Guide",
         counts: { w: 5, m: 5 },
         titles: {
-            w: ["Royal Emerald Lehenga", "Ivory Modest Dress", "Classic Gharara", "Heavy Anarkali", "Silk Abaya Gown"],
-            m: ["Ivory Sherwani", "Royal Green Kurta", "Classic Bandhgala", "Peshawari Kurta", "Embroidered Achkan"]
-        },
-        descriptions: {
             w: [
-                "Rich emerald green velvets with ornate gold zardozi.",
-                "Sophisticated modest luxury dress in ivory or cream.",
-                "Traditional ghararas with intricate borders and veils.",
-                "Ornate heavy georgette or silk Anarkali suits.",
-                "Premium silk modest abaya style gowns."
+                {
+                    left: { title: "Sage Modest Luxe", styling: "Modest • Graceful • Elegant", desc: "Flowing sage embroidery creates a serene and sophisticated festive look." },
+                    right: { title: "Pearl Ivory Saree", styling: "Classic • Timeless • Regal", desc: "Intricate ivory embroidery elevates traditional draping with effortless elegance." }
+                },
+                {
+                    left: { title: "Royal Sapphire Gown", styling: "Regal • Luxurious • Graceful", desc: "Deep sapphire embroidery delivers unforgettable evening sophistication." },
+                    right: { title: "Emerald Heritage Saree", styling: "Traditional • Rich • Elegant", desc: "Classic emerald silk showcases timeless beauty with regal detailing." }
+                },
+                {
+                    left: { title: "Blush Modest Ensemble", styling: "Soft • Elegant • Feminine", desc: "Delicate blush embroidery creates refined elegance with modest styling." },
+                    right: { title: "Olive Satin Abaya", styling: "Modest • Contemporary • Luxurious", desc: "Fluid olive satin offers graceful movement with understated sophistication." }
+                },
+                {
+                    left: { title: "Burgundy Heritage Suit", styling: "Traditional • Rich • Festive", desc: "Warm burgundy embroidery reflects timeless celebration and refined craftsmanship." },
+                    right: { title: "Fuchsia Celebration Set", styling: "Modern • Vibrant • Chic", desc: "Bold jewel tones bring confident glamour to the wedding festivities." }
+                },
+                {
+                    left: { title: "Emerald Evening Gown", styling: "Elegant • Flowing • Luxurious", desc: "Graceful emerald draping creates an effortlessly regal evening presence." },
+                    right: { title: "Royal Wine Anarkali", styling: "Classic • Regal • Sophisticated", desc: "Rich wine embroidery blends timeless tradition with luxurious elegance." }
+                }
             ],
             m: [
-                "Ornate ivory sherwani styled with gold accents.",
-                "Rich dark green fabrics with classic cuts.",
-                "Elegant classic bandhgala for a timeless wedding look.",
-                "Traditional loose Peshawari styling in fine fabrics.",
-                "Embroidered wedding achkan with subtle threadwork."
+                {
+                    left: { title: "Ivory Executive Suit", styling: "Modern • Elegant • Timeless", desc: "A refined ivory suit tailored for sophisticated daytime celebrations." },
+                    right: { title: "Charcoal Regal Sherwani", styling: "Royal • Classic • Distinguished", desc: "A structured charcoal sherwani that blends heritage with contemporary luxury." }
+                },
+                {
+                    left: { title: "Stone Urban Layers", styling: "Minimal • Modern • Smart", desc: "Neutral layering creates effortless sophistication with relaxed tailoring." },
+                    right: { title: "Champagne Prestige Suit", styling: "Clean • Luxurious • Refined", desc: "Champagne tailoring offers timeless elegance for a polished wedding appearance." }
+                },
+                {
+                    left: { title: "Ivory Emirati Bisht", styling: "Traditional • Regal • Elegant", desc: "A ceremonial bisht paired with crisp white attire for graceful Islamic elegance." },
+                    right: { title: "Linen Riviera Suit", styling: "Modern • Relaxed • Premium", desc: "Soft linen tailoring delivers understated luxury with effortless charm." }
+                },
+                {
+                    left: { title: "Navy Signature Suit", styling: "Executive • Sharp • Timeless", desc: "Classic navy tailoring creates an impeccably polished formal statement." },
+                    right: { title: "Emerald Royal Bandhgala", styling: "Royal • Sophisticated • Bold", desc: "Rich emerald tailoring embodies regal confidence with refined detailing." }
+                },
+                {
+                    left: { title: "Ivory Heritage Sherwani", styling: "Classic • Regal • Traditional", desc: "Elegant ivory embroidery celebrates timeless cultural sophistication." },
+                    right: { title: "Modern Ivory Linen", styling: "Minimal • Contemporary • Elegant", desc: "Relaxed ivory tailoring offers clean modern luxury for daytime festivities." }
+                }
             ]
-        }
+        },
+        descriptions: {}
     },
     valima: {
         folder: "valima",
@@ -116,6 +199,22 @@ const DRESS_INSPIRATION_CONFIG = {
         titles: {
             w: ["Designer Gown", "Modern Silk Saree", "Pastel Lehenga", "Contemporary Sharara", "Floor-Length Jacket Suit"],
             m: ["Formal Tuxedo", "Classic Black Tie Suit", "Tailored Sherwani", "Three-Piece Suit", "Modern Jodhpur Suit"]
+        },
+        stylings: {
+            w: [
+                "Contemporary • Structured • Luxury",
+                "Silk • Pastel • Minimal",
+                "Intricate • Silver • Pastel",
+                "Chic • Sequined • Modern",
+                "Elegant • Layered • Floor-Length"
+            ],
+            m: [
+                "Tuxedo • Satin Lapel • Sleek",
+                "Tailored • Charcoal • Navy",
+                "Sherwani • Understated • Reception",
+                "Double-Breasted • Classic • 3-Piece",
+                "Jodhpur Suit • Brass Buttons • Modern"
+            ]
         },
         descriptions: {
             w: [
@@ -133,6 +232,68 @@ const DRESS_INSPIRATION_CONFIG = {
                 "Modern jodhpur suits with elegant brass buttons."
             ]
         }
+    },
+    reception: {
+        folder: "nikkah",
+        prefix: "k",
+        title: "Wedding Feast & Reception",
+        counts: { w: 5, m: 5 },
+        shuffleOrder: {
+            w: [3, 5, 1, 4, 2],
+            m: [4, 2, 5, 1, 3]
+        },
+        titles: {
+            w: [
+                {
+                    left: { title: "Sage Celeste Abaya", desc: "Soft sage elegance with graceful modest luxury.", styling: ["Nude heels", "Champagne clutch", "Pearl earrings", "Satin hijab"] },
+                    right: { title: "Ivory Noor Saree", desc: "Classic ivory drapes radiate timeless wedding elegance.", styling: ["Pearl jewellery", "Nude heels", "Champagne clutch", "Soft makeup"] }
+                },
+                {
+                    left: { title: "Royal Sapphire Gown", desc: "Rich sapphire embroidery creates regal evening sophistication.", styling: ["Silver earrings", "Metallic heels", "Crystal clutch", "Soft curls"] },
+                    right: { title: "Emerald Heritage Saree", desc: "Traditional emerald silk with luxurious golden craftsmanship.", styling: ["Temple jewellery", "Gold bangles", "Gold heels", "Elegant bun"] }
+                },
+                {
+                    left: { title: "Blush Grace Ensemble", desc: "Soft blush tones bring warmth and refined celebration elegance.", styling: ["Nude heels", "Pearl clutch", "Rose-gold jewellery", "Light makeup"] },
+                    right: { title: "Magenta Celebration Set", desc: "Bold magenta layers create a vibrant festive statement.", styling: ["Gold heels", "Statement earrings", "Champagne clutch", "Soft curls"] }
+                },
+                {
+                    left: { title: "Emerald Evening Gown", desc: "Flowing emerald elegance crafted for luxurious evening celebrations.", styling: ["Gold clutch", "Gold earrings", "Metallic heels", "Soft waves"] },
+                    right: { title: "Royal Maroon Ensemble", desc: "Rich maroon embroidery reflects timeless festive grandeur.", styling: ["Antique gold jewellery", "Nude heels", "Gold clutch", "Elegant bun"] }
+                },
+                {
+                    left: { title: "Peach Blossom Saree", desc: "Romantic peach florals create graceful contemporary elegance.", styling: ["Pearl earrings", "Nude heels", "Soft curls", "Champagne clutch"] },
+                    right: { title: "Powder Blue Modest Set", desc: "Soft blue tailoring offers refined modest sophistication.", styling: ["Beige hijab", "Nude heels", "Pearl handbag", "Minimal jewellery"] }
+                }
+            ],
+            m: [
+                {
+                    left: { title: "Ivory Prestige Suit", desc: "Modern ivory tailoring crafted for an elegant wedding celebration.", styling: ["Brown leather loafers", "White dress shirt", "Beige pocket square", "Silver watch"] },
+                    right: { title: "Charcoal Regal Sherwani", desc: "Classic charcoal heritage tailoring with timeless ceremonial elegance.", styling: ["Black formal shoes", "Black kurta", "Silver pocket square", "Minimal accessories"] }
+                },
+                {
+                    left: { title: "Stone Contemporary Layers", desc: "Relaxed neutral layering with refined modern sophistication.", styling: ["Black loafers", "Black shirt", "Leather watch", "No tie"] },
+                    right: { title: "Champagne Luxe Suit", desc: "Soft champagne tailoring designed for effortless reception elegance.", styling: ["Brown loafers", "Cream shirt", "Pocket square", "Gold watch"] }
+                },
+                {
+                    left: { title: "Royal Bisht Ensemble", desc: "Traditional ceremonial attire with distinguished timeless luxury.", styling: ["White thobe", "Gold bisht", "Brown leather shoes", "Classic silver watch"] },
+                    right: { title: "Linen Reception Suit", desc: "Minimal linen tailoring for an elegant daytime wedding feast.", styling: ["Brown loafers", "White shirt", "Beige pocket square", "Minimal belt"] }
+                },
+                {
+                    left: { title: "Midnight Executive Suit", desc: "Sharp navy tailoring for sophisticated formal celebrations.", styling: ["Navy tie", "Black Oxford shoes", "White pocket square", "Steel watch"] },
+                    right: { title: "Emerald Royal Bandhgala", desc: "Deep emerald tailoring blends royal tradition with modern refinement.", styling: ["Black trousers", "Black formal shoes", "Gold chain brooch", "Pocket square"] }
+                },
+                {
+                    left: { title: "Ivory Heritage Sherwani", desc: "Elegant ivory ceremonial wear with timeless craftsmanship.", styling: ["Brown leather loafers", "White churidar", "Ivory pocket square", "Minimal watch"] },
+                    right: { title: "Classic Ivory Smart Casual", desc: "Relaxed ivory separates for effortless family celebration style.", styling: ["Brown belt", "Brown loafers", "White mandarin shirt", "Steel watch"] }
+                }
+            ]
+        },
+        descriptions: {}
+    }}
+                }
+            ]
+        },
+        descriptions: {}
     }
 };
 
@@ -142,74 +303,125 @@ function generateOutfitCards(eventKey) {
 
     const outfits = [];
     const types = ['w', 'm'];
-    
+
     types.forEach(t => {
         const count = config.counts[t] || 0;
-        for (let i = 1; i <= count; i++) {
+        const order = config.shuffleOrder?.[t] || Array.from({ length: count }, (_, idx) => idx + 1);
+
+        order.forEach(i => {
             const imagePath = `assets/dress-inspirations/${config.folder}/${config.prefix}${t}${i}.jpg`;
-            const title = config.titles[t]?.[i-1] || (t === 'w' ? 'Women Outfit' : 'Men Outfit');
-            const desc = config.descriptions[t]?.[i-1] || 'Premium outfit inspiration.';
-            
+            const title = config.titles[t]?.[i - 1] || (t === 'w' ? 'Women Outfit' : 'Men Outfit');
+            const desc = config.descriptions[t]?.[i - 1] || 'Premium outfit inspiration.';
+            const isDual = typeof title === 'object' && title !== null && 'left' in title;
+
             outfits.push({
                 image: imagePath,
                 title: title,
-                desc: desc
+                desc: desc,
+                isDual: isDual
             });
-        }
+        });
     });
 
-    return outfits.map(outfit => `
-        <div class="lookbook-card">
-            <div class="lookbook-img-wrap">
-                <img src="${outfit.image}" alt="${outfit.title}" loading="lazy">
+    return outfits.map(outfit => {
+        if (outfit.isDual) {
+            const leftTitle = typeof outfit.title.left === 'object' ? outfit.title.left.title : outfit.title.left;
+            const leftDesc = typeof outfit.title.left === 'object' ? outfit.title.left.desc : outfit.desc.left;
+            const leftStyling = typeof outfit.title.left === 'object' ? outfit.title.left.styling : null;
+
+            const rightTitle = typeof outfit.title.right === 'object' ? outfit.title.right.title : outfit.title.right;
+            const rightDesc = typeof outfit.title.right === 'object' ? outfit.title.right.desc : outfit.desc.right;
+            const rightStyling = typeof outfit.title.right === 'object' ? outfit.title.right.styling : null;
+
+            const renderStyling = (items) => {
+                if (!items) return "";
+                if (typeof items === 'string') {
+                    return `<div class="lookbook-styling-text">${items}</div>`;
+                }
+                if (Array.isArray(items)) {
+                    return `<div class="lookbook-styling-text">${items.join(" • ")}</div>`;
+                }
+                return "";
+            };
+
+            return `
+                <div class="lookbook-card dual-look-card">
+                    <div class="lookbook-img-wrap">
+                        <img src="${outfit.image}" alt="${leftTitle} & ${rightTitle}" loading="lazy">
+                    </div>
+                    <div class="lookbook-info-dual">
+                        <div class="look-col left-look">
+                            <h4>${leftTitle}</h4>
+                            ${renderStyling(leftStyling)}
+                            <p>${leftDesc}</p>
+                        </div>
+                        <div class="look-col right-look">
+                            <h4>${rightTitle}</h4>
+                            ${renderStyling(rightStyling)}
+                            <p>${rightDesc}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        return `
+            <div class="lookbook-card">
+                <div class="lookbook-img-wrap">
+                    <img src="${outfit.image}" alt="${outfit.title}" loading="lazy">
+                </div>
+                <div class="lookbook-info">
+                    <h4>${outfit.title}</h4>
+                    <p>${outfit.desc}</p>
+                </div>
             </div>
-            <div class="lookbook-info">
-                <h4>${outfit.title}</h4>
-            </div>
-        </div>
-    `).join("");
+        `;
+    }).join("");
 }
 
 function getDressInspirationMarkup(eventId, eventName) {
     const key = eventId?.toLowerCase() || "";
-    let dataKey = null;
-    if (key.includes("haldi") || eventName?.toLowerCase().includes("haldi")) dataKey = "haldi";
-    else if (key.includes("nalang") || eventName?.toLowerCase().includes("nalang")) dataKey = "nalang";
-    else if (key.includes("sangeet") || eventName?.toLowerCase().includes("sangeet")) dataKey = "sangeet";
-    else if (key.includes("nikah") || eventName?.toLowerCase().includes("nikah")) dataKey = "nikkah";
-    else if (key.includes("valima") || eventName?.toLowerCase().includes("valima")) dataKey = "valima";
+    let dataKeys = [];
+    if (key.includes("haldi") || eventName?.toLowerCase().includes("haldi")) dataKeys = ["haldi"];
+    else if (key.includes("nalang") || eventName?.toLowerCase().includes("nalang")) dataKeys = ["nalang"];
+    else if (key.includes("sangeet") || eventName?.toLowerCase().includes("sangeet")) dataKeys = ["sangeet"];
+    else if (key.includes("nikah") || eventName?.toLowerCase().includes("nikah")) dataKeys = ["nikkah"];
+    else if (key.includes("valima") || eventName?.toLowerCase().includes("valima")) dataKeys = ["valima"];
+    else if (key.includes("reception") || eventName?.toLowerCase().includes("reception")) dataKeys = ["reception"];
 
-    if (!dataKey) return "";
+    if (dataKeys.length === 0) return "";
 
-    const config = DRESS_INSPIRATION_CONFIG[dataKey];
-    const outfitsHtml = generateOutfitCards(dataKey);
-    const totalOutfits = (config.counts.w || 0) + (config.counts.m || 0);
+    return dataKeys.map(dataKey => {
+        const config = DRESS_INSPIRATION_CONFIG[dataKey];
+        const outfitsHtml = generateOutfitCards(dataKey);
+        const totalOutfits = (config.counts.w || 0) + (config.counts.m || 0);
+        const buttonLabel = "Style Guide";
 
-    return `
-        <div class="dress-inspiration-container">
-            <button type="button" class="btn-dress-inspiration" data-event="${dataKey}">
-                <span>Style Guide</span>
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" class="chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </button>
-            <div class="dress-inspiration-panel" id="inspiration-${dataKey}" style="display: none; opacity: 0; height: 0;">
-                <div class="dress-inspiration-inner">
-                    <div class="dress-lookbook-carousel" data-event="${dataKey}">
-                        ${outfitsHtml}
-                    </div>
-                    <div class="lookbook-dots">
-                        ${Array.from({ length: totalOutfits }).map((_, i) => `<span class="lookbook-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></span>`).join("")}
+        return `
+            <div class="dress-inspiration-container" style="margin-top: 15px;">
+                <button type="button" class="btn-dress-inspiration" data-event="${dataKey}">
+                    <span>${buttonLabel}</span>
+                    <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" class="chevron"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                </button>
+                <div class="dress-inspiration-panel" id="inspiration-${dataKey}" style="display: none; opacity: 0; height: 0;">
+                    <div class="dress-inspiration-inner">
+                        <div class="dress-lookbook-carousel" data-event="${dataKey}">
+                            ${outfitsHtml}
+                        </div>
+                        <div class="lookbook-dots">
+                            ${Array.from({ length: totalOutfits }).map((_, i) => `<span class="lookbook-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></span>`).join("")}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    `;
+        `;
+    }).join("");
 }
 
 function initLookbookCarousel(carousel) {
     let isDown = false;
     let startX;
     let scrollLeft;
-    
+
     // Mouse drag controls
     carousel.addEventListener('mousedown', (e) => {
         isDown = true;
@@ -232,7 +444,7 @@ function initLookbookCarousel(carousel) {
     });
 
     carousel.addEventListener('mousemove', (e) => {
-        if(!isDown) return;
+        if (!isDown) return;
         e.preventDefault();
         const x = e.pageX - carousel.offsetLeft;
         const walk = (x - startX) * 2;
@@ -242,13 +454,13 @@ function initLookbookCarousel(carousel) {
     // Touch momentum/scroll tracking
     const dots = carousel.parentElement.querySelectorAll('.lookbook-dot');
     const cards = carousel.querySelectorAll('.lookbook-card');
-    
+
     carousel.addEventListener('scroll', () => {
         const cardWidth = cards[0]?.offsetWidth || 190;
         const gap = 16;
         const step = cardWidth + gap;
         const index = Math.round(carousel.scrollLeft / step);
-        
+
         dots.forEach((dot, idx) => {
             if (idx === index) {
                 dot.classList.add('active');
@@ -393,7 +605,7 @@ function getWeddingSettings() {
                 localStorage.setItem(storageKey, JSON.stringify(parsed));
             }
             return parsed;
-        } catch(e) {}
+        } catch (e) { }
     }
     return freshDefaults;
 }
@@ -431,10 +643,10 @@ const settings = getWeddingSettings();
         timelineContainer.innerHTML = settings.events.map((event, index) => {
             const venue = settings.venues?.find(v => v.id === event.venueId) || {};
             const sideClass = index % 2 === 0 ? "timeline-left" : "timeline-right";
-            
+
             const isValima = event.id === 'valima' || event.name?.toLowerCase().includes('valima');
             const isTba = isValima || !event.date || event.date === 'TBA' || isNaN(new Date(event.date).getTime());
-            
+
             if (isTba) {
                 return `
                     <article class="event-card glass-card event-valima ${sideClass}">
@@ -455,7 +667,7 @@ const settings = getWeddingSettings();
                     </article>
                 `;
             }
-            
+
             const dateObj = new Date(event.date);
             const formattedDate = dateObj.toLocaleDateString('en-US', {
                 weekday: 'long',
@@ -463,19 +675,19 @@ const settings = getWeddingSettings();
                 month: 'long',
                 year: 'numeric'
             }).replace(',', ' •');
-            
+
             let formattedTime = dateObj.toLocaleTimeString('en-US', {
                 hour: 'numeric',
                 minute: '2-digit'
             });
-            
+
             if (event.id === 'sangeet' || event.name?.toLowerCase().includes('sangeet')) {
                 formattedTime = "After 7:00 PM";
             }
-            
+
             const locationText = venue.name || "To Be Announced";
             const mapsUrl = venue.googleMapsUrl || "#";
-            
+
             return `
                 <article class="event-card glass-card ${sideClass}">
                     <div class="timeline-dot" aria-hidden="true"></div>
@@ -495,12 +707,12 @@ const settings = getWeddingSettings();
     if (primaryVenue) {
         const venueNameEl = document.querySelector(".venue-info .venue-name");
         if (venueNameEl) venueNameEl.textContent = primaryVenue.name;
-        
+
         const venueAddressEl = document.querySelector(".venue-info .venue-address");
         if (venueAddressEl) {
             venueAddressEl.innerHTML = `${primaryVenue.address}<br>${primaryVenue.city}, ${primaryVenue.state}, ${primaryVenue.country}`;
         }
-        
+
         const venueMapBtn = document.querySelector(".venue-info .map-btn");
         if (venueMapBtn && primaryVenue.googleMapsUrl) {
             venueMapBtn.href = primaryVenue.googleMapsUrl;
@@ -522,7 +734,7 @@ const settings = getWeddingSettings();
             const panel = document.getElementById(`inspiration-${dataKey}`);
             const carousel = panel.querySelector(".dress-lookbook-carousel");
             const cards = panel.querySelectorAll(".lookbook-card");
-            
+
             if (panel.classList.contains("expanded")) {
                 panel.classList.remove("expanded");
                 btn.classList.remove("active");
@@ -543,23 +755,23 @@ const settings = getWeddingSettings();
                 panel.classList.add("expanded");
                 btn.classList.add("active");
                 panel.style.display = "block";
-                
+
                 if (hasGsap()) {
                     gsap.killTweensOf(panel);
-                    gsap.fromTo(panel, 
+                    gsap.fromTo(panel,
                         { height: 0, opacity: 0 },
                         { height: "auto", opacity: 1, duration: 0.6, ease: "power2.out" }
                     );
-                    
+
                     gsap.killTweensOf(cards);
                     gsap.fromTo(cards,
                         { opacity: 0, y: 20, x: 25 },
-                        { 
-                            opacity: 1, 
-                            y: 0, 
-                            x: 0, 
-                            duration: 0.8, 
-                            stagger: 0.1, 
+                        {
+                            opacity: 1,
+                            y: 0,
+                            x: 0,
+                            duration: 0.8,
+                            stagger: 0.1,
                             ease: "power3.out",
                             delay: 0.1
                         }
@@ -569,7 +781,7 @@ const settings = getWeddingSettings();
                     panel.style.opacity = "1";
                     cards.forEach(c => c.style.opacity = "1");
                 }
-                
+
                 // Initialize custom drag, scroll, parallax events once opened
                 if (carousel && !carousel.classList.contains("initialized")) {
                     carousel.classList.add("initialized");
@@ -603,7 +815,7 @@ const hasGsap = () => {
 // Enhanced Loader Ring Animation Loop
 function initLoaderLoop() {
     if (!hasGsap()) return;
-    
+
     const rays = document.querySelectorAll(".loader-logo-svg .loader-ray");
     const ring = document.querySelector(".loader-logo-svg .logo-ring");
     const container = document.querySelector(".loader-logo-svg svg");
@@ -622,21 +834,21 @@ function initLoaderLoop() {
             { x: 92, y: 50 }, // 3 o'clock
             { x: 8, y: 50 }   // 9 o'clock
         ];
-        
+
         points.forEach(pt => {
             for (let i = 0; i < 8; i++) {
                 const sparkle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
                 const angle = Math.random() * Math.PI * 2;
                 const speed = 4 + Math.random() * 10;
                 const radius = 0.4 + Math.random() * 0.8;
-                
+
                 sparkle.setAttribute("cx", pt.x);
                 sparkle.setAttribute("cy", pt.y);
                 sparkle.setAttribute("r", radius);
                 sparkle.setAttribute("fill", "#D4AF37");
                 sparkle.setAttribute("opacity", "1");
                 sparklesGroup.appendChild(sparkle);
-                
+
                 gsap.to(sparkle, {
                     cx: pt.x + Math.cos(angle) * speed,
                     cy: pt.y + Math.sin(angle) * speed,
@@ -712,7 +924,7 @@ function splitTextIntoSpans(selector) {
     if (!hasGsap()) return;
     const element = document.querySelector(selector);
     if (!element) return;
-    
+
     const nobrkSpans = element.querySelectorAll('.nobrk');
     if (nobrkSpans.length > 0) {
         nobrkSpans.forEach(span => {
@@ -797,59 +1009,59 @@ function revealPage() {
             ease: "power2.inOut",
             onComplete: () => {
                 loader.classList.add("is-hidden");
-                
+
                 splitTextIntoSpans(".hero-content h1");
                 applyPersonalization();
                 initFloatingLabels();
- 
-                 const tl = gsap.timeline({ defaults: { ease: "cubic-bezier(0.22, 1, 0.36, 1)" } });
-                 
-                 const greeting = document.querySelector(".personal-greeting");
-                 if (greeting) {
-                     tl.to(greeting, { opacity: 1, y: 0, duration: 0.7 });
-                 }
- 
-                 // Elegant reveal of the luxury quotes and dividers
-                 tl.from(".hero-quote", {
-                     opacity: 0,
-                     y: 20,
-                     duration: 0.8
-                 }, greeting ? "-=0.4" : "0");
 
-                 tl.from(".hero-support", {
-                     opacity: 0,
-                     y: 20,
-                     duration: 0.7
-                 }, "-=0.6");
+                const tl = gsap.timeline({ defaults: { ease: "cubic-bezier(0.22, 1, 0.36, 1)" } });
 
-                 tl.from(".hero-divider-gold", {
-                     scaleX: 0,
-                     opacity: 0,
-                     duration: 0.6
-                 }, "-=0.5");
+                const greeting = document.querySelector(".personal-greeting");
+                if (greeting) {
+                    tl.to(greeting, { opacity: 1, y: 0, duration: 0.7 });
+                }
 
-                 tl.from(".hero-content .eyebrow", {
-                     opacity: 0,
-                     y: 15,
-                     duration: 0.6
-                 }, "-=0.5");
- 
-                 tl.to(".hero-content h1 .char-span", {
-                     opacity: 1,
-                     y: 0,
-                     duration: 0.7,
-                     stagger: 0.02
-                 }, "-=0.5");
- 
-                 tl.from("#beginBtn", {
-                     opacity: 0,
-                     y: 20,
-                     duration: 0.5
-                 }, "-=0.4");
-             }
-         });
-         return;
-     }
+                // Elegant reveal of the luxury quotes and dividers
+                tl.from(".hero-quote", {
+                    opacity: 0,
+                    y: 20,
+                    duration: 0.8
+                }, greeting ? "-=0.4" : "0");
+
+                tl.from(".hero-support", {
+                    opacity: 0,
+                    y: 20,
+                    duration: 0.7
+                }, "-=0.6");
+
+                tl.from(".hero-divider-gold", {
+                    scaleX: 0,
+                    opacity: 0,
+                    duration: 0.6
+                }, "-=0.5");
+
+                tl.from(".hero-content .eyebrow", {
+                    opacity: 0,
+                    y: 15,
+                    duration: 0.6
+                }, "-=0.5");
+
+                tl.to(".hero-content h1 .char-span", {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.7,
+                    stagger: 0.02
+                }, "-=0.5");
+
+                tl.from("#beginBtn", {
+                    opacity: 0,
+                    y: 20,
+                    duration: 0.5
+                }, "-=0.4");
+            }
+        });
+        return;
+    }
 
     loader.classList.add("is-hidden");
 }
@@ -1174,20 +1386,20 @@ function openModal(index) {
         const rect = img.getBoundingClientRect();
         const wrapperW = modalWrapper.offsetWidth || 720;
         const wrapperH = modalWrapper.offsetHeight || 500;
-        
+
         const startX = (rect.left + rect.width / 2) - window.innerWidth / 2;
         const startY = (rect.top + rect.height / 2) - window.innerHeight / 2;
         const startScaleX = rect.width / wrapperW;
         const startScaleY = rect.height / wrapperH;
-        
-        gsap.fromTo(modalWrapper, 
+
+        gsap.fromTo(modalWrapper,
             {
                 x: startX,
                 y: startY,
                 scaleX: isNaN(startScaleX) || startScaleX === 0 ? 0.35 : startScaleX,
                 scaleY: isNaN(startScaleY) || startScaleY === 0 ? 0.35 : startScaleY,
                 opacity: 0.2
-            }, 
+            },
             {
                 x: 0,
                 y: 0,
@@ -1216,12 +1428,12 @@ function closeModal() {
             const rect = img.getBoundingClientRect();
             const wrapperW = modalWrapper.offsetWidth || 720;
             const wrapperH = modalWrapper.offsetHeight || 500;
-            
+
             const endX = (rect.left + rect.width / 2) - window.innerWidth / 2;
             const endY = (rect.top + rect.height / 2) - window.innerHeight / 2;
             const endScaleX = rect.width / wrapperW;
             const endScaleY = rect.height / wrapperH;
- 
+
             gsap.to(modalWrapper, {
                 x: endX,
                 y: endY,
@@ -1246,7 +1458,7 @@ function closeModal() {
             return;
         }
     }
-    
+
     modalOverlay.classList.remove("active");
     document.body.classList.remove("modal-open");
     modalImage.src = "";
@@ -1346,7 +1558,7 @@ const joinSayIDoBtn = document.getElementById("joinSayIDoBtn");
 function updateStoryProgress(activeChapter) {
     const desktopSteps = document.querySelectorAll(".story-nav-step");
     const mobileSteps = document.querySelectorAll(".mobile-nav-step");
-    
+
     desktopSteps.forEach(step => {
         const ch = parseInt(step.getAttribute("data-chapter"), 10);
         step.classList.remove("active", "completed");
@@ -1704,7 +1916,7 @@ storyCards.forEach(card => {
                         duration: 0.4,
                         ease: "power2.out",
                         onUpdate: () => window.scrollTo(0, obj.y)
-					});
+                    });
                 } else {
                     window.scrollTo({ top: targetY, behavior: "smooth" });
                 }
@@ -1806,7 +2018,7 @@ if (hasGsap() && window.ScrollTrigger) {
             }, "-=0.6");
 
         // Mobile-only parallax zoom on scroll
-        gsap.fromTo("#story .story-photo img", 
+        gsap.fromTo("#story .story-photo img",
             { scale: 1.3 },
             {
                 scale: 1.02,
@@ -1831,9 +2043,9 @@ if (hasGsap() && window.ScrollTrigger) {
         function showMemory(index) {
             const currentItem = currentMemoryIndex >= 0 ? memories[currentMemoryIndex] : null;
             const nextItem = memories[index];
-            
+
             const tl = gsap.timeline();
-            
+
             if (currentItem) {
                 // Fade out current item while drifting up
                 tl.to(currentItem, {
@@ -1842,7 +2054,7 @@ if (hasGsap() && window.ScrollTrigger) {
                     duration: 1.0,
                     ease: "power2.inOut"
                 }, 0);
-                
+
                 // Fade in next item while drifting up (starts 0.7s before previous fade out ends, i.e., 0.3s after start)
                 tl.fromTo(nextItem,
                     { opacity: 0, y: 25 },
@@ -1857,19 +2069,19 @@ if (hasGsap() && window.ScrollTrigger) {
                     0
                 );
             }
-            
+
             // Ken Burns effect on the image: slow zoom/unzoom over 4.6 seconds
             const zoomIn = (index % 2 === 0);
             const startScale = zoomIn ? 1.02 : 1.05;
             const endScale = zoomIn ? 1.05 : 1.02;
-            
+
             gsap.fromTo("#storyImage",
                 { scale: startScale },
                 { scale: endScale, duration: 4.6, ease: "sine.inOut" }
             );
-            
+
             currentMemoryIndex = index;
-            
+
             // Schedule next transition after 4.6 seconds
             memoryTimer = gsap.delayedCall(4.6, () => {
                 const nextIndex = (index + 1) % totalMemories;
@@ -2081,7 +2293,7 @@ if (hasGsap() && window.ScrollTrigger) {
         ease: "cubic-bezier(0.22, 1, 0.36, 1)",
         onComplete: () => {
             // Draw the route line on the map - faster
-            gsap.fromTo("#venue .route-line", 
+            gsap.fromTo("#venue .route-line",
                 { strokeDasharray: 100, strokeDashoffset: 100 },
                 { strokeDashoffset: 0, duration: 1.2, ease: "power2.out" }
             );
@@ -2453,12 +2665,12 @@ function setupCalendarIntegrations(name, attendance) {
     const currentUtc = toUtcStr(new Date());
 
     const toOutlookUtcStr = (d) => d.toISOString().split('.')[0] + 'Z';
-    
+
     const rawTitle = `${settings.groomShortName} & ${settings.brideShortName}'s Wedding (Nikah)`;
-    const rawLocation = primaryVenue 
+    const rawLocation = primaryVenue
         ? `${primaryVenue.name}, ${primaryVenue.address}, ${primaryVenue.city}, ${primaryVenue.state}`
         : "NSK & NKR A/C Mahal and Residency, Madurai, Tamil Nadu";
-        
+
     const siteUrl = window.location.origin;
     const mapsUrl = primaryVenue?.googleMapsUrl || "https://maps.google.com";
 
@@ -2490,11 +2702,11 @@ function setupCalendarIntegrations(name, attendance) {
         body: rawDetails,
         location: rawLocation
     });
-    
+
     if (outlookCalendarLink) {
         outlookCalendarLink.href = `https://outlook.live.com/calendar/deeplink/compose?${outlookParams.toString()}`;
     }
-    
+
     if (microsoft365CalendarLink) {
         microsoft365CalendarLink.href = `https://outlook.office.com/calendar/deeplink/compose?${outlookParams.toString()}`;
     }
@@ -2550,7 +2762,7 @@ function setupCalendarIntegrations(name, attendance) {
             link.download = filename;
             document.body.appendChild(link);
             link.click();
-            
+
             setTimeout(() => {
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
@@ -2608,7 +2820,7 @@ async function executeRsvpSubmission() {
 
         rsvpLoadingState.style.setProperty("display", "none");
         rsvpSuccessState.style.setProperty("display", "flex");
-        
+
         // Play success chime and premium double vibration pulse
         AudioManager.playChime();
         AudioManager.triggerHaptic([80, 50, 80, 50, 120]);
@@ -2647,7 +2859,7 @@ window.addEventListener("load", () => {
         rsvpSuccessState.style.setProperty("display", "flex");
         rsvpFailureState.style.setProperty("display", "none");
         setupCalendarIntegrations(name, attendance);
-        
+
         const seal = document.querySelector(".rsvp-wax-seal");
         if (seal) {
             seal.classList.add("stamp-active");
@@ -3046,7 +3258,7 @@ const AudioManager = {
 
     init() {
         if (this.bgm) return;
-        
+
         // Respect audio preference from localStorage
         const savedMute = localStorage.getItem('project_ra_muted');
         if (savedMute !== null) {
@@ -3092,7 +3304,7 @@ const AudioManager = {
         localStorage.setItem('project_ra_muted', this.muted);
 
         if (this.ctx && this.ctx.state === 'suspended') {
-            this.ctx.resume().catch(() => {});
+            this.ctx.resume().catch(() => { });
         }
 
         if (this.muted) {
@@ -3198,10 +3410,10 @@ const AudioManager = {
             if (this.bgm && !this.muted) {
                 this.bgm.play().then(() => {
                     this.startBgm();
-                }).catch(() => {});
+                }).catch(() => { });
             }
             if (this.ctx && this.ctx.state === 'suspended') {
-                this.ctx.resume().catch(() => {});
+                this.ctx.resume().catch(() => { });
             }
             // Remove interaction listeners
             ['click', 'touchstart', 'scroll', 'keydown'].forEach(evt => {
@@ -3216,17 +3428,17 @@ const AudioManager = {
     // Synthetic Sound Effects
     playClick() {
         if (this.muted || !this.ctx) return;
-        
+
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        
+
         osc.type = 'sine';
         osc.frequency.setValueAtTime(750, this.ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(150, this.ctx.currentTime + 0.04);
-        
+
         gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
-        
+
         osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start();
@@ -3309,10 +3521,10 @@ const AudioManager = {
                 const gain = this.ctx.createGain();
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-                
+
                 gain.gain.setValueAtTime(0.02, this.ctx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.35);
-                
+
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
                 osc.start();
@@ -3346,7 +3558,7 @@ const AudioManager = {
 
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
-                
+
                 gain.connect(delayNode);
                 delayNode.connect(delayGain);
                 delayGain.connect(this.ctx.destination);
@@ -3388,18 +3600,18 @@ const AudioManager = {
         try {
             const osc = this.ctx.createOscillator();
             const gain = this.ctx.createGain();
-            
+
             osc.type = 'sine';
             osc.frequency.setValueAtTime(1200, this.ctx.currentTime);
-            
+
             gain.gain.setValueAtTime(0.003, this.ctx.currentTime); // quiet and subtle
             gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.02);
-            
+
             osc.connect(gain);
             gain.connect(this.ctx.destination);
             osc.start();
             osc.stop(this.ctx.currentTime + 0.02);
-        } catch (e) {}
+        } catch (e) { }
     },
 
     // Web Vibration API
