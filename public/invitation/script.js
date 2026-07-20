@@ -32,24 +32,24 @@ const DRESS_INSPIRATION_CONFIG = {
     },
     nalang: {
         folder: "nalang",
-        prefix: "n",
+        prefix: "",
         title: "Nalang Style Guide",
         counts: { w: 5, m: 5 },
         titles: {
-            w: ["Olive Blossom Kurta", "Azure Coast Resortwear", "Pastel Bloom Jacket Set", "Sage Petal Salwar", "Peach Royale Anarkali"],
-            m: ["Mint Rosé Heritage Suit", "Blush Whisper Suit", "Royal Sherwani Collection", "Modern Heritage Edit", "Rosewood Couture Suit"]
+            w: ["Pastel Bloom Jacket Set", "Sage Petal Salwar", "Mint Rosé Heritage Suit", "Peach Royale Anarkali", "Blush Whisper Suit"],
+            m: ["Olive Blossom Kurta", "Azure Coast Resortwear", "Royal Sherwani Collection", "Modern Heritage Edit", "Rosewood Couture Suit"]
         },
         descriptions: {
             w: [
-                "Fresh olive tones paired with soft peach accents for a refined daytime celebration.",
-                "Breezy linen separates crafted for effortless elegance from brunch to sunset.",
                 "Contemporary pastel layering that blends youthful charm with sophisticated tailoring.",
                 "Floral embroidery and blush drapes create an effortlessly graceful festive ensemble.",
-                "Flowing elegance in soft peach, designed for understated grandeur."
+                "Delicate embroidery meets airy silhouettes for timeless festive sophistication.",
+                "Flowing elegance in soft peach, designed for understated grandeur.",
+                "Minimal embroidery and dreamy pastel tones define quiet luxury."
             ],
             m: [
-                "Delicate embroidery meets airy silhouettes for timeless festive sophistication.",
-                "Minimal embroidery and dreamy pastel tones define quiet luxury.",
+                "Fresh olive tones paired with soft peach accents for a refined daytime celebration.",
+                "Breezy linen separates crafted for effortless elegance from brunch to sunset.",
                 "Regal sherwanis crafted for distinguished celebrations with timeless elegance.",
                 "Traditional tailoring reimagined through clean silhouettes and contemporary styling.",
                 "Ornate embroidery and refined tailoring for the modern gentleman who stands apart."
@@ -142,14 +142,14 @@ function generateOutfitCards(eventKey) {
 
     const outfits = [];
     const types = ['w', 'm'];
-    
+
     types.forEach(t => {
         const count = config.counts[t] || 0;
         for (let i = 1; i <= count; i++) {
             const imagePath = `assets/dress-inspirations/${config.folder}/${config.prefix}${t}${i}.jpg`;
-            const title = config.titles[t]?.[i-1] || (t === 'w' ? 'Women Outfit' : 'Men Outfit');
-            const desc = config.descriptions[t]?.[i-1] || 'Premium outfit inspiration.';
-            
+            const title = config.titles[t]?.[i - 1] || (t === 'w' ? 'Women Outfit' : 'Men Outfit');
+            const desc = config.descriptions[t]?.[i - 1] || 'Premium outfit inspiration.';
+
             outfits.push({
                 image: imagePath,
                 title: title,
@@ -209,7 +209,7 @@ function initLookbookCarousel(carousel) {
     let isDown = false;
     let startX;
     let scrollLeft;
-    
+
     // Mouse drag controls
     carousel.addEventListener('mousedown', (e) => {
         isDown = true;
@@ -232,7 +232,7 @@ function initLookbookCarousel(carousel) {
     });
 
     carousel.addEventListener('mousemove', (e) => {
-        if(!isDown) return;
+        if (!isDown) return;
         e.preventDefault();
         const x = e.pageX - carousel.offsetLeft;
         const walk = (x - startX) * 2;
@@ -242,13 +242,13 @@ function initLookbookCarousel(carousel) {
     // Touch momentum/scroll tracking
     const dots = carousel.parentElement.querySelectorAll('.lookbook-dot');
     const cards = carousel.querySelectorAll('.lookbook-card');
-    
+
     carousel.addEventListener('scroll', () => {
         const cardWidth = cards[0]?.offsetWidth || 190;
         const gap = 16;
         const step = cardWidth + gap;
         const index = Math.round(carousel.scrollLeft / step);
-        
+
         dots.forEach((dot, idx) => {
             if (idx === index) {
                 dot.classList.add('active');
@@ -393,7 +393,7 @@ function getWeddingSettings() {
                 localStorage.setItem(storageKey, JSON.stringify(parsed));
             }
             return parsed;
-        } catch(e) {}
+        } catch (e) { }
     }
     return freshDefaults;
 }
@@ -431,10 +431,10 @@ const settings = getWeddingSettings();
         timelineContainer.innerHTML = settings.events.map((event, index) => {
             const venue = settings.venues?.find(v => v.id === event.venueId) || {};
             const sideClass = index % 2 === 0 ? "timeline-left" : "timeline-right";
-            
+
             const isValima = event.id === 'valima' || event.name?.toLowerCase().includes('valima');
             const isTba = isValima || !event.date || event.date === 'TBA' || isNaN(new Date(event.date).getTime());
-            
+
             if (isTba) {
                 return `
                     <article class="event-card glass-card event-valima ${sideClass}">
@@ -455,7 +455,7 @@ const settings = getWeddingSettings();
                     </article>
                 `;
             }
-            
+
             const dateObj = new Date(event.date);
             const formattedDate = dateObj.toLocaleDateString('en-US', {
                 weekday: 'long',
@@ -463,19 +463,19 @@ const settings = getWeddingSettings();
                 month: 'long',
                 year: 'numeric'
             }).replace(',', ' •');
-            
+
             let formattedTime = dateObj.toLocaleTimeString('en-US', {
                 hour: 'numeric',
                 minute: '2-digit'
             });
-            
+
             if (event.id === 'sangeet' || event.name?.toLowerCase().includes('sangeet')) {
                 formattedTime = "After 7:00 PM";
             }
-            
+
             const locationText = venue.name || "To Be Announced";
             const mapsUrl = venue.googleMapsUrl || "#";
-            
+
             return `
                 <article class="event-card glass-card ${sideClass}">
                     <div class="timeline-dot" aria-hidden="true"></div>
@@ -495,12 +495,12 @@ const settings = getWeddingSettings();
     if (primaryVenue) {
         const venueNameEl = document.querySelector(".venue-info .venue-name");
         if (venueNameEl) venueNameEl.textContent = primaryVenue.name;
-        
+
         const venueAddressEl = document.querySelector(".venue-info .venue-address");
         if (venueAddressEl) {
             venueAddressEl.innerHTML = `${primaryVenue.address}<br>${primaryVenue.city}, ${primaryVenue.state}, ${primaryVenue.country}`;
         }
-        
+
         const venueMapBtn = document.querySelector(".venue-info .map-btn");
         if (venueMapBtn && primaryVenue.googleMapsUrl) {
             venueMapBtn.href = primaryVenue.googleMapsUrl;
@@ -522,7 +522,7 @@ const settings = getWeddingSettings();
             const panel = document.getElementById(`inspiration-${dataKey}`);
             const carousel = panel.querySelector(".dress-lookbook-carousel");
             const cards = panel.querySelectorAll(".lookbook-card");
-            
+
             if (panel.classList.contains("expanded")) {
                 panel.classList.remove("expanded");
                 btn.classList.remove("active");
@@ -543,23 +543,23 @@ const settings = getWeddingSettings();
                 panel.classList.add("expanded");
                 btn.classList.add("active");
                 panel.style.display = "block";
-                
+
                 if (hasGsap()) {
                     gsap.killTweensOf(panel);
-                    gsap.fromTo(panel, 
+                    gsap.fromTo(panel,
                         { height: 0, opacity: 0 },
                         { height: "auto", opacity: 1, duration: 0.6, ease: "power2.out" }
                     );
-                    
+
                     gsap.killTweensOf(cards);
                     gsap.fromTo(cards,
                         { opacity: 0, y: 20, x: 25 },
-                        { 
-                            opacity: 1, 
-                            y: 0, 
-                            x: 0, 
-                            duration: 0.8, 
-                            stagger: 0.1, 
+                        {
+                            opacity: 1,
+                            y: 0,
+                            x: 0,
+                            duration: 0.8,
+                            stagger: 0.1,
                             ease: "power3.out",
                             delay: 0.1
                         }
@@ -569,7 +569,7 @@ const settings = getWeddingSettings();
                     panel.style.opacity = "1";
                     cards.forEach(c => c.style.opacity = "1");
                 }
-                
+
                 // Initialize custom drag, scroll, parallax events once opened
                 if (carousel && !carousel.classList.contains("initialized")) {
                     carousel.classList.add("initialized");
@@ -603,7 +603,7 @@ const hasGsap = () => {
 // Enhanced Loader Ring Animation Loop
 function initLoaderLoop() {
     if (!hasGsap()) return;
-    
+
     const rays = document.querySelectorAll(".loader-logo-svg .loader-ray");
     const ring = document.querySelector(".loader-logo-svg .logo-ring");
     const container = document.querySelector(".loader-logo-svg svg");
@@ -622,21 +622,21 @@ function initLoaderLoop() {
             { x: 92, y: 50 }, // 3 o'clock
             { x: 8, y: 50 }   // 9 o'clock
         ];
-        
+
         points.forEach(pt => {
             for (let i = 0; i < 8; i++) {
                 const sparkle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
                 const angle = Math.random() * Math.PI * 2;
                 const speed = 4 + Math.random() * 10;
                 const radius = 0.4 + Math.random() * 0.8;
-                
+
                 sparkle.setAttribute("cx", pt.x);
                 sparkle.setAttribute("cy", pt.y);
                 sparkle.setAttribute("r", radius);
                 sparkle.setAttribute("fill", "#D4AF37");
                 sparkle.setAttribute("opacity", "1");
                 sparklesGroup.appendChild(sparkle);
-                
+
                 gsap.to(sparkle, {
                     cx: pt.x + Math.cos(angle) * speed,
                     cy: pt.y + Math.sin(angle) * speed,
@@ -712,7 +712,7 @@ function splitTextIntoSpans(selector) {
     if (!hasGsap()) return;
     const element = document.querySelector(selector);
     if (!element) return;
-    
+
     const nobrkSpans = element.querySelectorAll('.nobrk');
     if (nobrkSpans.length > 0) {
         nobrkSpans.forEach(span => {
@@ -797,59 +797,59 @@ function revealPage() {
             ease: "power2.inOut",
             onComplete: () => {
                 loader.classList.add("is-hidden");
-                
+
                 splitTextIntoSpans(".hero-content h1");
                 applyPersonalization();
                 initFloatingLabels();
- 
-                 const tl = gsap.timeline({ defaults: { ease: "cubic-bezier(0.22, 1, 0.36, 1)" } });
-                 
-                 const greeting = document.querySelector(".personal-greeting");
-                 if (greeting) {
-                     tl.to(greeting, { opacity: 1, y: 0, duration: 0.7 });
-                 }
- 
-                 // Elegant reveal of the luxury quotes and dividers
-                 tl.from(".hero-quote", {
-                     opacity: 0,
-                     y: 20,
-                     duration: 0.8
-                 }, greeting ? "-=0.4" : "0");
 
-                 tl.from(".hero-support", {
-                     opacity: 0,
-                     y: 20,
-                     duration: 0.7
-                 }, "-=0.6");
+                const tl = gsap.timeline({ defaults: { ease: "cubic-bezier(0.22, 1, 0.36, 1)" } });
 
-                 tl.from(".hero-divider-gold", {
-                     scaleX: 0,
-                     opacity: 0,
-                     duration: 0.6
-                 }, "-=0.5");
+                const greeting = document.querySelector(".personal-greeting");
+                if (greeting) {
+                    tl.to(greeting, { opacity: 1, y: 0, duration: 0.7 });
+                }
 
-                 tl.from(".hero-content .eyebrow", {
-                     opacity: 0,
-                     y: 15,
-                     duration: 0.6
-                 }, "-=0.5");
- 
-                 tl.to(".hero-content h1 .char-span", {
-                     opacity: 1,
-                     y: 0,
-                     duration: 0.7,
-                     stagger: 0.02
-                 }, "-=0.5");
- 
-                 tl.from("#beginBtn", {
-                     opacity: 0,
-                     y: 20,
-                     duration: 0.5
-                 }, "-=0.4");
-             }
-         });
-         return;
-     }
+                // Elegant reveal of the luxury quotes and dividers
+                tl.from(".hero-quote", {
+                    opacity: 0,
+                    y: 20,
+                    duration: 0.8
+                }, greeting ? "-=0.4" : "0");
+
+                tl.from(".hero-support", {
+                    opacity: 0,
+                    y: 20,
+                    duration: 0.7
+                }, "-=0.6");
+
+                tl.from(".hero-divider-gold", {
+                    scaleX: 0,
+                    opacity: 0,
+                    duration: 0.6
+                }, "-=0.5");
+
+                tl.from(".hero-content .eyebrow", {
+                    opacity: 0,
+                    y: 15,
+                    duration: 0.6
+                }, "-=0.5");
+
+                tl.to(".hero-content h1 .char-span", {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.7,
+                    stagger: 0.02
+                }, "-=0.5");
+
+                tl.from("#beginBtn", {
+                    opacity: 0,
+                    y: 20,
+                    duration: 0.5
+                }, "-=0.4");
+            }
+        });
+        return;
+    }
 
     loader.classList.add("is-hidden");
 }
@@ -1174,20 +1174,20 @@ function openModal(index) {
         const rect = img.getBoundingClientRect();
         const wrapperW = modalWrapper.offsetWidth || 720;
         const wrapperH = modalWrapper.offsetHeight || 500;
-        
+
         const startX = (rect.left + rect.width / 2) - window.innerWidth / 2;
         const startY = (rect.top + rect.height / 2) - window.innerHeight / 2;
         const startScaleX = rect.width / wrapperW;
         const startScaleY = rect.height / wrapperH;
-        
-        gsap.fromTo(modalWrapper, 
+
+        gsap.fromTo(modalWrapper,
             {
                 x: startX,
                 y: startY,
                 scaleX: isNaN(startScaleX) || startScaleX === 0 ? 0.35 : startScaleX,
                 scaleY: isNaN(startScaleY) || startScaleY === 0 ? 0.35 : startScaleY,
                 opacity: 0.2
-            }, 
+            },
             {
                 x: 0,
                 y: 0,
@@ -1216,12 +1216,12 @@ function closeModal() {
             const rect = img.getBoundingClientRect();
             const wrapperW = modalWrapper.offsetWidth || 720;
             const wrapperH = modalWrapper.offsetHeight || 500;
-            
+
             const endX = (rect.left + rect.width / 2) - window.innerWidth / 2;
             const endY = (rect.top + rect.height / 2) - window.innerHeight / 2;
             const endScaleX = rect.width / wrapperW;
             const endScaleY = rect.height / wrapperH;
- 
+
             gsap.to(modalWrapper, {
                 x: endX,
                 y: endY,
@@ -1246,7 +1246,7 @@ function closeModal() {
             return;
         }
     }
-    
+
     modalOverlay.classList.remove("active");
     document.body.classList.remove("modal-open");
     modalImage.src = "";
@@ -1346,7 +1346,7 @@ const joinSayIDoBtn = document.getElementById("joinSayIDoBtn");
 function updateStoryProgress(activeChapter) {
     const desktopSteps = document.querySelectorAll(".story-nav-step");
     const mobileSteps = document.querySelectorAll(".mobile-nav-step");
-    
+
     desktopSteps.forEach(step => {
         const ch = parseInt(step.getAttribute("data-chapter"), 10);
         step.classList.remove("active", "completed");
@@ -1704,7 +1704,7 @@ storyCards.forEach(card => {
                         duration: 0.4,
                         ease: "power2.out",
                         onUpdate: () => window.scrollTo(0, obj.y)
-					});
+                    });
                 } else {
                     window.scrollTo({ top: targetY, behavior: "smooth" });
                 }
@@ -1806,7 +1806,7 @@ if (hasGsap() && window.ScrollTrigger) {
             }, "-=0.6");
 
         // Mobile-only parallax zoom on scroll
-        gsap.fromTo("#story .story-photo img", 
+        gsap.fromTo("#story .story-photo img",
             { scale: 1.3 },
             {
                 scale: 1.02,
@@ -1831,9 +1831,9 @@ if (hasGsap() && window.ScrollTrigger) {
         function showMemory(index) {
             const currentItem = currentMemoryIndex >= 0 ? memories[currentMemoryIndex] : null;
             const nextItem = memories[index];
-            
+
             const tl = gsap.timeline();
-            
+
             if (currentItem) {
                 // Fade out current item while drifting up
                 tl.to(currentItem, {
@@ -1842,7 +1842,7 @@ if (hasGsap() && window.ScrollTrigger) {
                     duration: 1.0,
                     ease: "power2.inOut"
                 }, 0);
-                
+
                 // Fade in next item while drifting up (starts 0.7s before previous fade out ends, i.e., 0.3s after start)
                 tl.fromTo(nextItem,
                     { opacity: 0, y: 25 },
@@ -1857,19 +1857,19 @@ if (hasGsap() && window.ScrollTrigger) {
                     0
                 );
             }
-            
+
             // Ken Burns effect on the image: slow zoom/unzoom over 4.6 seconds
             const zoomIn = (index % 2 === 0);
             const startScale = zoomIn ? 1.02 : 1.05;
             const endScale = zoomIn ? 1.05 : 1.02;
-            
+
             gsap.fromTo("#storyImage",
                 { scale: startScale },
                 { scale: endScale, duration: 4.6, ease: "sine.inOut" }
             );
-            
+
             currentMemoryIndex = index;
-            
+
             // Schedule next transition after 4.6 seconds
             memoryTimer = gsap.delayedCall(4.6, () => {
                 const nextIndex = (index + 1) % totalMemories;
@@ -2081,7 +2081,7 @@ if (hasGsap() && window.ScrollTrigger) {
         ease: "cubic-bezier(0.22, 1, 0.36, 1)",
         onComplete: () => {
             // Draw the route line on the map - faster
-            gsap.fromTo("#venue .route-line", 
+            gsap.fromTo("#venue .route-line",
                 { strokeDasharray: 100, strokeDashoffset: 100 },
                 { strokeDashoffset: 0, duration: 1.2, ease: "power2.out" }
             );
@@ -2453,12 +2453,12 @@ function setupCalendarIntegrations(name, attendance) {
     const currentUtc = toUtcStr(new Date());
 
     const toOutlookUtcStr = (d) => d.toISOString().split('.')[0] + 'Z';
-    
+
     const rawTitle = `${settings.groomShortName} & ${settings.brideShortName}'s Wedding (Nikah)`;
-    const rawLocation = primaryVenue 
+    const rawLocation = primaryVenue
         ? `${primaryVenue.name}, ${primaryVenue.address}, ${primaryVenue.city}, ${primaryVenue.state}`
         : "NSK & NKR A/C Mahal and Residency, Madurai, Tamil Nadu";
-        
+
     const siteUrl = window.location.origin;
     const mapsUrl = primaryVenue?.googleMapsUrl || "https://maps.google.com";
 
@@ -2490,11 +2490,11 @@ function setupCalendarIntegrations(name, attendance) {
         body: rawDetails,
         location: rawLocation
     });
-    
+
     if (outlookCalendarLink) {
         outlookCalendarLink.href = `https://outlook.live.com/calendar/deeplink/compose?${outlookParams.toString()}`;
     }
-    
+
     if (microsoft365CalendarLink) {
         microsoft365CalendarLink.href = `https://outlook.office.com/calendar/deeplink/compose?${outlookParams.toString()}`;
     }
@@ -2550,7 +2550,7 @@ function setupCalendarIntegrations(name, attendance) {
             link.download = filename;
             document.body.appendChild(link);
             link.click();
-            
+
             setTimeout(() => {
                 document.body.removeChild(link);
                 URL.revokeObjectURL(url);
@@ -2608,7 +2608,7 @@ async function executeRsvpSubmission() {
 
         rsvpLoadingState.style.setProperty("display", "none");
         rsvpSuccessState.style.setProperty("display", "flex");
-        
+
         // Play success chime and premium double vibration pulse
         AudioManager.playChime();
         AudioManager.triggerHaptic([80, 50, 80, 50, 120]);
@@ -2647,7 +2647,7 @@ window.addEventListener("load", () => {
         rsvpSuccessState.style.setProperty("display", "flex");
         rsvpFailureState.style.setProperty("display", "none");
         setupCalendarIntegrations(name, attendance);
-        
+
         const seal = document.querySelector(".rsvp-wax-seal");
         if (seal) {
             seal.classList.add("stamp-active");
@@ -3046,7 +3046,7 @@ const AudioManager = {
 
     init() {
         if (this.bgm) return;
-        
+
         // Respect audio preference from localStorage
         const savedMute = localStorage.getItem('project_ra_muted');
         if (savedMute !== null) {
@@ -3092,7 +3092,7 @@ const AudioManager = {
         localStorage.setItem('project_ra_muted', this.muted);
 
         if (this.ctx && this.ctx.state === 'suspended') {
-            this.ctx.resume().catch(() => {});
+            this.ctx.resume().catch(() => { });
         }
 
         if (this.muted) {
@@ -3198,10 +3198,10 @@ const AudioManager = {
             if (this.bgm && !this.muted) {
                 this.bgm.play().then(() => {
                     this.startBgm();
-                }).catch(() => {});
+                }).catch(() => { });
             }
             if (this.ctx && this.ctx.state === 'suspended') {
-                this.ctx.resume().catch(() => {});
+                this.ctx.resume().catch(() => { });
             }
             // Remove interaction listeners
             ['click', 'touchstart', 'scroll', 'keydown'].forEach(evt => {
@@ -3216,17 +3216,17 @@ const AudioManager = {
     // Synthetic Sound Effects
     playClick() {
         if (this.muted || !this.ctx) return;
-        
+
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        
+
         osc.type = 'sine';
         osc.frequency.setValueAtTime(750, this.ctx.currentTime);
         osc.frequency.exponentialRampToValueAtTime(150, this.ctx.currentTime + 0.04);
-        
+
         gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
-        
+
         osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start();
@@ -3309,10 +3309,10 @@ const AudioManager = {
                 const gain = this.ctx.createGain();
                 osc.type = 'sine';
                 osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-                
+
                 gain.gain.setValueAtTime(0.02, this.ctx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.35);
-                
+
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
                 osc.start();
@@ -3346,7 +3346,7 @@ const AudioManager = {
 
                 osc.connect(gain);
                 gain.connect(this.ctx.destination);
-                
+
                 gain.connect(delayNode);
                 delayNode.connect(delayGain);
                 delayGain.connect(this.ctx.destination);
@@ -3388,18 +3388,18 @@ const AudioManager = {
         try {
             const osc = this.ctx.createOscillator();
             const gain = this.ctx.createGain();
-            
+
             osc.type = 'sine';
             osc.frequency.setValueAtTime(1200, this.ctx.currentTime);
-            
+
             gain.gain.setValueAtTime(0.003, this.ctx.currentTime); // quiet and subtle
             gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.02);
-            
+
             osc.connect(gain);
             gain.connect(this.ctx.destination);
             osc.start();
             osc.stop(this.ctx.currentTime + 0.02);
-        } catch (e) {}
+        } catch (e) { }
     },
 
     // Web Vibration API
