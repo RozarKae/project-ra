@@ -1977,7 +1977,7 @@ if (hasGsap() && window.ScrollTrigger) {
     const mm = gsap.matchMedia();
 
     // Mobile/Tablet version (max-width: 820px)
-    mm.add("(max-width: 820px)", () => {
+    mm.add("(max-width: 767px)", () => {
         const storyTimeline = gsap.timeline({
             scrollTrigger: {
                 trigger: "#story",
@@ -1992,13 +1992,7 @@ if (hasGsap() && window.ScrollTrigger) {
                 stagger: 0.08,
                 ease: "cubic-bezier(0.22, 1, 0.36, 1)"
             })
-            .from("#story .story-copy-mobile", {
-                x: -30,
-                opacity: 0,
-                duration: 0.6,
-                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-            }, "-=0.3")
-            .from("#story .story-copy-mobile p", {
+            .from("#story .story-copy-part1, #story .story-copy-part2", {
                 y: 15,
                 opacity: 0,
                 duration: 0.6,
@@ -2010,26 +2004,18 @@ if (hasGsap() && window.ScrollTrigger) {
                 opacity: 0,
                 duration: 0.7,
                 ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-            }, "-=0.6");
-
-        // Mobile-only parallax zoom on scroll
-        gsap.fromTo("#story .story-photo img",
-            { scale: 1.3 },
-            {
-                scale: 1.02,
-                scrollTrigger: {
-                    trigger: "#story",
-                    start: "top bottom",
-                    end: "bottom top",
-                    scrub: true
-                },
-                ease: "none"
-            }
-        );
+            }, "-=0.5")
+            .from("#story .memory-item", {
+                y: 20,
+                opacity: 0,
+                duration: 0.5,
+                stagger: 0.08,
+                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+            }, "-=0.4");
     });
 
-    // Desktop version (min-width: 821px)
-    mm.add("(min-width: 821px)", () => {
+    // Desktop & Tablet version (min-width: 768px)
+    mm.add("(min-width: 768px)", () => {
         let currentMemoryIndex = -1;
         let memoryTimer = null;
         const memories = gsap.utils.toArray("#story .memory-item");
@@ -2050,7 +2036,7 @@ if (hasGsap() && window.ScrollTrigger) {
                     ease: "power2.inOut"
                 }, 0);
 
-                // Fade in next item while drifting up (starts 0.7s before previous fade out ends, i.e., 0.3s after start)
+                // Fade in next item while drifting up
                 tl.fromTo(nextItem,
                     { opacity: 0, y: 25 },
                     { opacity: 1, y: 0, duration: 0.8, ease: "power2.inOut" },
@@ -2104,10 +2090,11 @@ if (hasGsap() && window.ScrollTrigger) {
                 stagger: 0.08,
                 ease: "cubic-bezier(0.22, 1, 0.36, 1)"
             })
-            .from("#story .story-copy-desktop", {
-                x: -30,
+            .from("#story .story-copy-part1, #story .story-copy-part2", {
+                y: 20,
                 opacity: 0,
                 duration: 0.6,
+                stagger: 0.15,
                 ease: "cubic-bezier(0.22, 1, 0.36, 1)"
             }, "-=0.3")
             .from("#story .story-photo", {
@@ -2115,7 +2102,7 @@ if (hasGsap() && window.ScrollTrigger) {
                 opacity: 0,
                 duration: 0.7,
                 ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-            }, "-=0.6");
+            }, "-=0.5");
 
         // ScrollTrigger to pause/resume loop depending on viewport active status
         ScrollTrigger.create({
