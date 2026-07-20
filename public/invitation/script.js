@@ -289,11 +289,6 @@ const DRESS_INSPIRATION_CONFIG = {
             ]
         },
         descriptions: {}
-    }}
-                }
-            ]
-        },
-        descriptions: {}
     }
 };
 
