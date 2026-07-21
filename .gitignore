@@ -1,8 +1,43 @@
+# IDE / Editor cache
 .vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS generated files
 .DS_Store
 Thumbs.db
+
+# Dependencies
 node_modules
+node_modules/
+
+# Production / Build outputs
 dist/
+build/
+
+# Environment files
 .env
 .env.local
 .env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testing / Coverage
+coverage/
+
+# Temporary / Cache folders
+.cache/
+.vite/
+.firebase/
+*.tmp
+*.temp
+
