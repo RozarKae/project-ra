@@ -39,4 +39,24 @@ if (fs.existsSync(adminDist)) {
   process.exit(1);
 }
 
+// Ensure CNAME and 404.html exist in root dist for GitHub Pages deployment
+const staticFilesToEnsure = ['CNAME', '404.html'];
+for (const file of staticFilesToEnsure) {
+  const targetPath = path.join(distDir, file);
+  if (!fs.existsSync(targetPath)) {
+    // Check root directory first, then root public directory
+    const rootSourcePath = path.join(rootDir, file);
+    const publicSourcePath = path.join(rootDir, 'public', file);
+    
+    if (fs.existsSync(rootSourcePath)) {
+      console.log(`  -> Copying ${file} from root to dist/...`);
+      fs.copyFileSync(rootSourcePath, targetPath);
+    } else if (fs.existsSync(publicSourcePath)) {
+      console.log(`  -> Copying ${file} from public/ to dist/...`);
+      fs.copyFileSync(publicSourcePath, targetPath);
+    }
+  }
+}
+
 console.log('✅ Bundling complete! Unified dist/ structure created successfully.');
+

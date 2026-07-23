@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting... | Project RA</title>
+    <script>
+        // Single Page Application & GitHub Pages Subpath Fallback Redirect
+        (function() {
+            var path = window.location.pathname;
+            var search = window.location.search;
+            var hash = window.location.hash;
+
+            if (path.indexOf('/invitation') === 0) {
+                window.location.replace('/invitation/index.html' + search + hash);
+            } else {
+                window.location.replace('/' + search + hash);
+            }
+        })();
+    </script>
+</head>
+<body style="background:#090909; color:#F5F5F5; font-family:sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; margin:0;">
+    <p style="color:#D4AF37;">Redirecting to Rozar &amp; Arifa Wedding Invitation...</p>
+</body>
+</html>

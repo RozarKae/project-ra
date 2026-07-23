@@ -19,7 +19,6 @@ export const PublicWedding: React.FC = () => {
     if (settings) {
       const storageKey = 'ra_settings_default_workspace_arifa_rozar_wedding';
       localStorage.setItem(storageKey, JSON.stringify(settings));
-      window.dispatchEvent(new CustomEvent('ra_storage_update', { detail: { key: storageKey } }));
     }
   }, [settings]);
 

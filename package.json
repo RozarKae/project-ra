@@ -8,6 +8,7 @@
     "packages/*"
   ],
   "scripts": {
+    "dev": "npm run dev:invitation",
     "dev:invitation": "npm run dev --workspace=apps/invitation",
     "dev:admin": "npm run dev --workspace=apps/admin",
     "build:invitation": "npm run build --workspace=apps/invitation",
