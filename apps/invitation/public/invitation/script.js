@@ -1977,155 +1977,118 @@ if (hasGsap() && window.ScrollTrigger) {
     // 2. Story Section responsive animations
     const mm = gsap.matchMedia();
 
-    // Mobile/Tablet version (max-width: 767px)
-    mm.add("(max-width: 767px)", () => {
-        const storyTimeline = gsap.timeline({
+    // 2. Story Section Cinematic Quote & Paragraph Reveal Sequence
+    (() => {
+        const storySection = document.getElementById("story");
+        if (!storySection) return;
+
+        const memories = gsap.utils.toArray("#story .memory-item");
+        const quotesContainer = storySection.querySelector(".story-copy-quotes");
+        const storyParagraphs = storySection.querySelector(".story-paragraphs");
+        const storyPhoto = storySection.querySelector(".story-photo");
+        const sectionHeading = storySection.querySelector(".section-heading");
+
+        if (!hasGsap() || memories.length === 0) {
+            if (storyParagraphs) storyParagraphs.style.opacity = "1";
+            return;
+        }
+
+        // Initialize element states
+        gsap.set(memories, { opacity: 0, y: 15 });
+        if (storyParagraphs) {
+            gsap.set(storyParagraphs, { opacity: 0, y: 25, display: "none" });
+        }
+
+        const mainTl = gsap.timeline({
             scrollTrigger: {
                 trigger: "#story",
-                start: "top 85%"
+                start: "top 80%",
+                toggleActions: "play none none none"
             }
         });
-        storyTimeline
-            .from("#story .section-heading > *", {
-                y: 30,
-                opacity: 0,
-                duration: 0.5,
-                stagger: 0.08,
-                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-            })
-            .from("#story .story-photo", {
-                scale: 0.96,
-                opacity: 0,
-                duration: 0.7,
-                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-            }, "-=0.3")
-            .from("#story .memory-item", {
-                y: 15,
-                opacity: 0,
-                duration: 0.5,
-                stagger: 0.08,
-                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-            }, "-=0.4")
-            .from("#story .story-paragraphs p", {
-                y: 20,
-                opacity: 0,
-                duration: 0.6,
-                stagger: 0.12,
-                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-            }, "-=0.3");
-    });
 
-    // Desktop & Tablet version (min-width: 768px)
-    mm.add("(min-width: 768px)", () => {
-        let currentMemoryIndex = -1;
-        let memoryTimer = null;
-        const memories = gsap.utils.toArray("#story .memory-item");
-        const totalMemories = memories.length;
+        // 1. Reveal Section Heading
+        if (sectionHeading) {
+            mainTl.fromTo(sectionHeading.children,
+                { opacity: 0, y: 30 },
+                { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" }
+            );
+        }
 
-        function showMemory(index) {
-            const currentItem = currentMemoryIndex >= 0 ? memories[currentMemoryIndex] : null;
-            const nextItem = memories[index];
-
-            const tl = gsap.timeline();
-
-            if (currentItem) {
-                // Fade out current item while drifting up
-                tl.to(currentItem, {
-                    opacity: 0,
-                    y: -25,
-                    duration: 1.0,
-                    ease: "power2.inOut"
-                }, 0);
-
-                // Fade in next item while drifting up
-                tl.fromTo(nextItem,
-                    { opacity: 0, y: 25 },
-                    { opacity: 1, y: 0, duration: 0.8, ease: "power2.inOut" },
-                    0.3
-                );
-            } else {
-                // First run: just fade in the first item
-                tl.fromTo(nextItem,
-                    { opacity: 0, y: 25 },
-                    { opacity: 1, y: 0, duration: 0.8, ease: "power2.inOut" },
-                    0
-                );
-            }
-
-            // Ken Burns effect on the image: slow zoom/unzoom over 4.6 seconds
-            const zoomIn = (index % 2 === 0);
-            const startScale = zoomIn ? 1.02 : 1.05;
-            const endScale = zoomIn ? 1.05 : 1.02;
-
-            gsap.fromTo("#storyImage",
-                { scale: startScale },
-                { scale: endScale, duration: 4.6, ease: "sine.inOut" }
+        // 2. Reveal Story Image
+        if (storyPhoto) {
+            mainTl.fromTo(storyPhoto,
+                { opacity: 0, scale: 0.96 },
+                { opacity: 1, scale: 1.0, duration: 0.8, ease: "power2.out" },
+                "-=0.3"
             );
 
-            currentMemoryIndex = index;
+            // Ambient Ken Burns slow scale on story image
+            gsap.fromTo("#storyImage",
+                { scale: 1.0 },
+                { scale: 1.04, duration: 25, ease: "none", repeat: -1, yoyo: true }
+            );
+        }
 
-            // Schedule next transition after 4.6 seconds
-            memoryTimer = gsap.delayedCall(4.6, () => {
-                const nextIndex = (index + 1) % totalMemories;
-                showMemory(nextIndex);
+        // 3. Cinematic Quote Sequence (ONE quote at a time in chronological order)
+        memories.forEach((quote, index) => {
+            // Fade In Quote
+            mainTl.to(quote, {
+                opacity: 1,
+                y: 0,
+                duration: 0.7,
+                ease: "power2.out"
+            });
+
+            // Hold Visible (2.8 seconds)
+            mainTl.to({}, { duration: 2.8 });
+
+            // Fade Out Quote
+            mainTl.to(quote, {
+                opacity: 0,
+                y: -15,
+                duration: 0.7,
+                ease: "power2.in"
+            });
+        });
+
+        // 4. Smoothly collapse & fade out quote container
+        if (quotesContainer) {
+            mainTl.to(quotesContainer, {
+                opacity: 0,
+                height: 0,
+                marginTop: 0,
+                marginBottom: 0,
+                duration: 0.7,
+                ease: "power2.inOut",
+                onComplete: () => {
+                    quotesContainer.style.display = "none";
+                }
             });
         }
 
-        const storyTimeline = gsap.timeline({
-            scrollTrigger: {
-                trigger: "#story",
-                start: "top 85%"
-            },
-            onComplete: () => {
-                if (currentMemoryIndex === -1) {
-                    showMemory(0);
-                }
+        // 5. Fade in Story Paragraph(s)
+        if (storyParagraphs) {
+            mainTl.call(() => {
+                storyParagraphs.style.display = "flex";
+            });
+            mainTl.to(storyParagraphs, {
+                opacity: 1,
+                y: 0,
+                duration: 1.0,
+                ease: "power2.out"
+            }, "+=0.1");
+
+            const paragraphs = storyParagraphs.querySelectorAll("p");
+            if (paragraphs.length > 0) {
+                mainTl.fromTo(paragraphs,
+                    { opacity: 0, y: 15 },
+                    { opacity: 1, y: 0, duration: 0.8, stagger: 0.2, ease: "power2.out" },
+                    "-=0.8"
+                );
             }
-        });
-
-        storyTimeline
-            .from("#story .section-heading > *", {
-                y: 30,
-                opacity: 0,
-                duration: 0.5,
-                stagger: 0.08,
-                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-            })
-            .from("#story .story-photo", {
-                scale: 0.96,
-                opacity: 0,
-                duration: 0.7,
-                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-            }, "-=0.3")
-            .from("#story .story-paragraphs p", {
-                y: 20,
-                opacity: 0,
-                duration: 0.6,
-                stagger: 0.15,
-                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-            }, "-=0.3");
-
-        // ScrollTrigger to pause/resume loop depending on viewport active status
-        ScrollTrigger.create({
-            trigger: "#story",
-            start: "top bottom",
-            end: "bottom top",
-            onToggle: (self) => {
-                if (self.isActive) {
-                    if (memoryTimer) memoryTimer.resume();
-                } else {
-                    if (memoryTimer) memoryTimer.pause();
-                }
-            }
-        });
-
-        // Clean up on matchMedia break
-        return () => {
-            if (memoryTimer) memoryTimer.kill();
-            gsap.set("#storyImage", { clearProps: "all" });
-            memories.forEach(item => gsap.set(item, { clearProps: "all" }));
-        };
-    });
+        }
+    })();
 
     // Fade-in divider quote
     gsap.from(".story-divider", {
