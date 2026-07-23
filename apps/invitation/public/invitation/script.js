@@ -380,7 +380,8 @@ function getDressInspirationMarkup(eventId, eventName) {
     else if (key.includes("nalang") || eventName?.toLowerCase().includes("nalang")) dataKeys = ["nalang"];
     else if (key.includes("sangeet") || eventName?.toLowerCase().includes("sangeet")) dataKeys = ["sangeet"];
     else if (key.includes("nikah") || eventName?.toLowerCase().includes("nikah")) dataKeys = ["nikkah"];
-    else if (key.includes("valima") || eventName?.toLowerCase().includes("valima")) dataKeys = ["valima"];
+    // Valima style guide temporarily hidden until date and dress code are finalized
+    // else if (key.includes("valima") || eventName?.toLowerCase().includes("valima")) dataKeys = ["valima"];
     else if (key.includes("reception") || eventName?.toLowerCase().includes("reception")) dataKeys = ["reception"];
 
     if (dataKeys.length === 0) return "";
@@ -1976,7 +1977,7 @@ if (hasGsap() && window.ScrollTrigger) {
     // 2. Story Section responsive animations
     const mm = gsap.matchMedia();
 
-    // Mobile/Tablet version (max-width: 820px)
+    // Mobile/Tablet version (max-width: 767px)
     mm.add("(max-width: 767px)", () => {
         const storyTimeline = gsap.timeline({
             scrollTrigger: {
@@ -1992,26 +1993,26 @@ if (hasGsap() && window.ScrollTrigger) {
                 stagger: 0.08,
                 ease: "cubic-bezier(0.22, 1, 0.36, 1)"
             })
-            .from("#story .story-copy-part1, #story .story-copy-part2", {
-                y: 15,
-                opacity: 0,
-                duration: 0.6,
-                stagger: 0.12,
-                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-            }, "-=0.3")
             .from("#story .story-photo", {
                 scale: 0.96,
                 opacity: 0,
                 duration: 0.7,
                 ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-            }, "-=0.5")
+            }, "-=0.3")
             .from("#story .memory-item", {
-                y: 20,
+                y: 15,
                 opacity: 0,
                 duration: 0.5,
                 stagger: 0.08,
                 ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-            }, "-=0.4");
+            }, "-=0.4")
+            .from("#story .story-paragraphs p", {
+                y: 20,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.12,
+                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+            }, "-=0.3");
     });
 
     // Desktop & Tablet version (min-width: 768px)
@@ -2090,19 +2091,19 @@ if (hasGsap() && window.ScrollTrigger) {
                 stagger: 0.08,
                 ease: "cubic-bezier(0.22, 1, 0.36, 1)"
             })
-            .from("#story .story-copy-part1, #story .story-copy-part2", {
-                y: 20,
-                opacity: 0,
-                duration: 0.6,
-                stagger: 0.15,
-                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-            }, "-=0.3")
             .from("#story .story-photo", {
                 scale: 0.96,
                 opacity: 0,
                 duration: 0.7,
                 ease: "cubic-bezier(0.22, 1, 0.36, 1)"
-            }, "-=0.5");
+            }, "-=0.3")
+            .from("#story .story-paragraphs p", {
+                y: 20,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.15,
+                ease: "cubic-bezier(0.22, 1, 0.36, 1)"
+            }, "-=0.3");
 
         // ScrollTrigger to pause/resume loop depending on viewport active status
         ScrollTrigger.create({
@@ -3237,11 +3238,12 @@ const AudioManager = {
     muted: false,
     bgm: null,
     bgmFadeInterval: null,
+    isAutoplayFallbackBound: false,
 
     init() {
         if (this.bgm) return;
 
-        // Respect audio preference from localStorage
+        // Default state must be ON unless user explicitly muted in a previous session
         const savedMute = localStorage.getItem('project_ra_muted');
         if (savedMute !== null) {
             this.muted = savedMute === 'true';
@@ -3249,7 +3251,7 @@ const AudioManager = {
             this.muted = false; // ENABLED by default
         }
 
-        // Initialize audio context for synthesized sound effects
+        // Initialize Web Audio context for synthesized sound effects
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
         if (AudioContextClass) {
             try {
@@ -3263,13 +3265,13 @@ const AudioManager = {
         this.bgm = new Audio();
         this.bgm.src = 'assets/sound/bgm.mp3';
         this.bgm.loop = true;
-        this.bgm.volume = 0; // Start silent for fade-in
+        this.bgm.volume = 0; // Start silent for smooth fade-in
         this.bgm.crossOrigin = 'anonymous';
 
-        // Bind events to update floating audio toggle button icon in real time
-        this.bgm.addEventListener('play', () => this.updateToggleUI());
-        this.bgm.addEventListener('playing', () => this.updateToggleUI());
-        this.bgm.addEventListener('pause', () => this.updateToggleUI());
+        // Bind event listeners to ensure floating toggle icon reflects exact playback status
+        ['play', 'playing', 'pause', 'ended'].forEach(evt => {
+            this.bgm.addEventListener(evt, () => this.updateToggleUI());
+        });
 
         this.updateToggleUI();
 
@@ -3297,15 +3299,15 @@ const AudioManager = {
 
         this.updateToggleUI();
         this.playClick();
-        this.triggerHaptic(30); // Light haptic feedback on sound toggle
+        this.triggerHaptic(30);
     },
 
     updateToggleUI() {
         const btn = document.getElementById('floatingAudioToggle');
         if (!btn) return;
 
-        // Represents the actual playback state: playing, not paused, and not system-muted
-        const isPlaying = this.bgm && !this.bgm.paused && !this.muted;
+        // Reflect current state: ON when playing, OFF when paused or muted
+        const isPlaying = Boolean(this.bgm && !this.bgm.paused && !this.muted);
 
         if (!isPlaying) {
             btn.classList.add('muted');
@@ -3317,12 +3319,11 @@ const AudioManager = {
             btn.setAttribute('aria-label', 'Mute sound');
         }
 
-        // Initialize wrapper structure inside button container if not already present
         if (!btn.querySelector('.audio-indicator-wrapper')) {
             btn.innerHTML = `
                 <div class="audio-indicator-wrapper">
                     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="audio-crescent">
-                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" fill="currentColor"/>
+                        <path d="M12 3a6 6 0 0 0 9 9 9 0 1 1-9-9Z" fill="currentColor"/>
                     </svg>
                     <div class="audio-equalizer">
                         <span class="bar bar-1"></span>
@@ -3338,25 +3339,35 @@ const AudioManager = {
     startBgm() {
         if (this.muted || !this.bgm) return;
 
-        // Try to play BGM
-        const playPromise = this.bgm.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(() => {
-                // Autoplay blocked: listen on first interaction to play
-                this.setupAutoplayFallback();
-            });
+        if (this.ctx && this.ctx.state === 'suspended') {
+            this.ctx.resume().catch(() => { });
         }
 
-        // Clear existing fade intervals
+        const playPromise = this.bgm.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                this.fadeInBgm();
+                this.updateToggleUI();
+            }).catch(() => {
+                // Autoplay blocked by browser policy -> gracefully queue play on first user interaction
+                this.setupAutoplayFallback();
+            });
+        } else {
+            this.fadeInBgm();
+            this.updateToggleUI();
+        }
+    },
+
+    fadeInBgm() {
+        if (this.muted || !this.bgm) return;
         clearInterval(this.bgmFadeInterval);
 
-        // Fade in smoothly over 3 seconds
         const targetVol = 0.15;
         const step = 0.005;
-        const intervalTime = 100; // ms
+        const intervalTime = 100;
 
         this.bgmFadeInterval = setInterval(() => {
-            if (this.muted) {
+            if (this.muted || !this.bgm || this.bgm.paused) {
                 clearInterval(this.bgmFadeInterval);
                 return;
             }
@@ -3373,37 +3384,53 @@ const AudioManager = {
 
         clearInterval(this.bgmFadeInterval);
 
-        // Fade out smoothly over 1.5 seconds
         const step = 0.01;
         const intervalTime = 100;
 
         this.bgmFadeInterval = setInterval(() => {
+            if (!this.bgm) {
+                clearInterval(this.bgmFadeInterval);
+                return;
+            }
             if (this.bgm.volume > 0) {
                 this.bgm.volume = Math.max(0, this.bgm.volume - step);
             } else {
                 clearInterval(this.bgmFadeInterval);
                 this.bgm.pause();
+                this.updateToggleUI();
             }
         }, intervalTime);
     },
 
     setupAutoplayFallback() {
+        if (this.isAutoplayFallbackBound) return;
+        this.isAutoplayFallbackBound = true;
+
+        const events = ['click', 'touchstart', 'touchend', 'pointerdown', 'scroll', 'keydown', 'wheel'];
+
         const resumeOnInteract = () => {
-            if (this.bgm && !this.muted) {
-                this.bgm.play().then(() => {
-                    this.startBgm();
-                }).catch(() => { });
-            }
+            // Remove all interaction listeners immediately to prevent duplicate calls
+            events.forEach(evt => {
+                window.removeEventListener(evt, resumeOnInteract, { capture: true });
+                document.removeEventListener(evt, resumeOnInteract, { capture: true });
+            });
+            this.isAutoplayFallbackBound = false;
+
             if (this.ctx && this.ctx.state === 'suspended') {
                 this.ctx.resume().catch(() => { });
             }
-            // Remove interaction listeners
-            ['click', 'touchstart', 'scroll', 'keydown'].forEach(evt => {
-                window.removeEventListener(evt, resumeOnInteract);
-            });
+
+            if (this.bgm && !this.muted && this.bgm.paused) {
+                this.bgm.play().then(() => {
+                    this.fadeInBgm();
+                    this.updateToggleUI();
+                }).catch(() => { });
+            }
         };
-        ['click', 'touchstart', 'scroll', 'keydown'].forEach(evt => {
-            window.addEventListener(evt, resumeOnInteract, { passive: true });
+
+        events.forEach(evt => {
+            window.addEventListener(evt, resumeOnInteract, { capture: true, passive: true });
+            document.addEventListener(evt, resumeOnInteract, { capture: true, passive: true });
         });
     },
 
@@ -3651,8 +3678,10 @@ document.querySelectorAll('.event-card, .gallery-item, button, .btn, #primary-na
     });
 });
 
-// Load user audio preference on window load
-window.addEventListener('DOMContentLoaded', () => {
+// Initialize user audio immediately on load
+if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', () => AudioManager.init());
+} else {
     AudioManager.init();
-});
+}
 

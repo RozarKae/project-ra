@@ -116,6 +116,7 @@ export const PublicWedding: React.FC = () => {
         title="Rozar & Arifa Wedding Invitation"
         className="w-full h-full border-none outline-none"
         style={{ width: '100%', height: '100%', border: 'none', outline: 'none', display: 'block' }}
+        allow="autoplay; muted"
         sandbox="allow-scripts allow-same-origin allow-forms allow-modals"
       />
     </div>
