@@ -110,11 +110,12 @@ export const PublicWedding: React.FC = () => {
   }, [guests, rsvps, saveGuest, saveRsvp]);
 
   return (
-    <div className="w-screen h-screen overflow-hidden bg-[#090909]">
+    <div className="w-screen h-screen overflow-hidden bg-[#090909]" style={{ width: '100vw', height: '100vh', margin: 0, padding: 0, overflow: 'hidden', backgroundColor: '#090909' }}>
       <iframe
         src="/invitation/index.html"
         title="Rozar & Arifa Wedding Invitation"
         className="w-full h-full border-none outline-none"
+        style={{ width: '100%', height: '100%', border: 'none', outline: 'none', display: 'block' }}
         sandbox="allow-scripts allow-same-origin allow-forms allow-modals"
       />
     </div>
